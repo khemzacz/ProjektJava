@@ -11,7 +11,7 @@ public class test {
 		{
 			public void run()
 			{
-				JFrame okno = new JFrame("Menu");
+				JFrame okno = new MainFrame("Menu");
 				okno.setSize (500,400);
 				okno.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				okno.setVisible(true);
