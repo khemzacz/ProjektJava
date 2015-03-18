@@ -2,6 +2,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -23,6 +25,7 @@ public class MojaRamka extends JFrame {
 	JLabel LoginLabel= new JLabel("Login: ");
 	JTextField Pass=new JTextField("",12);
 	JLabel PassLabel= new JLabel("Hasło: ");
+	String importedlogin = new String("");
 	
 	public MojaRamka(String tekst){
 		super(tekst);
@@ -34,15 +37,26 @@ public class MojaRamka extends JFrame {
 		setResizable(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
+
+		
+		zalogujButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent ae)
+			{
+				importedlogin=Login.getText();
+				System.out.println(importedlogin);	
+			}
+		});
+		
 		//p.setLayout(new GridLayout(14,2)); //(wiersze, kolumny, luka pozioma, pionowa)
 		
 		//p.setBorder();
 		p.setLayout(null);
 		
-		LoginLabel.setBounds(100, 100, 45, 20);
+		LoginLabel.setBounds(100, 100, 44, 20);
 		Login.setBounds(150,100,151,20);
 		
-		PassLabel.setBounds(100,120,45,20);
+		PassLabel.setBounds(100,120,44,20);
 		Pass.setBounds(150,120,151,20);
 		
 		zalogujButton.setBounds(100,140,90,20);
@@ -64,6 +78,7 @@ public class MojaRamka extends JFrame {
 		add(p);
 		
 		setVisible(true);
+		
 		
 		
 	}
