@@ -18,7 +18,7 @@ public class MojaRamka extends JFrame {
 	JPanel p=new JPanel();
 	JPanel zewP=new JPanel();
 	JButton zalogujButton=new JButton("Zaloguj");
-	JButton rejestrujButton=new JButton("Załóż konto");
+	JButton rejestrujButton=new JButton("Rejestracja");
 	JTextField Login=new JTextField("",12);
 	JLabel LoginLabel= new JLabel("Login: ");
 	JTextField Pass=new JTextField("",12);
@@ -34,16 +34,25 @@ public class MojaRamka extends JFrame {
 		setResizable(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		p.setLayout(new GridLayout(14,2)); //(wiersze, kolumny, luka pozioma, pionowa)
+		//p.setLayout(new GridLayout(14,2)); //(wiersze, kolumny, luka pozioma, pionowa)
 		
 		//p.setBorder();
-
-		JLabel odstep[]=new JLabel[18];
+		p.setLayout(null);
+		
+		LoginLabel.setBounds(100, 100, 45, 20);
+		Login.setBounds(150,100,151,20);
+		
+		PassLabel.setBounds(100,120,45,20);
+		Pass.setBounds(150,120,151,20);
+		
+		zalogujButton.setBounds(100,140,90,20);
+		rejestrujButton.setBounds(190,140,110,20);
+		/*JLabel odstep[]=new JLabel[18];
 		for (int i=0;i<18;i++)
 		{
 			odstep[i]=new JLabel("");
 			p.add(odstep[i]);
-		}
+		}*/
 		
 		p.add(LoginLabel);
 		p.add(Login);
@@ -51,8 +60,8 @@ public class MojaRamka extends JFrame {
 		p.add(Pass);
 		p.add(zalogujButton);
 		p.add(rejestrujButton);
-		zewP.add(p);
-		add(zewP);
+		add(p);
+		add(p);
 		
 		setVisible(true);
 		
