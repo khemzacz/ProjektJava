@@ -18,7 +18,7 @@ import javax.swing.border.EmptyBorder;
 
 public class MojaRamka extends JFrame {
 	JPanel p=new JPanel();
-	JPanel zewP=new JPanel();
+	//JPanel zewP=new JPanel();
 	JButton zalogujButton=new JButton("Zaloguj");
 	JButton rejestrujButton=new JButton("Rejestracja");
 	JTextField Login=new JTextField("",12);
@@ -30,11 +30,8 @@ public class MojaRamka extends JFrame {
 	public MojaRamka(String tekst){
 		super(tekst);
 
-		
-		
-		
 		setSize(800,600); //rozmiar ramki-okna
-		setResizable(true);
+		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 
@@ -44,8 +41,8 @@ public class MojaRamka extends JFrame {
 			public void actionPerformed(ActionEvent ae)
 			{
 				importedlogin=Login.getText();
-				System.out.println(importedlogin);	
-			}
+				System.out.println("Pobrany Login: " +importedlogin);
+				new MainMenu(importedlogin).run();			}
 		});
 		
 		//p.setLayout(new GridLayout(14,2)); //(wiersze, kolumny, luka pozioma, pionowa)
@@ -74,7 +71,6 @@ public class MojaRamka extends JFrame {
 		p.add(Pass);
 		p.add(zalogujButton);
 		p.add(rejestrujButton);
-		add(p);
 		add(p);
 		
 		setVisible(true);
