@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 
-public class MojaRamka extends JFrame {
+public class MojaRamka extends JFrame{
 	JPanel p=new JPanel();
 	//JPanel zewP=new JPanel();
 	JButton zalogujButton=new JButton("Zaloguj");
@@ -29,7 +29,7 @@ public class MojaRamka extends JFrame {
 	
 	public MojaRamka(String tekst){
 		super(tekst);
-
+		
 		setSize(800,600); //rozmiar ramki-okna
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -77,6 +77,8 @@ public class MojaRamka extends JFrame {
 		
 		
 		
+		
 	}
-	
+
+
 }
