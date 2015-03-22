@@ -46,9 +46,9 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 			chessBoard.add( square);
 			int row =(i/8)%2;
 			if (row==0)
-				square.setBackground(i%2== 0? Color.getHSBColor((76F/360F),1F,0.5F) : Color.getHSBColor((51F/360F),.35F,0.80F));
+				square.setBackground(i%2== 0? Color.getHSBColor((51F/360F),.46F,0.77F) : Color.getHSBColor((76F/360F),1F,0.5F));
 			else
-				square.setBackground(i%2==0? Color.getHSBColor((51F/360F),.35F,0.80F) : Color.getHSBColor((76F/360F),1F,0.5F));
+				square.setBackground(i%2==0? Color.getHSBColor((76F/360F),1F,0.5F)  : Color.getHSBColor((51F/360F),.46F,0.77F));
 			
 		}
 		for (int i = 0;i<8;i++)
