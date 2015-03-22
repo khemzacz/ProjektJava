@@ -47,6 +47,15 @@ public class MainMenu extends JFrame implements Runnable
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setSize(width,height);
 		
+		sp_button.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent ae)
+			{
+				new ChessGame().run();
+			}
+		});
+		
+		
 		setResizable(false);
 		
 		panel_menu.setLayout(null);
