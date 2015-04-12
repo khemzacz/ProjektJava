@@ -59,7 +59,7 @@ public class MainMenu extends JFrame implements Runnable
 		{
 			public void actionPerformed(ActionEvent ae)
 			{
-				// TU bede odpalał
+				// TU bede odpalał XDD
 			}
 		});
 		
