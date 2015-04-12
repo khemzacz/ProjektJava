@@ -34,6 +34,10 @@ public class MojCharacter
 		this.c=c;
 	}
 	
-	void operator (Character c)
-	{this.c=c;}
+	public boolean rowne(Character c)
+	{
+		if (this.c.equals(c))
+		return true;
+		return false;
+	}
 }
