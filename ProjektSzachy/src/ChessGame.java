@@ -16,20 +16,24 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 
-public class ChessGame extends JFrame implements MouseListener, MouseMotionListener, Runnable
+public class ChessGame extends JFrame implements MouseListener, MouseMotionListener, Runnable // implementacja interfejsów odpowiedzialnych za guziki myszy i ruch myszy i odpalanie na wątku
 {
 	JLayeredPane layeredPane;
 	JPanel chessBoard;
 	JLabel chessPiece;
 	int xAdjustment;
 	int yAdjustment;
+	int szachownica[][];
+	//enum figury {PION, WIEZA, KON, GONIEC, HETMAN, KROL}
+	
 	
 	public ChessGame()
 	{
-		Dimension boardSize = new Dimension(600,600);
-		layeredPane= new JLayeredPane();
-		getContentPane().add(layeredPane);
-		layeredPane.setPreferredSize(boardSize);
+		super("Plansza");
+		Dimension boardSize = new Dimension(600,600); // rozmiar szachownicy - to się poskaluje
+		layeredPane= new JLayeredPane(); //
+		getContentPane().add(layeredPane); //
+		layeredPane.setPreferredSize(boardSize); // rozmiar layered pane
 		layeredPane.addMouseListener(this);
 		layeredPane.addMouseMotionListener(this);
 		

@@ -22,7 +22,7 @@ public class MainMenu extends JFrame implements Runnable
 	private int width=400, height=500;
 	MainMenu(String user)
 	{
-		super("MainMenu");
+		super("MainMenu"); // nazwa okna
 		this.user=user;
 		
 		
@@ -55,12 +55,20 @@ public class MainMenu extends JFrame implements Runnable
 			}
 		});
 		
+		mp_button.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent ae)
+			{
+				// TU bede odpalał
+			}
+		});
+		
 		
 		setResizable(false);
 		
 		panel_menu.setLayout(null);
 		
-		dane_usera.setBounds(width-40-7*user.length(),0,40+7*user.length(),20);
+		dane_usera.setBounds(width-40-8*user.length(),0,40+8*user.length(),20);
 		sp_button.setBounds(width/2-80,height/2-120,160,40);
 		mp_button.setBounds(width/2-80,height/2-80,160,40);
 		op_button.setBounds(width/2-80,height/2-40,160,40);

@@ -13,7 +13,7 @@ public class test {
 		{
 			public void run()
 			{
-				new MojaRamka("preAlpha JavaSzachy v.001");	
+				new MojaRamka("preAlpha JavaSzachy v.001");// informacje dla konstruktora ramki do nazwy okna
 			}//new MojaRamka("preAlpha JavaSzachy v.001");	
 		});
 	}
