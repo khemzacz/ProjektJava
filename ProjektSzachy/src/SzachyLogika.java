@@ -36,7 +36,7 @@ public class SzachyLogika {
 		}
 		if(plansza[pos.row][pos.column].rowne('w') || plansza[pos.row][pos.column].rowne('W') )
 		{
-			return this.ruchyPionka(pos);
+			return this.ruchyWiezy(pos);
 		}
 		
 			
@@ -90,6 +90,123 @@ public class SzachyLogika {
 		return null;
 	}
 		
+	
+	public List<Pozycja> ruchyWiezy(Pozycja pos)
+	{
+		List<Pozycja> pMoves = new ArrayList<Pozycja>();
+		if(plansza[pos.row][pos.column].rowne('w'))
+		{
+			for (int i = pos.column ; i>=0;i--) // petla do sprawdzenie ruchu w lewo
+			{
+				if(plansza[pos.row][i].rowne(' '))
+				{
+					pMoves.add(new Pozycja(pos.row,i)); 
+				}
+				else if(plansza[pos.row][i].isUpperCase())
+				{
+					pMoves.add(new Pozycja(pos.row,i));
+					break;
+				}
+			}
+			for (int i = 7-pos.column;i<=7;i++)	//ruch w prawo
+			{
+				if(plansza[pos.row][i].rowne(' '))
+				{
+					pMoves.add(new Pozycja(pos.row,i));
+				}
+				else if(plansza[pos.row][i].isUpperCase())
+				{
+					pMoves.add(new Pozycja(pos.row,i));
+					break;
+				}
+			}
+			for (int j=pos.row;j>=0;j--)// sprawdzanie ruchu w górę
+			{
+				if(plansza[j][pos.column].rowne(' '))
+				{
+					pMoves.add(new Pozycja(j,pos.column));
+				}
+				else if (plansza[j][pos.column].isUpperCase())
+				{
+					pMoves.add(new Pozycja(j, pos.column));
+					break;
+				}
+			}
+			for (int j=7-pos.row;j<=7;j++) // sprawdzanie ruchu w dol
+			{
+				if (plansza[j][pos.column].rowne(' '))
+				{
+					pMoves.add(new Pozycja(j,pos.column));
+				}
+				else if (plansza[j][pos.column].isUpperCase())
+				{
+					pMoves.add(new Pozycja(j,pos.column));
+					break;
+				}
+			}
+			
+			return pMoves;
+			else if(plansza[pos.row][pos.column].rowne('W'))
+			{
+				
+			}
+			
+			
+		}
+		else if(plansza[pos.row][pos.column].rowne('W'))
+		{
+			for (int i = pos.column ; i>=0;i--) // petla do sprawdzenie ruchu w lewo
+			{
+				if(plansza[pos.row][i].rowne(' '))
+				{
+					pMoves.add(new Pozycja(pos.row,i)); 
+				}
+				else if(plansza[pos.row][i].isLowerCase())
+				{
+					pMoves.add(new Pozycja(pos.row,i));
+					break;
+				}
+			}
+			for (int i = 7-pos.column;i<=7;i++)	//ruch w prawo
+			{
+				if(plansza[pos.row][i].rowne(' '))
+				{
+					pMoves.add(new Pozycja(pos.row,i));
+				}
+				else if(plansza[pos.row][i].isLowerCase())
+				{
+					pMoves.add(new Pozycja(pos.row,i));
+					break;
+				}
+			}
+			for (int j=pos.row;j>=0;j--)// sprawdzanie ruchu w górę
+			{
+				if(plansza[j][pos.column].rowne(' '))
+				{
+					pMoves.add(new Pozycja(j,pos.column));
+				}
+				else if (plansza[j][pos.column].isLowerCase())
+				{
+					pMoves.add(new Pozycja(j, pos.column));
+					break;
+				}
+			}
+			for (int j=7-pos.row;j<=7;j++) // sprawdzanie ruchu w dol
+			{
+				if (plansza[j][pos.column].rowne(' '))
+				{
+					pMoves.add(new Pozycja(j,pos.column));
+				}
+				else if (plansza[j][pos.column].isLowerCase())
+				{
+					pMoves.add(new Pozycja(j,pos.column));
+					break;
+				}
+			}
+			
+		}
+		return null;
+	}
 		
 	
 	
