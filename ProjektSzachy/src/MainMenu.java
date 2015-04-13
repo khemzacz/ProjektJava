@@ -59,6 +59,7 @@ public class MainMenu extends JFrame implements Runnable
 		{
 			public void actionPerformed(ActionEvent ae)
 			{
+				new GUI("Klient").guiStart();
 				// TU bede odpalał XDD
 			}
 		});

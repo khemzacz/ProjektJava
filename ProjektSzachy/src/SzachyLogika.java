@@ -146,10 +146,7 @@ public class SzachyLogika {
 			}
 			
 			return pMoves;
-			else if(plansza[pos.row][pos.column].rowne('W'))
-			{
-				
-			}
+
 			
 			
 		}
