@@ -10,7 +10,7 @@ public class SzachyLogika {
 	
 	public SzachyLogika()
 	{
-		resetujplansze();
+		resetujplansze(); //ffd
 	}
 	
 	public void resetujplansze()
@@ -23,7 +23,7 @@ public class SzachyLogika {
 				 {new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
 				 {new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
 				 {new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P')},
-				 {new MojCharacter('W'),new MojCharacter('S'),new MojCharacter('G'),new MojCharacter('h'),new MojCharacter('k'),new MojCharacter('G'),new MojCharacter('S'),new MojCharacter('W')}};
+				 {new MojCharacter('W'),new MojCharacter('S'),new MojCharacter('G'),new MojCharacter('H'),new MojCharacter('K'),new MojCharacter('G'),new MojCharacter('S'),new MojCharacter('W')}};
 	}
 	
 	public List<Pozycja> possibleMoves(/*MojCharacter plansza[][],*/Pozycja pos )

@@ -55,12 +55,84 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/pionczarny.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
+				continue;
 			}
 			if (gra.plansza[i/8][i%8].rowne('P'))
 			{
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/pionbialy.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
+				continue;
+			}
+			if (gra.plansza[i/8][i%8].rowne('w'))
+			{
+				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/wiezaczarna.png")); // Bierka jest JLabelem
+				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
+				panel.add(piece); // dodaje bierke do tego panelu
+				continue;
+			}
+			if (gra.plansza[i/8][i%8].rowne('W'))
+			{
+				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/wiezabiala.png")); // Bierka jest JLabelem
+				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
+				panel.add(piece); // dodaje bierke do tego panelu
+				continue;
+			}
+			if (gra.plansza[i/8][i%8].rowne('s'))
+			{
+				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/skoczekczarny.png")); // Bierka jest JLabelem
+				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
+				panel.add(piece); // dodaje bierke do tego panelu
+				continue;
+			}
+			if (gra.plansza[i/8][i%8].rowne('S'))
+			{
+				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/skoczekbialy.png")); // Bierka jest JLabelem
+				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
+				panel.add(piece); // dodaje bierke do tego panelu
+				continue;
+			}
+			if (gra.plansza[i/8][i%8].rowne('g'))
+			{
+				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/goniecczarny.png")); // Bierka jest JLabelem
+				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
+				panel.add(piece); // dodaje bierke do tego panelu
+				continue;
+			}
+			if (gra.plansza[i/8][i%8].rowne('G'))
+			{
+				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/goniecbialy.png")); // Bierka jest JLabelem
+				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
+				panel.add(piece); // dodaje bierke do tego panelu
+				continue;
+			}
+			if (gra.plansza[i/8][i%8].rowne('k'))
+			{
+				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/krolczarny.png")); // Bierka jest JLabelem
+				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
+				panel.add(piece); // dodaje bierke do tego panelu
+				continue;
+			}
+			if (gra.plansza[i/8][i%8].rowne('K'))
+			{
+				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/krolbialy.png")); // Bierka jest JLabelem
+				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
+				panel.add(piece); // dodaje bierke do tego panelu
+				continue;
+			}
+			if (gra.plansza[i/8][i%8].rowne('h'))
+			{
+				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanczarny.png")); // Bierka jest JLabelem
+				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
+				panel.add(piece); // dodaje bierke do tego panelu
+				continue;
+			}
+			if (gra.plansza[i/8][i%8].rowne('H'))
+			{
+				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanbialy.png")); // Bierka jest JLabelem
+				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
+				panel.add(piece); // dodaje bierke do tego panelu
+				continue;
 			}
 		}
 	}
