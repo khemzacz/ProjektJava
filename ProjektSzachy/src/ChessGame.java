@@ -24,8 +24,46 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	int xAdjustment;
 	int yAdjustment;
 	int szachownica[][];
+	private SzachyLogika gra;
 	//enum figury {PION, WIEZA, KON, GONIEC, HETMAN, KROL}
 	
+	public void rysujPlansze()
+	{
+		gra = new SzachyLogika();		 // nowy obiekt Typu SzachyLogika
+		for (int i = 0;i<64 ;i++)
+		{
+			JPanel square = new JPanel(new BorderLayout());
+			chessBoard.add( square);
+			int row =(i/8)%2;
+			if (row==0)
+				square.setBackground(i%2== 0? Color.getHSBColor((51F/360F),.46F,0.77F) : Color.getHSBColor((76F/360F),1F,0.5F));
+			else
+				square.setBackground(i%2==0? Color.getHSBColor((76F/360F),1F,0.5F)  : Color.getHSBColor((51F/360F),.46F,0.77F));
+
+		}
+		
+	}
+	
+	public void rysujBierki()
+	{
+		for (int i = 0 ; i<64 ; i++)
+		{
+			//System.out.println("Petla"); dziala
+			if (gra.plansza[i/8][i%8].rowne('p'))
+			{
+				//System.out.println("True"); // YOLO BO DZIAŁA
+				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/pionczarny.png")); // Bierka jest JLabelem
+				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
+				panel.add(piece); // dodaje bierke do tego panelu
+			}
+			if (gra.plansza[i/8][i%8].rowne('P'))
+			{
+				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/pionbialy.png")); // Bierka jest JLabelem
+				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
+				panel.add(piece); // dodaje bierke do tego panelu
+			}
+		}
+	}
 	
 	public ChessGame()
 	{
@@ -44,30 +82,22 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		chessBoard.setPreferredSize(boardSize);
 		chessBoard.setBounds(0,0,boardSize.width, boardSize.height);
 		
-		for (int i = 0;i<64 ;i++)
+
+		rysujPlansze();
+		rysujBierki();
+		/*for (int i = 0;i<8;i++)
 		{
-			JPanel square = new JPanel(new BorderLayout());
-			chessBoard.add( square);
-			int row =(i/8)%2;
-			if (row==0)
-				square.setBackground(i%2== 0? Color.getHSBColor((51F/360F),.46F,0.77F) : Color.getHSBColor((76F/360F),1F,0.5F));
-			else
-				square.setBackground(i%2==0? Color.getHSBColor((76F/360F),1F,0.5F)  : Color.getHSBColor((51F/360F),.46F,0.77F));
-			
-		}
-		for (int i = 0;i<8;i++)
-		{
-		JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/pionczarny.png"));
-		JPanel panel = (JPanel)chessBoard.getComponent(8+i);
-		panel.add(piece);
+			JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/pionczarny.png")); // Bierka jest JLabelem
+			JPanel panel = (JPanel)chessBoard.getComponent(8+i); // przypisuje pod odniesienie panel, odpowiedni komponent
+			panel.add(piece); // dodaje bierke do tego panelu
 		}
 		
 		for (int i = 0;i<8;i++)
 		{
-		JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/pionbialy.png"));
-		JPanel panel = (JPanel)chessBoard.getComponent(48+i);
-		panel.add(piece);
-		}
+			JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/pionbialy.png"));
+			JPanel panel = (JPanel)chessBoard.getComponent(48+i);
+			panel.add(piece);
+		}*/
 	}
 	
 	
@@ -90,13 +120,13 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	public void mousePressed(MouseEvent e)
 	{
 		chessPiece=null;
-		Component c = chessBoard.findComponentAt(e.getX(), e.getY());
+		Component c = chessBoard.findComponentAt(e.getX(), e.getY()); //Pobiera komponent znajdujący się na danych współrzędnych
 		
-		if(c instanceof JPanel)
-			return;
-		Point parentLocation =c.getParent().getLocation();
-		xAdjustment = parentLocation.x -e.getX();
-		yAdjustment = parentLocation.y -e.getY();
+		if(c instanceof JPanel) // jeśli jest to JPanel;
+			return; // to wyjdź z funkcji
+		Point parentLocation =c.getParent().getLocation(); // zapisuhe położenie w parentLocation
+		xAdjustment = parentLocation.x -e.getX(); 
+		yAdjustment = parentLocation.y -e.getY(); 
 		chessPiece = (JLabel)c;
 		chessPiece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
 		chessPiece.setSize(chessPiece.getWidth(), chessPiece.getHeight());

@@ -3,12 +3,12 @@ import java.util.List;
 
 
 public class SzachyLogika {
-	private static MojCharacter plansza[][];
+	MojCharacter plansza[][];
 	public enum bierki {PUSTE,PION, WIEZA, KON, GONIEC, HETMAN, KROL}
 	
 	
 	
-	public void SzachyLogika()
+	public SzachyLogika()
 	{
 		resetujplansze();
 	}
