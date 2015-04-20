@@ -32,15 +32,17 @@ public class SzachyLogika {
 		List<Pozycja> pMoves = new ArrayList<Pozycja>();
 		if(plansza[pos.row][pos.column].rowne('p') || plansza[pos.row][pos.column].rowne('P') )
 		{
+			System.out.println("Wykryto pionka");
 			return this.ruchyPionka(pos);
 		}
 		if(plansza[pos.row][pos.column].rowne('w') || plansza[pos.row][pos.column].rowne('W') )
 		{
+			System.out.println("Wykryto wieze");
 			return this.ruchyWiezy(pos);
 		}
 		
 			
-		return null;
+		return pMoves;
 	}
 		
 		
@@ -87,7 +89,7 @@ public class SzachyLogika {
 			}
 			return pMoves;
 		}	
-		return null;
+		return pMoves;
 	}
 		
 	
@@ -202,7 +204,7 @@ public class SzachyLogika {
 			}
 			
 		}
-		return null;
+		return pMoves;
 	}
 		
 	

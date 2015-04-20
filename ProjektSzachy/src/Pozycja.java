@@ -5,6 +5,7 @@ public class Pozycja {
 	
 	Pozycja (int row, int column)
 	{
+		
 		this.row = row;
 		this.column = column;		
 	}

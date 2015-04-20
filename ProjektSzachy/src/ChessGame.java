@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -23,9 +24,9 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	JLabel chessPiece;
 	int xAdjustment;
 	int yAdjustment;
-	int szachownica[][];
+
 	private SzachyLogika gra;
-	//enum figury {PION, WIEZA, KON, GONIEC, HETMAN, KROL}
+
 	
 	public void rysujPlansze()
 	{
@@ -36,7 +37,7 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 			chessBoard.add( square);
 			int row =(i/8)%2;
 			if (row==0)
-				square.setBackground(i%2== 0? Color.getHSBColor((51F/360F),.46F,0.77F) : Color.getHSBColor((76F/360F),1F,0.5F));
+				square.setBackground(i%2== 0? Color.getHSBColor((51F/360F),.46F,0.77F) : Color.getHSBColor((76F/360F),1F,0.5F)); //
 			else
 				square.setBackground(i%2==0? Color.getHSBColor((76F/360F),1F,0.5F)  : Color.getHSBColor((51F/360F),.46F,0.77F));
 
@@ -51,7 +52,7 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 			//System.out.println("Petla"); dziala
 			if (gra.plansza[i/8][i%8].rowne('p'))
 			{
-				//System.out.println("True"); // YOLO BO DZIAŁA
+				//System.out.println("True"); //  DZIAŁA
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/pionczarny.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
@@ -140,7 +141,7 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	public ChessGame()
 	{
 		super("Plansza");
-		Dimension boardSize = new Dimension(600,600); // rozmiar szachownicy - to się poskaluje
+		Dimension boardSize = new Dimension(512,512); // rozmiar szachownicy - to się poskaluje
 		layeredPane= new JLayeredPane(); //
 		getContentPane().add(layeredPane); //
 		layeredPane.setPreferredSize(boardSize); // rozmiar layered pane
@@ -157,19 +158,7 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 
 		rysujPlansze();
 		rysujBierki();
-		/*for (int i = 0;i<8;i++)
-		{
-			JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/pionczarny.png")); // Bierka jest JLabelem
-			JPanel panel = (JPanel)chessBoard.getComponent(8+i); // przypisuje pod odniesienie panel, odpowiedni komponent
-			panel.add(piece); // dodaje bierke do tego panelu
-		}
-		
-		for (int i = 0;i<8;i++)
-		{
-			JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/pionbialy.png"));
-			JPanel panel = (JPanel)chessBoard.getComponent(48+i);
-			panel.add(piece);
-		}*/
+
 	}
 	
 	
@@ -197,8 +186,16 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		if(c instanceof JPanel) // jeśli jest to JPanel;
 			return; // to wyjdź z funkcji
 		Point parentLocation =c.getParent().getLocation(); // zapisuhe położenie w parentLocation
+
 		xAdjustment = parentLocation.x -e.getX(); 
 		yAdjustment = parentLocation.y -e.getY(); 
+		//System.out.println(parentLocation.x); System.out.println(parentLocation.y);//
+		int pom =0;
+		Pozycja pos = new Pozycja((e.getY()+pom)/64,(e.getX()+pom)/64);
+		List <Pozycja> listaRuchow = gra.possibleMoves(pos);
+		System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column);
+		System.out.println(listaRuchow.size());
+		//podswietlPole(listaRuchow);
 		chessPiece = (JLabel)c;
 		chessPiece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
 		chessPiece.setSize(chessPiece.getWidth(), chessPiece.getHeight());
@@ -212,37 +209,58 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	}
 	
 	
-	public void mouseReleased(MouseEvent e) {
+	public void mouseReleased(MouseEvent e) 
+	{
 		  if(chessPiece == null) return;
 		 
 		  chessPiece.setVisible(false);
 		  Component c =  chessBoard.findComponentAt(e.getX(), e.getY());
 		 
-		  if (c instanceof JLabel){
-		  Container parent = c.getParent();
-		  parent.remove(0);
-		  parent.add( chessPiece );
+		  if (c instanceof JLabel)
+		  {
+			  Container parent = c.getParent();
+			  parent.remove(0);
+			  parent.add( chessPiece );
 		  }
-		  else {
-		  Container parent = (Container)c;
-		  parent.add( chessPiece );
+		  else 
+		  {
+			  Container parent = (Container)c;
+			  parent.add( chessPiece );
 		  }
 		 
-		  chessPiece.setVisible(true);
-		  }
+		  	chessPiece.setVisible(true);
+	}
 	
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent e)
+	{
 		  
-	  }
-	  public void mouseMoved(MouseEvent e) {
-	 }
-	  public void mouseEntered(MouseEvent e){
+	}
+	public void mouseMoved(MouseEvent e)
+	{
+	}
+	public void mouseEntered(MouseEvent e)
+	{
 	  
-	  }
-	  public void mouseExited(MouseEvent e) {
+	}
+	public void mouseExited(MouseEvent e) 
+	{
 	  
-	  }
+	}
 	 
-
+	public void podswietlPole(List <Pozycja> ruchy)
+	{
+		if (ruchy.size() == 0)
+			return;
+		int k = ruchy.size();
+		System.out.println(k);
+		for (int i =0;i<k;i++)
+		{
+			JPanel poleDoPomalowania = (JPanel)layeredPane.getComponentAt((ruchy.get(i).row+1)*64-32,(ruchy.get(i).column+1)*64-32);
+			poleDoPomalowania.setBackground(Color.getHSBColor(61/360F, 1F, .81F));  
+			
+		}
+		  
+		 
+	}
 	
 }
