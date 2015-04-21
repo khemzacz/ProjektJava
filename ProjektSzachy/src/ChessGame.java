@@ -24,6 +24,7 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	JLabel chessPiece;
 	int xAdjustment;
 	int yAdjustment;
+	List <Pozycja> listaRuchow;
 
 	private SzachyLogika gra;
 
@@ -192,10 +193,10 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		//System.out.println(parentLocation.x); System.out.println(parentLocation.y);//
 		int pom =0;
 		Pozycja pos = new Pozycja((e.getY()+pom)/64,(e.getX()+pom)/64);
-		List <Pozycja> listaRuchow = gra.possibleMoves(pos);
-		System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column);
+		listaRuchow = gra.possibleMoves(pos,gra);
+		//System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column);
 		System.out.println(listaRuchow.size());
-		//podswietlPole(listaRuchow);
+		podswietlPole(listaRuchow);
 		chessPiece = (JLabel)c;
 		chessPiece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
 		chessPiece.setSize(chessPiece.getWidth(), chessPiece.getHeight());
@@ -227,7 +228,7 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 			  Container parent = (Container)c;
 			  parent.add( chessPiece );
 		  }
-		 
+		  	wylaczPodswietlenie();
 		  	chessPiece.setVisible(true);
 	}
 	
@@ -252,15 +253,34 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		if (ruchy.size() == 0)
 			return;
 		int k = ruchy.size();
-		System.out.println(k);
+		//System.out.println(k);
 		for (int i =0;i<k;i++)
 		{
-			JPanel poleDoPomalowania = (JPanel)layeredPane.getComponentAt((ruchy.get(i).row+1)*64-32,(ruchy.get(i).column+1)*64-32);
+			JPanel poleDoPomalowania = (JPanel)chessBoard.getComponentAt((ruchy.get(i).column+1)*64-32,(ruchy.get(i).row+1)*64-32);
 			poleDoPomalowania.setBackground(Color.getHSBColor(61/360F, 1F, .81F));  
 			
+		}	 
+	}
+	
+	public void wylaczPodswietlenie()
+	{
+		if (listaRuchow.size() == 0)
+			return;
+		int k = listaRuchow.size();
+		int pom = 0;
+		for (int i =0;i<k;i++)
+		{
+			JPanel poleDoPomalowania = (JPanel)chessBoard.getComponentAt((listaRuchow.get(i).column+1)*64-32,(listaRuchow.get(i).row+1)*64-32);
+			pom = ((listaRuchow.get(i).row) + (listaRuchow.get(i).column));
+			if (pom%2 ==0 )
+			{
+				//JPanel poleDoPomalowania = (JPanel)chessBoard.getComponentAt((ruchy.get(i).column+1)*64-32,(ruchy.get(i).row+1)*64-32);
+				poleDoPomalowania.setBackground( Color.getHSBColor((51F/360F),.46F,0.77F)); 
+			}
+			else 	
+				poleDoPomalowania.setBackground( Color.getHSBColor((76F/360F),1F,0.5F)); 
 		}
-		  
-		 
+		
 	}
 	
 }

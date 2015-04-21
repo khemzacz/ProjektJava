@@ -20,7 +20,7 @@ public class MojCharacter
 	{
 		for(int i =0;i<24;i++)
 		{
-			if(c.equals(maleLitery[i]))
+			if(this.rowne(maleLitery[i]))
 			{
 				return true;
 			}
@@ -37,7 +37,10 @@ public class MojCharacter
 	public boolean rowne(Character c)
 	{
 		if (this.c.equals(c))
-		return true;
-		return false;
+		{
+			return true;
+		}
+		else
+			return false;
 	}
 }
