@@ -16,8 +16,8 @@ public class SzachyLogika {
 		plansza = new MojCharacter[][] {	 
 				 {new MojCharacter('w'),new MojCharacter('s'),new MojCharacter('g'),new MojCharacter('h'),new MojCharacter('k'),new MojCharacter('g'),new MojCharacter('s'),new MojCharacter('w')},
 				 {new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter(' ')},	
-				 {new MojCharacter(' '),new MojCharacter(' '),new MojCharacter('G'),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
-				 {new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter('h'),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
+				 {new MojCharacter('k'),new MojCharacter(' '),new MojCharacter('G'),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
+				 {new MojCharacter(' '),new MojCharacter('k'),new MojCharacter('K'),new MojCharacter('h'),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
 				 {new MojCharacter(' '),new MojCharacter(' '),new MojCharacter('H'),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
 				 {new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
 				 {new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P')},
@@ -56,7 +56,7 @@ public class SzachyLogika {
 		if (gra.plansza[pos.row][pos.column].rowne('k') || gra.plansza[pos.row][pos.column].rowne('K') )
 		{
 			System.out.println("Wykryto króla");
-			// return this.ruchyKrola(pos,gra);			
+			return this.ruchyKrola(pos,gra);			
 		}
 		return pMoves;
 	}
@@ -1053,6 +1053,156 @@ public class SzachyLogika {
 		
 		return pMoves;
 	}
+	
+	public List <Pozycja> ruchyKrola(Pozycja pos, SzachyLogika gra)
+	{
+		List <Pozycja> pMoves =new ArrayList <Pozycja>();
+		
+		if(gra.plansza[pos.row][pos.column].rowne('k'))
+		{
+			if(pos.row-1 >=0 && pos.column-1 >=0) // polnocny-zachod
+			{
+				if(gra.plansza[pos.row-1][pos.column-1].rowne(' ') || gra.plansza[pos.row-1][pos.column-1].isUpperCase())
+				{
+					pMoves.add(new Pozycja(pos.row-1,pos.column-1));
+				}
+				
+			}
+			if(pos.row-1 >=0) // polnoc
+			{
+				if(gra.plansza[pos.row-1][pos.column].rowne(' ') || gra.plansza[pos.row-1][pos.column].isUpperCase())
+				{
+					pMoves.add(new Pozycja(pos.row-1,pos.column));
+				}
+				
+			}
+			if(pos.row-1 >=0 && pos.column+1 <=7) // polncny-wschod
+			{
+				if(gra.plansza[pos.row-1][pos.column+1].rowne(' ') || gra.plansza[pos.row-1][pos.column+1].isUpperCase())
+				{
+					pMoves.add(new Pozycja(pos.row-1,pos.column+1));
+				}
+				
+			}
+			if(pos.column+1 <=7) // wschod
+			{
+				if(gra.plansza[pos.row][pos.column+1].rowne(' ') || gra.plansza[pos.row][pos.column+1].isUpperCase())
+				{
+					pMoves.add(new Pozycja(pos.row,pos.column+1));
+				}
+				
+			}
+			
+			if(pos.row+1 <=7 && pos.column+1 <=7) // poludniowy-wschod
+			{
+				if(gra.plansza[pos.row+1][pos.column+1].rowne(' ') || gra.plansza[pos.row+1][pos.column+1].isUpperCase())
+				{
+					pMoves.add(new Pozycja(pos.row+1,pos.column+1));
+				}
+				
+			}
+			
+			if(pos.row+1 <=7) // poludnie
+			{
+				if(gra.plansza[pos.row+1][pos.column].rowne(' ') || gra.plansza[pos.row+1][pos.column].isUpperCase())
+				{
+					pMoves.add(new Pozycja(pos.row+1,pos.column));
+				}
+				
+			}
+			if(pos.row+1 <=7 && pos.column-1 >=0) // poludniowy-zachod
+			{
+				if(gra.plansza[pos.row+1][pos.column-1].rowne(' ') || gra.plansza[pos.row+1][pos.column-1].isUpperCase())
+				{
+					pMoves.add(new Pozycja(pos.row+1,pos.column-1));
+				}
+				
+			}
+			if(pos.column-1 >=0) // zachod
+			{
+				if(gra.plansza[pos.row][pos.column-1].rowne(' ') || gra.plansza[pos.row][pos.column-1].isUpperCase())
+				{
+					pMoves.add(new Pozycja(pos.row,pos.column-1));
+				}
+				
+			}
+		}
+		
+		
+		if(gra.plansza[pos.row][pos.column].rowne('K'))
+		{
+			if(pos.row-1 >=0 && pos.column-1 >=0) // polnocny-zachod
+			{
+				if(gra.plansza[pos.row-1][pos.column-1].rowne(' ') || gra.plansza[pos.row-1][pos.column-1].isLowerCase())
+				{
+					pMoves.add(new Pozycja(pos.row-1,pos.column-1));
+				}
+				
+			}
+			if(pos.row-1 >=0) // polnoc
+			{
+				if(gra.plansza[pos.row-1][pos.column].rowne(' ') || gra.plansza[pos.row-1][pos.column].isLowerCase())
+				{
+					pMoves.add(new Pozycja(pos.row-1,pos.column));
+				}
+				
+			}
+			if(pos.row-1 >=0 && pos.column+1 <=7) // polncny-wschod
+			{
+				if(gra.plansza[pos.row-1][pos.column+1].rowne(' ') || gra.plansza[pos.row-1][pos.column+1].isLowerCase())
+				{
+					pMoves.add(new Pozycja(pos.row-1,pos.column+1));
+				}
+				
+			}
+			if(pos.column+1 <=7) // wschod
+			{
+				if(gra.plansza[pos.row][pos.column+1].rowne(' ') || gra.plansza[pos.row][pos.column+1].isLowerCase())
+				{
+					pMoves.add(new Pozycja(pos.row,pos.column+1));
+				}
+				
+			}
+			
+			if(pos.row+1 <=7 && pos.column+1 <=7) // poludniowy-wschod
+			{
+				if(gra.plansza[pos.row+1][pos.column+1].rowne(' ') || gra.plansza[pos.row+1][pos.column+1].isLowerCase())
+				{
+					pMoves.add(new Pozycja(pos.row+1,pos.column+1));
+				}
+				
+			}
+			
+			if(pos.row+1 <=7) // poludnie
+			{
+				if(gra.plansza[pos.row+1][pos.column].rowne(' ') || gra.plansza[pos.row+1][pos.column].isLowerCase())
+				{
+					pMoves.add(new Pozycja(pos.row+1,pos.column));
+				}
+				
+			}
+			if(pos.row+1 <=7 && pos.column-1 >=0) // poludniowy-zachod
+			{
+				if(gra.plansza[pos.row+1][pos.column-1].rowne(' ') || gra.plansza[pos.row+1][pos.column-1].isLowerCase())
+				{
+					pMoves.add(new Pozycja(pos.row+1,pos.column-1));
+				}
+				
+			}
+			if(pos.column-1 >=0) // zachod
+			{
+				if(gra.plansza[pos.row][pos.column-1].rowne(' ') || gra.plansza[pos.row][pos.column-1].isLowerCase())
+				{
+					pMoves.add(new Pozycja(pos.row,pos.column-1));
+				}
+				
+			}
+			
+		}
+		
+		return pMoves;
+	}
+	
 	
 	public void zbij(String plansza[][], int row, int column)
 	{
