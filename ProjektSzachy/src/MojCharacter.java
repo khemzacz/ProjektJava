@@ -34,6 +34,11 @@ public class MojCharacter
 		this.c=c;
 	}
 	
+	MojCharacter()
+	{
+		this.c=' ';
+	}
+	
 	public boolean rowne(Character c)
 	{
 		if (this.c.equals(c))
@@ -51,5 +56,18 @@ public class MojCharacter
 	public Character get()
 	{
 		return this.c;
+	}
+	
+	public MojCharacter[][] kopiaTablicy2D(MojCharacter[][] org, int r1, int r2)
+	{
+		MojCharacter[][] planszaTMP= new MojCharacter[8][8]; 
+		for(int i =0;i<=r1;i++)
+		{
+			for(int j=0;j<=r2;j++)
+			{
+				planszaTMP[i][j] = org[i][j]; 
+			}
+		}
+		return planszaTMP;
 	}
 }

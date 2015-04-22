@@ -8,9 +8,16 @@ public class SzachyLogika {
 	Boolean sprawdzamSzach =false;
 	//public enum bierki {PUSTE,PION, WIEZA, KON, GONIEC, HETMAN, KROL}
 		
-	public SzachyLogika()
+	SzachyLogika()
 	{
 		resetujplansze(); //ffd
+	}
+	
+	SzachyLogika(MojCharacter[][] org)
+	{
+		MojCharacter kopiarka= new MojCharacter();
+		resetujplansze();
+		this.plansza=kopiarka.kopiaTablicy2D(org,7,7);		
 	}
 	
 	public void resetujplansze()
@@ -1273,6 +1280,82 @@ public class SzachyLogika {
 		}
 		gra.sprawdzamSzach=false;
 		return false;
+	}
+	
+	public List <Pozycja> sprawdzWMRB(SzachyLogika gra) // sprawdź wszystkie mozliwe ruchy białym
+	{
+		List <Pozycja> pMoves = new ArrayList<Pozycja>();
+		for (int i =0;i<=7;i++)
+		{
+			for (int j =0;j<=7;j++)
+			{
+				if(gra.plansza[i][j].isUpperCase())
+				{
+					pMoves.add(new Pozycja(i,j));
+				}
+				
+			}
+		}
+		return pMoves;
+	}
+
+	public List <Pozycja> sprawdzWMRC(SzachyLogika gra) // sprawdź wszystkie możliwe ruchy czarnym
+	{
+		List <Pozycja> pMoves = new ArrayList<Pozycja>();
+		for (int i =0;i<=7;i++)
+		{
+			for (int j =0;j<=7;j++)
+			{
+				if(gra.plansza[i][j].isLowerCase())
+				{
+					pMoves.add(new Pozycja(i,j));
+				}
+				
+			}
+		}
+		return pMoves;
+		
+	}
+	
+	public void ruchLogiczny(Pozycja pocz, Pozycja cel) // w celach testowania szachu i matu - Do napisania konieczne
+	{
+		
+		
+	}
+	
+	public List<Pozycja> sprawdzSDWMRB(SzachyLogika gra) // sprawdza czy dla 
+	// mozliwych ruchow dlaej wystepuje szach i zwraca wlasciwa liste ruchow
+	{
+		List <Pozycja> pMoves = new ArrayList<Pozycja>();
+		MojCharacter kopiarka = new MojCharacter();
+		List <Pozycja> ruchyTMP = new ArrayList<Pozycja>();
+		// ***************************** NAJPIERW KOPIA PLANSZY *******************************
+		//MojCharacter planszaTMP[][]= new MojCharacter[8][8];
+		SzachyLogika graTMP = new SzachyLogika(kopiarka.kopiaTablicy2D(gra.plansza, 7, 7));
+		for (int i =0; i<=7;i++)
+		{
+			for(int j = 0 ;j<=7;i++)
+			{
+				if (graTMP.plansza[i][j].isUpperCase()) // jesli znalazles Biala bierke
+				{
+					ruchyTMP=graTMP.possibleMoves(new Pozycja(i,j), graTMP); // lista pobierz jej ruchy
+					for (int k =0;k<=ruchyTMP.size();k++)
+					{
+						graTMP.ruchLogiczny(new Pozycja(i,j),ruchyTMP.get(i)); // wykonaj ruch k-ty;
+						
+					}
+				}
+			}
+			
+			
+			
+		}
+
+		
+		
+		
+		
+		return pMoves;
 	}
 	
 }
