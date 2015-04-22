@@ -190,6 +190,16 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 			return; // to wyjdź z funkcji
 		Point parentLocation =c.getParent().getLocation(); // zapisuhe położenie w parentLocation
 
+	  	if(gra.sprawdzSzachBialym(gra))
+	  	{
+	  		System.out.println("\nBialy krol w szachu!!!");
+	  	}
+	  	if(gra.sprawdzSzachCzarnym(gra))
+	  	{
+	  		System.out.println("\nCzarny ktol w szachu!!!");
+	  	}
+	  	
+		
 		xAdjustment = parentLocation.x -e.getX(); 
 		yAdjustment = parentLocation.y -e.getY(); 
 		//System.out.println(parentLocation.x); System.out.println(parentLocation.y);//
@@ -232,6 +242,7 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		  		chessPiece.setVisible(true);
 		  		return;
 		  	}
+		  
 		  if (c instanceof JLabel)
 		  {
 			  Container parent = c.getParent();
@@ -244,7 +255,8 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 			  parent.add( chessPiece );
 		  }
 
-		  	
+		  	zmianaTury();
+
 		  	chessPiece.setVisible(true);
 
 	}
@@ -317,5 +329,17 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		return false;
 		
 	}
-	
+	public void zmianaTury()
+	{
+		if (this.gra.tura ==1)
+			{
+				this.gra.tura =2;
+				return;
+			}
+		if (this.gra.tura == 2)
+		{
+			this.gra.tura =1;
+			return;
+		}
+	}
 }

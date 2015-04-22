@@ -10,5 +10,8 @@ public class Pozycja {
 		this.column = column;		
 	}
 	
+	Pozycja()
+	{}
+	
 	
 }

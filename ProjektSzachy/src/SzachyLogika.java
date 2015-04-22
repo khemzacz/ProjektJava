@@ -4,6 +4,8 @@ import java.util.List;
 
 public class SzachyLogika {
 	MojCharacter plansza[][];
+	int tura=1;
+	Boolean sprawdzamSzach =false;
 	//public enum bierki {PUSTE,PION, WIEZA, KON, GONIEC, HETMAN, KROL}
 		
 	public SzachyLogika()
@@ -15,10 +17,10 @@ public class SzachyLogika {
 	{
 		plansza = new MojCharacter[][] {	 
 				 {new MojCharacter('w'),new MojCharacter('s'),new MojCharacter('g'),new MojCharacter('h'),new MojCharacter('k'),new MojCharacter('g'),new MojCharacter('s'),new MojCharacter('w')},
-				 {new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter(' ')},	
-				 {new MojCharacter('k'),new MojCharacter(' '),new MojCharacter('G'),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
-				 {new MojCharacter(' '),new MojCharacter('k'),new MojCharacter('K'),new MojCharacter('h'),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
-				 {new MojCharacter(' '),new MojCharacter(' '),new MojCharacter('H'),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
+				 {new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p'),new MojCharacter('p')},	
+				 {new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
+				 {new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
+				 {new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
 				 {new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' '),new MojCharacter(' ')},
 				 {new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P'),new MojCharacter('P')},
 				 {new MojCharacter('W'),new MojCharacter('S'),new MojCharacter('G'),new MojCharacter('H'),new MojCharacter('K'),new MojCharacter('G'),new MojCharacter('S'),new MojCharacter('W')}};
@@ -27,33 +29,39 @@ public class SzachyLogika {
 	public List<Pozycja> possibleMoves(Pozycja pos, SzachyLogika gra )
 	{
 		List<Pozycja> pMoves = new ArrayList<Pozycja>();
-		if(gra.plansza[pos.row][pos.column].rowne('p') || gra.plansza[pos.row][pos.column].rowne('P') )
+		if((gra.plansza[pos.row][pos.column].rowne('p') && (tura ==2 || sprawdzamSzach))||
+				(gra.plansza[pos.row][pos.column].rowne('P') && (tura ==1 || sprawdzamSzach)))
 		{
 			System.out.println("Wykryto pionka");
 			return this.ruchyPionka(pos,gra);
 		}
-		if(gra.plansza[pos.row][pos.column].rowne('w') || gra.plansza[pos.row][pos.column].rowne('W') )
+		if((gra.plansza[pos.row][pos.column].rowne('w') && (tura ==2 || sprawdzamSzach)) ||
+				(gra.plansza[pos.row][pos.column].rowne('W') && (tura==1 || sprawdzamSzach)) )
 		{
 			System.out.println("Wykryto wieze");
 			return this.ruchyWiezy(pos,gra);
 		}
-		if(gra.plansza[pos.row][pos.column].rowne('s') || gra.plansza[pos.row][pos.column].rowne('S') )
+		if((gra.plansza[pos.row][pos.column].rowne('s') && (tura==2 || sprawdzamSzach))
+				|| (gra.plansza[pos.row][pos.column].rowne('S') && (tura ==1 || sprawdzamSzach)))
 		{
 			System.out.println("Wykryto skoczka");
 			return this.ruchySkoczka(pos,gra);
 			
 		}
-		if (gra.plansza[pos.row][pos.column].rowne('g') || gra.plansza[pos.row][pos.column].rowne('G') )
+		if ((gra.plansza[pos.row][pos.column].rowne('g') && (tura ==2 || sprawdzamSzach))
+				|| (gra.plansza[pos.row][pos.column].rowne('G') && (tura ==1 || sprawdzamSzach)) )
 		{
 			System.out.println("Wykryto Gonca");
 			return this.ruchyGonca(pos,gra);
 		}
-		if (gra.plansza[pos.row][pos.column].rowne('h') || gra.plansza[pos.row][pos.column].rowne('H') )
+		if ((gra.plansza[pos.row][pos.column].rowne('h') && (tura ==2 || sprawdzamSzach))
+				|| (gra.plansza[pos.row][pos.column].rowne('H') && (tura ==1 || sprawdzamSzach)))
 		{
 			System.out.println("Wykryto Hetmana");
 			return this.ruchyHetmana(pos,gra);			
 		}
-		if (gra.plansza[pos.row][pos.column].rowne('k') || gra.plansza[pos.row][pos.column].rowne('K') )
+		if ((gra.plansza[pos.row][pos.column].rowne('k') && (tura==2 || sprawdzamSzach))
+				|| (gra.plansza[pos.row][pos.column].rowne('K') && (tura ==1 || sprawdzamSzach)))
 		{
 			System.out.println("Wykryto króla");
 			return this.ruchyKrola(pos,gra);			
@@ -272,11 +280,11 @@ public class SzachyLogika {
 		System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column);
 		if(gra.plansza[pos.row][pos.column].rowne('s')) // czarny skoczek
 		{
-			System.out.println("czarnego");
+			//System.out.println("czarnego");
 			//System.out.println(pos.row -1);
 			if((pos.row-1)>=0)
 			{
-				System.out.println("Tutaj");
+				//System.out.println("Tutaj");
 				if(pos.column -2>=0)
 				{
 					
@@ -309,10 +317,10 @@ public class SzachyLogika {
 				
 				if(pos.column -2>=0)
 				{
-					System.out.println("Tutaj");
+					//System.out.println("Tutaj");
 					if(gra.plansza[pos.row+1][pos.column-2].rowne(' '))
 					{
-						System.out.println("Tutaj2");
+					//	System.out.println("Tutaj2");
 						pMoves.add(new Pozycja(pos.row+1,pos.column -2));
 					}
 					if(gra.plansza[pos.row+1][pos.column -2].isUpperCase())
@@ -390,11 +398,11 @@ public class SzachyLogika {
 		
 		if(gra.plansza[pos.row][pos.column].rowne('S'))
 		{
-			System.out.println("czarnego");
+			//System.out.println("czarnego");
 			//System.out.println(pos.row -1);
 			if((pos.row-1)>=0)
 			{
-				System.out.println("Tutaj");
+				//System.out.println("Tutaj");
 				if(pos.column -2>=0)
 				{
 					
@@ -427,10 +435,10 @@ public class SzachyLogika {
 				
 				if(pos.column -2>=0)
 				{
-					System.out.println("Tutaj");
+					//System.out.println("Tutaj");
 					if(gra.plansza[pos.row+1][pos.column-2].rowne(' '))
 					{
-						System.out.println("Tutaj2");
+						//System.out.println("Tutaj2");
 						pMoves.add(new Pozycja(pos.row+1,pos.column -2));
 					}
 					if(gra.plansza[pos.row+1][pos.column -2].isLowerCase())
@@ -1204,10 +1212,67 @@ public class SzachyLogika {
 	}
 	
 	
-	public void zbij(String plansza[][], int row, int column)
+	public Boolean sprawdzSzachBialym(SzachyLogika gra)
 	{
+		List <Pozycja> pMoves = new ArrayList <Pozycja>();
+		Pozycja pozycjaKrola = new Pozycja();
+		for(int i =0 ;i<=7;i++)
+		{
+			for( int j=0;j<=7;j++)
+			{
+				if(gra.plansza[i][j].isLowerCase())
+				{
+					pMoves.addAll(gra.possibleMoves(new Pozycja(i,j),gra));
+				}
+				if(gra.plansza[i][j].rowne('K'))
+				{
+					pozycjaKrola = new Pozycja(i,j);
+				}
+			}
+		}
 		
+		for (int i = 0;i<pMoves.size();i++)
+		{
+			if (pozycjaKrola.row == pMoves.get(i).row && pozycjaKrola.column == pMoves.get(i).column)
+			{
+				return true;
+			}
+			
+		}
+		return false;
+	}
+	
+	public Boolean sprawdzSzachCzarnym(SzachyLogika gra)
+	{
+		gra.sprawdzamSzach= true;
+		List <Pozycja> pMoves = new ArrayList <Pozycja>();
+		Pozycja pozycjaKrola = new Pozycja();
+		for(int i =0 ;i<=7;i++)
+		{
+			for( int j=0;j<=7;j++)
+			{
+				if(gra.plansza[i][j].isUpperCase())
+				{
+					pMoves.addAll(gra.possibleMoves(new Pozycja(i,j),gra));
+				}
+				if(gra.plansza[i][j].rowne('k'))
+				{
+					pozycjaKrola = new Pozycja(i,j);
+				}
+			}
+		}
 		
+		for (int i = 0;i<pMoves.size();i++)
+		{
+			if (pozycjaKrola.row == pMoves.get(i).row && pozycjaKrola.column == pMoves.get(i).column)
+			{
+				gra.sprawdzamSzach=false;
+				return true;
+			}
+			
+		}
+		gra.sprawdzamSzach=false;
+		return false;
 	}
 	
 }
