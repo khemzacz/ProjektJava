@@ -24,7 +24,9 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	JLabel chessPiece;
 	int xAdjustment;
 	int yAdjustment;
+	Pozycja pos, cel, poprzedniGraficzny;
 	List <Pozycja> listaRuchow;
+	
 
 	private SzachyLogika gra;
 
@@ -192,13 +194,14 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		yAdjustment = parentLocation.y -e.getY(); 
 		//System.out.println(parentLocation.x); System.out.println(parentLocation.y);//
 		int pom =0;
-		Pozycja pos = new Pozycja((e.getY()+pom)/64,(e.getX()+pom)/64);
+		pos = new Pozycja((e.getY()+pom)/64,(e.getX()+pom)/64);
 		listaRuchow = gra.possibleMoves(pos,gra);
 		//System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column);
 		System.out.println(listaRuchow.size());
 		podswietlPole(listaRuchow);
 		chessPiece = (JLabel)c;
 		chessPiece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
+		poprzedniGraficzny = new Pozycja( e.getY()+ yAdjustment, e.getX() + xAdjustment);
 		chessPiece.setSize(chessPiece.getWidth(), chessPiece.getHeight());
 		layeredPane.add(chessPiece, JLayeredPane.DRAG_LAYER);
 	}
@@ -214,9 +217,21 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	{
 		  if(chessPiece == null) return;
 		 
-		  chessPiece.setVisible(false);
+		  chessPiece.setVisible(false); //widocznosc JLabela
 		  Component c =  chessBoard.findComponentAt(e.getX(), e.getY());
-		 
+		  Component pom = chessBoard.findComponentAt(poprzedniGraficzny.column, poprzedniGraficzny.row);
+
+		  	wylaczPodswietlenie();
+		  	cel = new Pozycja((e.getY())/64,(e.getX())/64);
+		  	Boolean flag = ruch(pos,cel);
+		  	if (!flag)
+		  	{
+		  		chessPiece.setLocation(poprzedniGraficzny.column,poprzedniGraficzny.row);
+		  		Container parent = (Container)pom;
+		  		parent.add(chessPiece);
+		  		chessPiece.setVisible(true);
+		  		return;
+		  	}
 		  if (c instanceof JLabel)
 		  {
 			  Container parent = c.getParent();
@@ -228,8 +243,10 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 			  Container parent = (Container)c;
 			  parent.add( chessPiece );
 		  }
-		  	wylaczPodswietlenie();
+
+		  	
 		  	chessPiece.setVisible(true);
+
 	}
 	
 	public void mouseClicked(MouseEvent e)
@@ -280,6 +297,24 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 			else 	
 				poleDoPomalowania.setBackground( Color.getHSBColor((76F/360F),1F,0.5F)); 
 		}
+		
+	}
+	
+	public Boolean ruch(Pozycja pocz, Pozycja cel)
+	{
+		if (pocz.row == cel.row && pocz.column == cel.column)
+			return false;
+		for (int i =0;i<listaRuchow.size();i++)
+		{
+			if (cel.row == listaRuchow.get(i).row && cel.column == listaRuchow.get(i).column)
+			{
+				gra.plansza[cel.row][cel.column].set(gra.plansza[pos.row][pos.column].get());
+				gra.plansza[pos.row][pos.column].set(' ');
+				return true;
+			}
+			
+		}
+		return false;
 		
 	}
 	

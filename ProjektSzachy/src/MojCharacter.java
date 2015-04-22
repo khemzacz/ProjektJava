@@ -43,4 +43,13 @@ public class MojCharacter
 		else
 			return false;
 	}
+	
+	public void set(Character c)
+	{
+		this.c=c;		
+	}
+	public Character get()
+	{
+		return this.c;
+	}
 }
