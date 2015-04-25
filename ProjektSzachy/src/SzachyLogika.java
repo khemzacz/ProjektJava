@@ -1291,7 +1291,7 @@ public class SzachyLogika {
 			{
 				if(gra.plansza[i][j].isUpperCase())
 				{
-					pMoves.add(new Pozycja(i,j));
+					pMoves.addAll(gra.possibleMoves(new Pozycja(i,j), gra));
 				}
 				
 			}
@@ -1317,9 +1317,11 @@ public class SzachyLogika {
 		
 	}
 	
-	public void ruchLogiczny(Pozycja pocz, Pozycja cel) // w celach testowania szachu i matu - Do napisania konieczne
+	public void ruchLogiczny(Pozycja pocz, Pozycja cel,SzachyLogika graTMP) // w celach testowania szachu i matu - Do napisania konieczne
 	{
-		
+		Character tmp = graTMP.plansza[pocz.row][pocz.column].get();
+		graTMP.plansza[pocz.row][pocz.column].set(' '); // ustawia puste
+		graTMP.plansza[cel.row][cel.column].set(tmp);
 		
 	}
 	
@@ -1329,6 +1331,7 @@ public class SzachyLogika {
 		List <Pozycja> pMoves = new ArrayList<Pozycja>();
 		MojCharacter kopiarka = new MojCharacter();
 		List <Pozycja> ruchyTMP = new ArrayList<Pozycja>();
+		//ruchyTMP = sprawdzWMRB(gra); // same ruchy nie mam pozycji poczatkowej ;/
 		// ***************************** NAJPIERW KOPIA PLANSZY *******************************
 		//MojCharacter planszaTMP[][]= new MojCharacter[8][8];
 		SzachyLogika graTMP = new SzachyLogika(kopiarka.kopiaTablicy2D(gra.plansza, 7, 7));
@@ -1341,21 +1344,51 @@ public class SzachyLogika {
 					ruchyTMP=graTMP.possibleMoves(new Pozycja(i,j), graTMP); // lista pobierz jej ruchy
 					for (int k =0;k<=ruchyTMP.size();k++)
 					{
-						graTMP.ruchLogiczny(new Pozycja(i,j),ruchyTMP.get(i)); // wykonaj ruch k-ty;
-						
+						graTMP.ruchLogiczny(new Pozycja(i,j),ruchyTMP.get(k),graTMP); // wykonaj ruch k-ty;
+						if (!graTMP.sprawdzSzachBialym(graTMP))
+						{
+							pMoves.add(ruchyTMP.get(k)); // do tablicy ruch ktory spowoduje ze nie ma szacha
+						}
+						graTMP = new SzachyLogika(kopiarka.kopiaTablicy2D(gra.plansza, 7, 7));
 					}
 				}
 			}
-			
-			
-			
 		}
-
-		
-		
-		
-		
 		return pMoves;
 	}
 	
+	
+	public List<Pozycja> sprawdzSDWMRC(SzachyLogika gra) // sprawdza czy dla 
+	// mozliwych ruchow dlaej wystepuje szach i zwraca wlasciwa liste ruchow
+	{
+		List <Pozycja> pMoves = new ArrayList<Pozycja>();
+		MojCharacter kopiarka = new MojCharacter();
+		List <Pozycja> ruchyTMP = new ArrayList<Pozycja>();
+		//ruchyTMP = sprawdzWMRB(gra); // same ruchy nie mam pozycji poczatkowej ;/
+		// ***************************** NAJPIERW KOPIA PLANSZY *******************************
+		//MojCharacter planszaTMP[][]= new MojCharacter[8][8];
+		SzachyLogika graTMP = new SzachyLogika(kopiarka.kopiaTablicy2D(gra.plansza, 7, 7)); // kopia planszy
+		for (int i =0; i<=7;i++)
+		{
+			for(int j = 0 ;j<=7;i++)
+			{
+				if (graTMP.plansza[i][j].isLowerCase()) // jesli znalazles czarna bierke
+				{
+					ruchyTMP=graTMP.possibleMoves(new Pozycja(i,j), graTMP); // lista pobierz jej ruchy
+					for (int k =0;k<=ruchyTMP.size();k++)
+					{
+						graTMP.ruchLogiczny(new Pozycja(i,j),ruchyTMP.get(k),graTMP); // wykonaj ruch k-ty; // jakis exception tutaj
+						if (!graTMP.sprawdzSzachBialym(graTMP))
+						{
+							pMoves.add(ruchyTMP.get(k)); // do tablicy ruch ktory spowoduje ze nie ma szacha
+						}
+						graTMP = new SzachyLogika(kopiarka.kopiaTablicy2D(gra.plansza, 7, 7));
+					}
+				}
+			}
+		}
+		return pMoves;
+	}
 }
+
+

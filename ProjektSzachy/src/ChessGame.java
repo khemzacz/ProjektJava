@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -26,7 +27,6 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	int yAdjustment;
 	Pozycja pos, cel, poprzedniGraficzny;
 	List <Pozycja> listaRuchow;
-	
 
 	private SzachyLogika gra;
 
@@ -189,14 +189,21 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		if(c instanceof JPanel) // jeśli jest to JPanel;
 			return; // to wyjdź z funkcji
 		Point parentLocation =c.getParent().getLocation(); // zapisuhe położenie w parentLocation
-
+		List <Pozycja> tmpMoves = new ArrayList<Pozycja>();
 	  	if(gra.sprawdzSzachBialym(gra))
 	  	{
 	  		System.out.println("\nBialy krol w szachu!!!");
+	  		tmpMoves.addAll(this.gra.sprawdzSDWMRB(this.gra));
+	  		if (tmpMoves.size() == 0)
+	  			System.out.println(" Bialy ZAmatowany!");
 	  	}
 	  	if(gra.sprawdzSzachCzarnym(gra))
 	  	{
 	  		System.out.println("\nCzarny ktol w szachu!!!");
+	  		
+	  		tmpMoves.addAll(this.gra.sprawdzSDWMRC(this.gra));
+	  		if (tmpMoves.size() == 0)
+	  			System.out.println(" Bialy ZAmatowany!");
 	  	}
 	  	
 		
