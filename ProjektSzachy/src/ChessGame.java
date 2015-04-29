@@ -200,25 +200,30 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		pos = new Pozycja((e.getY()+pom)/64,(e.getX()+pom)/64);
 		listaRuchow = gra.possibleMoves(pos,gra);
 	  	
-		if(gra.sprawdzSzachBialym(gra))
-	  	{/*
-	  		System.out.println("\nBialy krol w szachu!!!");
-	  		
+	  	if(gra.sprawdzSzachBialym(gra))
+	  	{
+	  		System.out.println("\nCzarny krol w szachu!!!");
+	  	}
+
+	  	if (gra.plansza[pos.row][pos.column].isUpperCase() && gra.tura ==1)
+	  	{
 	  		tmpMoves.addAll(this.gra.sprawdzSDWMRB(this.gra));
 	  		if (tmpMoves.size() == 0)
 	  		{
-	  			System.out.println("Bialy Zamatowany!");
-	  		} 
-	  		//listaRuchow = new ArrayList <Pozycja>(iloczynPozycji(listaRuchow, tmpMoves));
-	  		*/
+	  			System.out.println("Czarny Zamatowany!");
+	  		}
+	  		System.out.println(listaRuchow.size());
+	  		System.out.println(tmpMoves.size());
+	  		listaRuchow = new ArrayList <Pozycja>(iloczynPozycji(pos,listaRuchow, tmpMoves)); 
 	  	}
+	  	
 		tmpMoves = new ArrayList <PojedynczyRuch>();
 	  	if(gra.sprawdzSzachCzarnym(gra))
 	  	{
 	  		System.out.println("\nCzarny krol w szachu!!!");
 	  	}
 	  	
-	  	if (gra.plansza[pos.row][pos.column].isLowerCase())
+	  	if (gra.plansza[pos.row][pos.column].isLowerCase() && gra.tura == 2)
 	  	{
 	  		tmpMoves.addAll(this.gra.sprawdzSDWMRC(this.gra));
 	  		if (tmpMoves.size() == 0)
