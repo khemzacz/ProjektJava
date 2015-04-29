@@ -189,7 +189,7 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		if(c instanceof JPanel) // jeśli jest to JPanel;
 			return; // to wyjdź z funkcji
 		Point parentLocation =c.getParent().getLocation(); // zapisuhe położenie w parentLocation
-		List <Pozycja> tmpMoves = new ArrayList<Pozycja>();
+		List <PojedynczyRuch> tmpMoves = new ArrayList<PojedynczyRuch>();
 
 	  	
 		
@@ -201,7 +201,7 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		listaRuchow = gra.possibleMoves(pos,gra);
 	  	
 		if(gra.sprawdzSzachBialym(gra))
-	  	{
+	  	{/*
 	  		System.out.println("\nBialy krol w szachu!!!");
 	  		
 	  		tmpMoves.addAll(this.gra.sprawdzSDWMRB(this.gra));
@@ -210,19 +210,24 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	  			System.out.println("Bialy Zamatowany!");
 	  		} 
 	  		//listaRuchow = new ArrayList <Pozycja>(iloczynPozycji(listaRuchow, tmpMoves));
-	  		
+	  		*/
 	  	}
-		tmpMoves = new ArrayList <Pozycja>();
+		tmpMoves = new ArrayList <PojedynczyRuch>();
 	  	if(gra.sprawdzSzachCzarnym(gra))
 	  	{
 	  		System.out.println("\nCzarny krol w szachu!!!");
-	  		
+	  	}
+	  	
+	  	if (gra.plansza[pos.row][pos.column].isLowerCase())
+	  	{
 	  		tmpMoves.addAll(this.gra.sprawdzSDWMRC(this.gra));
 	  		if (tmpMoves.size() == 0)
 	  		{
 	  			System.out.println("Czarny Zamatowany!");
 	  		}
-	  		listaRuchow = new ArrayList <Pozycja>(iloczynPozycji(listaRuchow, tmpMoves)); 
+	  		System.out.println(listaRuchow.size());
+	  		System.out.println(tmpMoves.size());
+	  		listaRuchow = new ArrayList <Pozycja>(iloczynPozycji(pos,listaRuchow, tmpMoves)); 
 	  	}
 	  	
 		//System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column);
@@ -362,21 +367,21 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		}
 	}
 	
-	public List<Pozycja> iloczynPozycji(List<Pozycja> pierwsza, List <Pozycja> druga)
+	public List<Pozycja> iloczynPozycji(Pozycja pos,List<Pozycja> pierwsza, List <PojedynczyRuch> ruchy)
 	{
 		List <Pozycja> pMoves = new ArrayList <Pozycja>();
-		for (int i =0;i<pierwsza.size();i++)
-		{
-			for (int j =0;j<druga.size();j++)
+
+			for (int j =0;j<ruchy.size();j++) // kazdy mozliwy dozwolony ruch
 			{
-				
-				if (pierwsza.get(i).equals(druga.get(j)))
-				{
-					pMoves.add(druga.get(j));
-				}
-				
+
+					if (pos.row == ruchy.get(j).getPocz().row && pos.column == ruchy.get(j).getPocz().column) // mozliwe przyczy buga: zle pozycje
+						// jesli ruch nalezy do kliknietej bierki to:
+					{
+
+							pMoves.add(new Pozycja(ruchy.get(j).get())); // to dodaj 
+						
+					}				
 			}
-		}
 		return pMoves;
 	}
 	

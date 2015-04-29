@@ -1272,16 +1272,16 @@ public class SzachyLogika {
 			{
 				if(gra.plansza[i][j].isUpperCase())
 				{
-					pMoves.addAll(gra.possibleMoves(new Pozycja(i,j),gra));
+					pMoves.addAll(gra.possibleMoves(new Pozycja(i,j),gra)); // wszystkie ruchy białych zapisuje w arrayliscie
 				}
-				if(gra.plansza[i][j].rowne('k'))
+				if(gra.plansza[i][j].rowne('k')) // jak znajdzie czarnego krola
 				{
-					pozycjaKrola = new Pozycja(i,j);
+					pozycjaKrola = new Pozycja(i,j); // zapamieta pozycje
 				}
 			}
 		}
 		
-		for (int i = 0;i<pMoves.size();i++)
+		for (int i = 0;i<pMoves.size();i++) // sprawdza czy ktorys z ruchow bialych nie pokrywa sie z pozycja krola czarnego
 		{
 			if (pozycjaKrola.row == pMoves.get(i).row && pozycjaKrola.column == pMoves.get(i).column)
 			{
@@ -1375,13 +1375,13 @@ public class SzachyLogika {
 	}
 	
 	
-	public List<Pozycja> sprawdzSDWMRC(SzachyLogika gra) // sprawdza czy dla 
+	public List<PojedynczyRuch> sprawdzSDWMRC(SzachyLogika gra) // sprawdza czy dla 
 	// mozliwych ruchow dlaej wystepuje szach i zwraca wlasciwa liste ruchow
 	{
 		gra.sprawdzamSzach=true;
-		List <Ruch> pMoves = new ArrayList<Ruch>();
+		List <PojedynczyRuch> pMoves = new ArrayList<PojedynczyRuch>();
 		MojCharacter kopiarka = new MojCharacter();
-		List <Ruch> ruchyTMP = new ArrayList<Ruch>();
+		Ruch ruchyTMP;
 		//ruchyTMP = sprawdzWMRB(gra); // same ruchy nie mam pozycji poczatkowej ;/
 		// ***************************** NAJPIERW KOPIA PLANSZY *******************************
 		//MojCharacter planszaTMP[][]= new MojCharacter[8][8];
@@ -1394,17 +1394,19 @@ public class SzachyLogika {
 				if (graTMP.plansza[i][j].isLowerCase()) // jesli znalazles czarna bierke //null pointer exception
 				{
 					
-					ruchyTMP.add(new Ruch((new Character(graTMP.plansza[i][j].get())),new Pozycja(i,j),(graTMP.possibleMoves(new Pozycja(i,j), graTMP)))); // lista pobierz jej ruchy
-					for (int k =0;k<ruchyTMP.size();k++)
+					ruchyTMP = new Ruch(new Character(graTMP.plansza[i][j].get()),new Pozycja(i,j),(graTMP.possibleMoves(new Pozycja(i,j), graTMP))); // pobierz jej ruchy
+
+					for (int z = 0; z<ruchyTMP.size();z++) // dla wszystkich tych ruchow
 					{
-						graTMP.ruchLogiczny(new Pozycja(i,j),ruchyTMP.get(k)); // wykonaj ruch k-ty; // jakis exception tutaj
-						if (!graTMP.sprawdzSzachCzarnym(graTMP))
-						{
-							pMoves.add(ruchyTMP.get(k)); // do ArrayListy ruch ktory spowoduje ze nie ma szacha
-						}
-						graTMP = new SzachyLogika(kopiarka.kopiaTablicy2D(gra.plansza, 8, 8)); // przywrocenie kopi do stanu oryginalu
-						graTMP.sprawdzamSzach=true;
+							graTMP.ruchLogiczny(new Pozycja(i,j),ruchyTMP.get(z)); // wykonaj ruch z-ty;
+							if (!graTMP.sprawdzSzachCzarnym(graTMP))
+							{
+								pMoves.add(new PojedynczyRuch(new Character(graTMP.plansza[i][j].get()),new Pozycja(i,j),ruchyTMP.get(z))); // do ArrayListy ruch ktory spowoduje ze nie ma szacha
+							}
+							graTMP = new SzachyLogika(kopiarka.kopiaTablicy2D(gra.plansza, 8, 8)); // przywrocenie kopi do stanu oryginalu
+							graTMP.sprawdzamSzach=true;
 					}
+					
 				}
 			}
 		}
