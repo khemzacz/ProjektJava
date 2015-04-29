@@ -61,9 +61,9 @@ public class MojCharacter
 	public MojCharacter[][] kopiaTablicy2D(MojCharacter[][] org, int r1, int r2)
 	{
 		MojCharacter[][] planszaTMP= new MojCharacter[8][8]; 
-		for(int i =0;i<=r1;i++)
+		for(int i =0;i<r1;i++)
 		{
-			for(int j=0;j<=r2;j++)
+			for(int j=0;j<r2;j++)
 			{
 				planszaTMP[i][j] = org[i][j]; 
 			}

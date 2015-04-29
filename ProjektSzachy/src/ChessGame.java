@@ -193,17 +193,20 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	  	if(gra.sprawdzSzachBialym(gra))
 	  	{
 	  		System.out.println("\nBialy krol w szachu!!!");
+	  		
 	  		tmpMoves.addAll(this.gra.sprawdzSDWMRB(this.gra));
 	  		if (tmpMoves.size() == 0)
-	  			System.out.println(" Bialy ZAmatowany!");
+	  			System.out.println("Bialy Zamatowany!");
+	  			
 	  	}
 	  	if(gra.sprawdzSzachCzarnym(gra))
 	  	{
-	  		System.out.println("\nCzarny ktol w szachu!!!");
+	  		System.out.println("\nCzarny krol w szachu!!!");
 	  		
 	  		tmpMoves.addAll(this.gra.sprawdzSDWMRC(this.gra));
 	  		if (tmpMoves.size() == 0)
-	  			System.out.println(" Bialy ZAmatowany!");
+	  			System.out.println("Czarny Zamatowany!");
+	  			
 	  	}
 	  	
 		
