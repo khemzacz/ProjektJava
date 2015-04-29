@@ -190,24 +190,7 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 			return; // to wyjdź z funkcji
 		Point parentLocation =c.getParent().getLocation(); // zapisuhe położenie w parentLocation
 		List <Pozycja> tmpMoves = new ArrayList<Pozycja>();
-	  	if(gra.sprawdzSzachBialym(gra))
-	  	{
-	  		System.out.println("\nBialy krol w szachu!!!");
-	  		
-	  		tmpMoves.addAll(this.gra.sprawdzSDWMRB(this.gra));
-	  		if (tmpMoves.size() == 0)
-	  			System.out.println("Bialy Zamatowany!");
-	  			
-	  	}
-	  	if(gra.sprawdzSzachCzarnym(gra))
-	  	{
-	  		System.out.println("\nCzarny krol w szachu!!!");
-	  		
-	  		tmpMoves.addAll(this.gra.sprawdzSDWMRC(this.gra));
-	  		if (tmpMoves.size() == 0)
-	  			System.out.println("Czarny Zamatowany!");
-	  			
-	  	}
+
 	  	
 		
 		xAdjustment = parentLocation.x -e.getX(); 
@@ -216,6 +199,32 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		int pom =0;
 		pos = new Pozycja((e.getY()+pom)/64,(e.getX()+pom)/64);
 		listaRuchow = gra.possibleMoves(pos,gra);
+	  	
+		if(gra.sprawdzSzachBialym(gra))
+	  	{
+	  		System.out.println("\nBialy krol w szachu!!!");
+	  		
+	  		tmpMoves.addAll(this.gra.sprawdzSDWMRB(this.gra));
+	  		if (tmpMoves.size() == 0)
+	  		{
+	  			System.out.println("Bialy Zamatowany!");
+	  		} 
+	  		//listaRuchow = new ArrayList <Pozycja>(iloczynPozycji(listaRuchow, tmpMoves));
+	  		
+	  	}
+		tmpMoves = new ArrayList <Pozycja>();
+	  	if(gra.sprawdzSzachCzarnym(gra))
+	  	{
+	  		System.out.println("\nCzarny krol w szachu!!!");
+	  		
+	  		tmpMoves.addAll(this.gra.sprawdzSDWMRC(this.gra));
+	  		if (tmpMoves.size() == 0)
+	  		{
+	  			System.out.println("Czarny Zamatowany!");
+	  		}
+	  		listaRuchow = new ArrayList <Pozycja>(iloczynPozycji(listaRuchow, tmpMoves)); 
+	  	}
+	  	
 		//System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column);
 		System.out.println(listaRuchow.size());
 		podswietlPole(listaRuchow);
@@ -352,4 +361,23 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 			return;
 		}
 	}
+	
+	public List<Pozycja> iloczynPozycji(List<Pozycja> pierwsza, List <Pozycja> druga)
+	{
+		List <Pozycja> pMoves = new ArrayList <Pozycja>();
+		for (int i =0;i<pierwsza.size();i++)
+		{
+			for (int j =0;j<druga.size();j++)
+			{
+				
+				if (pierwsza.get(i).equals(druga.get(j)))
+				{
+					pMoves.add(druga.get(j));
+				}
+				
+			}
+		}
+		return pMoves;
+	}
+	
 }

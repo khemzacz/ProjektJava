@@ -16,7 +16,7 @@ public class SzachyLogika {
 	SzachyLogika(MojCharacter[][] org)
 	{
 		MojCharacter kopiarka= new MojCharacter();
-		resetujplansze();
+		plansza = new MojCharacter[8][8];
 		this.plansza=kopiarka.kopiaTablicy2D(org,8,8);		
 	}
 	
@@ -39,38 +39,44 @@ public class SzachyLogika {
 		if((gra.plansza[pos.row][pos.column].rowne('p') && (tura ==2 || sprawdzamSzach))||
 				(gra.plansza[pos.row][pos.column].rowne('P') && (tura ==1 || sprawdzamSzach)))
 		{
-			System.out.println("Wykryto pionka");
+			if(!sprawdzamSzach)
+				System.out.println("Wykryto pionka");
 			return this.ruchyPionka(pos,gra);
 		}
 		if((gra.plansza[pos.row][pos.column].rowne('w') && (tura ==2 || sprawdzamSzach)) ||
 				(gra.plansza[pos.row][pos.column].rowne('W') && (tura==1 || sprawdzamSzach)) )
 		{
-			System.out.println("Wykryto wieze");
+			if(!sprawdzamSzach)			
+				System.out.println("Wykryto wieze");
 			return this.ruchyWiezy(pos,gra);
 		}
 		if((gra.plansza[pos.row][pos.column].rowne('s') && (tura==2 || sprawdzamSzach))
 				|| (gra.plansza[pos.row][pos.column].rowne('S') && (tura ==1 || sprawdzamSzach)))
 		{
-			System.out.println("Wykryto skoczka");
+			if(!sprawdzamSzach)
+				System.out.println("Wykryto skoczka");
 			return this.ruchySkoczka(pos,gra);
 			
 		}
 		if ((gra.plansza[pos.row][pos.column].rowne('g') && (tura ==2 || sprawdzamSzach))
 				|| (gra.plansza[pos.row][pos.column].rowne('G') && (tura ==1 || sprawdzamSzach)) )
 		{
-			System.out.println("Wykryto Gonca");
+			if(!sprawdzamSzach)
+				System.out.println("Wykryto Gonca");
 			return this.ruchyGonca(pos,gra);
 		}
 		if ((gra.plansza[pos.row][pos.column].rowne('h') && (tura ==2 || sprawdzamSzach))
 				|| (gra.plansza[pos.row][pos.column].rowne('H') && (tura ==1 || sprawdzamSzach)))
 		{
-			System.out.println("Wykryto Hetmana");
+			if(!sprawdzamSzach)
+				System.out.println("Wykryto Hetmana");
 			return this.ruchyHetmana(pos,gra);			
 		}
 		if ((gra.plansza[pos.row][pos.column].rowne('k') && (tura==2 || sprawdzamSzach))
 				|| (gra.plansza[pos.row][pos.column].rowne('K') && (tura ==1 || sprawdzamSzach)))
 		{
-			System.out.println("Wykryto króla");
+			if(!sprawdzamSzach)
+				System.out.println("Wykryto króla");
 			return this.ruchyKrola(pos,gra);			
 		}
 		return pMoves;
@@ -84,7 +90,8 @@ public class SzachyLogika {
 		//System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column); // wchodzi
 		if(pos.row >0 && gra.plansza[pos.row][pos.column].rowne('P'))
 		{
-			System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column);
+			if(!sprawdzamSzach)
+				{System.out.println("wiersz" + pos.row);	System.out.println("kolumna" +pos.column);}
 			if(gra.plansza[pos.row-1][pos.column].rowne(' ')) // jesli przed soba ma wolne pole
 			{
 				
@@ -284,7 +291,8 @@ public class SzachyLogika {
 	public List <Pozycja> ruchySkoczka(Pozycja pos, SzachyLogika gra)
 	{
 		List<Pozycja> pMoves = new ArrayList<Pozycja>();
-		System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column);
+		if(!sprawdzamSzach)
+			{System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column);}
 		if(gra.plansza[pos.row][pos.column].rowne('s')) // czarny skoczek
 		{
 			//System.out.println("czarnego");
@@ -526,7 +534,8 @@ public class SzachyLogika {
 	public List <Pozycja> ruchyGonca(Pozycja pos, SzachyLogika gra)
 	{
 		List <Pozycja> pMoves = new ArrayList<Pozycja>();
-		System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column);
+		if(!sprawdzamSzach)
+			{System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column);}
 		if(gra.plansza[pos.row][pos.column].rowne('g'))
 		{
 			//System.out.println("tutaj");
@@ -1221,6 +1230,7 @@ public class SzachyLogika {
 	
 	public Boolean sprawdzSzachBialym(SzachyLogika gra)
 	{
+		gra.sprawdzamSzach= true;
 		List <Pozycja> pMoves = new ArrayList <Pozycja>();
 		Pozycja pozycjaKrola = new Pozycja();
 		for(int i =0 ;i<=7;i++)
@@ -1242,10 +1252,12 @@ public class SzachyLogika {
 		{
 			if (pozycjaKrola.row == pMoves.get(i).row && pozycjaKrola.column == pMoves.get(i).column)
 			{
+				gra.sprawdzamSzach=false;
 				return true;
 			}
 			
 		}
+		gra.sprawdzamSzach=false;
 		return false;
 	}
 	
@@ -1319,7 +1331,7 @@ public class SzachyLogika {
 	
 	public void ruchLogiczny(Pozycja pocz, Pozycja cel) // w celach testowania szachu i matu - Do napisania konieczne
 	{
-		Character tmp = this.plansza[pocz.row][pocz.column].get();
+		Character tmp = new Character(this.plansza[pocz.row][pocz.column].get());
 		this.plansza[pocz.row][pocz.column].set(' '); // ustawia puste
 		this.plansza[cel.row][cel.column].set(tmp);
 		
@@ -1328,6 +1340,7 @@ public class SzachyLogika {
 	public List<Pozycja> sprawdzSDWMRB(SzachyLogika gra) // sprawdza czy dla 
 	// mozliwych ruchow dlaej wystepuje szach i zwraca wlasciwa liste ruchow
 	{
+		gra.sprawdzamSzach=true;
 		List <Pozycja> pMoves = new ArrayList<Pozycja>();
 		MojCharacter kopiarka = new MojCharacter();
 		List <Pozycja> ruchyTMP = new ArrayList<Pozycja>();
@@ -1335,13 +1348,14 @@ public class SzachyLogika {
 		// ***************************** NAJPIERW KOPIA PLANSZY *******************************
 		//MojCharacter planszaTMP[][]= new MojCharacter[8][8];
 		SzachyLogika graTMP = new SzachyLogika(kopiarka.kopiaTablicy2D(gra.plansza, 8, 8));
+		graTMP.sprawdzamSzach=true;
 		for (int i =0; i<=7;i++)
 		{
 			for(int j = 0 ;j<=7;j++)
 			{
 				if (graTMP.plansza[i][j].isUpperCase()) // jesli znalazles Biala bierke
 				{
-					ruchyTMP=graTMP.possibleMoves(new Pozycja(i,j), graTMP); // lista pobierz jej ruchy
+					ruchyTMP= new ArrayList <Pozycja>(graTMP.possibleMoves(new Pozycja(i,j), graTMP)); // lista pobierz jej ruchy
 					for (int k =0;k<ruchyTMP.size();k++)
 					{
 						graTMP.ruchLogiczny(new Pozycja(i,j),ruchyTMP.get(k)); // wykonaj ruch k-ty;
@@ -1350,17 +1364,21 @@ public class SzachyLogika {
 							pMoves.add(ruchyTMP.get(k)); // do tablicy ruch ktory spowoduje ze nie ma szacha
 						}
 						graTMP = new SzachyLogika(kopiarka.kopiaTablicy2D(gra.plansza, 8, 8));
+						graTMP.sprawdzamSzach=true;
 					}
 				}
 			}
 		}
+		gra.sprawdzamSzach=false;
 		return pMoves;
+		
 	}
 	
 	
 	public List<Pozycja> sprawdzSDWMRC(SzachyLogika gra) // sprawdza czy dla 
 	// mozliwych ruchow dlaej wystepuje szach i zwraca wlasciwa liste ruchow
 	{
+		gra.sprawdzamSzach=true;
 		List <Pozycja> pMoves = new ArrayList<Pozycja>();
 		MojCharacter kopiarka = new MojCharacter();
 		List <Pozycja> ruchyTMP = new ArrayList<Pozycja>();
@@ -1368,6 +1386,7 @@ public class SzachyLogika {
 		// ***************************** NAJPIERW KOPIA PLANSZY *******************************
 		//MojCharacter planszaTMP[][]= new MojCharacter[8][8];
 		SzachyLogika graTMP = new SzachyLogika(kopiarka.kopiaTablicy2D(gra.plansza, 8, 8)); // kopia planszy
+		graTMP.sprawdzamSzach=true;
 		for (int i =0; i<=7;i++)
 		{
 			for(int j = 0 ;j<=7;j++)
@@ -1375,19 +1394,21 @@ public class SzachyLogika {
 				if (graTMP.plansza[i][j].isLowerCase()) // jesli znalazles czarna bierke //null pointer exception
 				{
 					
-					ruchyTMP= new ArrayList<Pozycja>(graTMP.possibleMoves(new Pozycja(i,j), graTMP)); // lista pobierz jej ruchy
+					ruchyTMP= new ArrayList <Pozycja> (graTMP.possibleMoves(new Pozycja(i,j), graTMP)); // lista pobierz jej ruchy
 					for (int k =0;k<ruchyTMP.size();k++)
 					{
-/* To ma blad--> */		graTMP.ruchLogiczny(new Pozycja(i,j),ruchyTMP.get(k)); // wykonaj ruch k-ty; // jakis exception tutaj
-						if (!graTMP.sprawdzSzachBialym(graTMP))
+						graTMP.ruchLogiczny(new Pozycja(i,j),ruchyTMP.get(k)); // wykonaj ruch k-ty; // jakis exception tutaj
+						if (!graTMP.sprawdzSzachCzarnym(graTMP))
 						{
-							pMoves.add(ruchyTMP.get(k)); // do tablicy ruch ktory spowoduje ze nie ma szacha
+							pMoves.add(ruchyTMP.get(k)); // do ArrayListy ruch ktory spowoduje ze nie ma szacha
 						}
-						graTMP = new SzachyLogika(kopiarka.kopiaTablicy2D(gra.plansza, 8, 8));
+						graTMP = new SzachyLogika(kopiarka.kopiaTablicy2D(gra.plansza, 8, 8)); // przywrocenie kopi do stanu oryginalu
+						graTMP.sprawdzamSzach=true;
 					}
 				}
 			}
 		}
+		gra.sprawdzamSzach=false;
 		return pMoves;
 	}
 }

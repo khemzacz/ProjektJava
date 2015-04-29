@@ -65,7 +65,7 @@ public class MojCharacter
 		{
 			for(int j=0;j<r2;j++)
 			{
-				planszaTMP[i][j] = org[i][j]; 
+				planszaTMP[i][j] = new MojCharacter( org[i][j].get()); // MIAŁEM BŁAD BO ROZWALAŁEM TABLICE PRZYPISANIEM bez NEW!!!
 			}
 		}
 		return planszaTMP;
