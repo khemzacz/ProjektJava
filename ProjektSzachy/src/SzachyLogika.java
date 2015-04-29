@@ -1379,9 +1379,9 @@ public class SzachyLogika {
 	// mozliwych ruchow dlaej wystepuje szach i zwraca wlasciwa liste ruchow
 	{
 		gra.sprawdzamSzach=true;
-		List <Pozycja> pMoves = new ArrayList<Pozycja>();
+		List <Ruch> pMoves = new ArrayList<Ruch>();
 		MojCharacter kopiarka = new MojCharacter();
-		List <Pozycja> ruchyTMP = new ArrayList<Pozycja>();
+		List <Ruch> ruchyTMP = new ArrayList<Ruch>();
 		//ruchyTMP = sprawdzWMRB(gra); // same ruchy nie mam pozycji poczatkowej ;/
 		// ***************************** NAJPIERW KOPIA PLANSZY *******************************
 		//MojCharacter planszaTMP[][]= new MojCharacter[8][8];
@@ -1394,7 +1394,7 @@ public class SzachyLogika {
 				if (graTMP.plansza[i][j].isLowerCase()) // jesli znalazles czarna bierke //null pointer exception
 				{
 					
-					ruchyTMP= new ArrayList <Pozycja> (graTMP.possibleMoves(new Pozycja(i,j), graTMP)); // lista pobierz jej ruchy
+					ruchyTMP.add(new Ruch((new Character(graTMP.plansza[i][j].get())),new Pozycja(i,j),(graTMP.possibleMoves(new Pozycja(i,j), graTMP)))); // lista pobierz jej ruchy
 					for (int k =0;k<ruchyTMP.size();k++)
 					{
 						graTMP.ruchLogiczny(new Pozycja(i,j),ruchyTMP.get(k)); // wykonaj ruch k-ty; // jakis exception tutaj
