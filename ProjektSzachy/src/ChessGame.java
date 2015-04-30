@@ -48,6 +48,15 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		
 	}
 	
+	public void czyscBierki()
+	{
+		for (int i = 0 ; i<64 ; i++)
+		{
+			JPanel panel = (JPanel)chessBoard.getComponent(i);
+			panel.remove(0);
+		}
+	}
+	
 	public void rysujBierki()
 	{
 		for (int i = 0 ; i<64 ; i++)
@@ -283,7 +292,33 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 			  Container parent = (Container)c;
 			  parent.add( chessPiece );
 		  }
-
+		  
+		  
+		  	if (gra.tura==2)
+		  	{
+		  		int tmp=gra.sprawdzAwansCzarnym();
+		  		if(tmp!=8)
+		  		{
+		  			JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanczarny.png")); // Bierka jest JLabelem
+					JPanel panel = (JPanel)chessBoard.getComponent(tmp); // przypisuje pod odniesienie panel, odpowiedni komponent
+					panel.remove(0);
+					panel.add(piece); // dodaje bierke do tego panelu
+		  		}
+		  			
+		  	}
+		  	if (gra.tura==1)
+		  	{
+		  		int tmp=gra.sprawdzAwansBialym();
+		  		if (tmp!=8)
+		  		{
+		  			JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanbialy.png")); // Bierka jest JLabelem
+					JPanel panel = (JPanel)chessBoard.getComponent(tmp); // przypisuje pod odniesienie panel, odpowiedni komponent
+					panel.remove(0);
+					panel.add(piece); // dodaje bierke do tego panelu
+		  		}
+		  	}
+		  	
+		  	//this.rysujBierki();
 		  	zmianaTury();
 
 		  	chessPiece.setVisible(true);

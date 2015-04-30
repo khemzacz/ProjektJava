@@ -1416,6 +1416,32 @@ public class SzachyLogika {
 		gra.sprawdzamSzach=false;
 		return pMoves;
 	}
+	
+	public int sprawdzAwansCzarnym()
+	{
+		for(int i =0 ; i <8;i++)
+		{
+			if(this.plansza[7][i].rowne('p'))
+			{
+				this.plansza[7][i].set('h');
+				return (7*8 + i);
+			}
+		}
+		return 8;
+	}
+	public int sprawdzAwansBialym()
+	{
+		for(int i =0 ; i <8;i++)
+		{
+			if(this.plansza[0][i].rowne('P'))
+			{
+				this.plansza[0][i].set('H');
+				return i;
+			}
+		}
+		return 8;
+	}
+	
 }
 
 
