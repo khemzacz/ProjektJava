@@ -20,7 +20,7 @@ public class MojCharacter
 	{
 		for(int i =0;i<24;i++)
 		{
-			if(c.equals(maleLitery[i]))
+			if(this.rowne(maleLitery[i]))
 			{
 				return true;
 			}
@@ -34,10 +34,40 @@ public class MojCharacter
 		this.c=c;
 	}
 	
+	MojCharacter()
+	{
+		this.c=' ';
+	}
+	
 	public boolean rowne(Character c)
 	{
 		if (this.c.equals(c))
-		return true;
-		return false;
+		{
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	public void set(Character c)
+	{
+		this.c=c;		
+	}
+	public Character get()
+	{
+		return this.c;
+	}
+	
+	public MojCharacter[][] kopiaTablicy2D(MojCharacter[][] org, int r1, int r2)
+	{
+		MojCharacter[][] planszaTMP= new MojCharacter[8][8]; 
+		for(int i =0;i<r1;i++)
+		{
+			for(int j=0;j<r2;j++)
+			{
+				planszaTMP[i][j] = new MojCharacter( org[i][j].get()); // MIAŁEM BŁAD BO ROZWALAŁEM TABLICE PRZYPISANIEM bez NEW!!!
+			}
+		}
+		return planszaTMP;
 	}
 }

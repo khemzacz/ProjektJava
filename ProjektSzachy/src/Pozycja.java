@@ -10,5 +10,19 @@ public class Pozycja {
 		this.column = column;		
 	}
 	
+	Pozycja()
+	{}
 	
+	Pozycja(Pozycja p)
+	{
+		this.row = p.row;
+		this.column = p.column;
+	}
+	
+	Boolean equals(Pozycja pom)
+	{
+		if (this.row == pom.row && this.column == pom.column)
+			return true;
+			return false;
+	}
 }
