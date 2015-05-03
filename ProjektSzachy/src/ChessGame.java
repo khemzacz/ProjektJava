@@ -269,17 +269,17 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		  Component c =  chessBoard.findComponentAt(e.getX(), e.getY());
 		  Component pom = chessBoard.findComponentAt(poprzedniGraficzny.column, poprzedniGraficzny.row);
 
-		  	wylaczPodswietlenie();
-		  	cel = new Pozycja((e.getY())/64,(e.getX())/64);
-		  	Boolean flag = ruch(pos,cel);
-		  	if (!flag)
-		  	{
-		  		chessPiece.setLocation(poprzedniGraficzny.column,poprzedniGraficzny.row);
-		  		Container parent = (Container)pom;
-		  		parent.add(chessPiece);
-		  		chessPiece.setVisible(true);
-		  		return;
-		  	}
+		  wylaczPodswietlenie();
+		  cel = new Pozycja((e.getY())/64,(e.getX())/64);
+		  Boolean flag = ruch(pos,cel);
+		  if (!flag)
+		  {
+			  chessPiece.setLocation(poprzedniGraficzny.column,poprzedniGraficzny.row);
+			  Container parent = (Container)pom;
+			  parent.add(chessPiece);
+			  chessPiece.setVisible(true);
+			  return;
+		  }
 		  
 		  if (c instanceof JLabel)
 		  {

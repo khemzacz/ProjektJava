@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -23,7 +24,7 @@ public class MojaRamka extends JFrame{
 	JButton rejestrujButton=new JButton("Rejestracja");
 	JTextField Login=new JTextField("",12);
 	JLabel LoginLabel= new JLabel("Login: ");
-	JTextField Pass=new JTextField("",12);
+	JPasswordField Pass=new JPasswordField("",12);
 	JLabel PassLabel= new JLabel("Hasło: ");
 	String importedlogin = new String("");
 	
@@ -42,7 +43,16 @@ public class MojaRamka extends JFrame{
 			{
 				importedlogin=Login.getText();
 				System.out.println("Pobrany Login: " +importedlogin);
-				new MainMenu(importedlogin).run();			}
+				
+				
+				
+				
+				
+				// new MainMenu(importedlogin).run();			
+				
+			
+			
+			}
 		});
 		
 		//p.setLayout(new GridLayout(14,2)); //(wiersze, kolumny, luka pozioma, pionowa)

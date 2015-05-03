@@ -20,9 +20,9 @@ public class GUI extends JFrame
 	private JButton connectButton = new JButton("Connect");
 	private JButton rejestracjaButton = new JButton("rejestruj");
 	private JButton wyslij = new JButton("Wyslij");
+	private JTextField doWyslania = new JTextField();
 	private JTextField loginTextField = new JTextField();
 	private JTextField hasloTextField = new JTextField();
-	private JTextField doWyslania = new JTextField();
 	private JTextField adresTextField = new JTextField("127.0.0.1");
 	private JTextArea odebraneWiadomosci = new JTextArea();
 	private JLabel loginLabel = new JLabel("Login: ");
