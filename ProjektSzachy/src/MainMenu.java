@@ -179,6 +179,7 @@ public class MainMenu extends JFrame implements Runnable
 				{
 					user = Login.getText();
 					System.out.println("Pobrany Login: " +user);
+					pisarz.println("loginAttempt");
 					pisarz.println(user);
 					pisarz.println(Pass.getPassword());
 					pisarz.flush();
@@ -192,6 +193,45 @@ public class MainMenu extends JFrame implements Runnable
 							else if (wiadom.equals("bledne_dane"))
 							{
 								messageBox.append ("\n Bledny login, lub haslo\n");
+							}
+					}
+					catch(Exception ex)
+					{
+					
+					}
+				}
+				catch (Exception ex)
+				{
+					//ex.printStackTrace();
+					System.out.println("Nie udalo sie poslac");
+				}
+
+				
+			}
+		});
+		
+		rejestrujButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent ev)
+			{
+				try 
+				{
+					user = Login.getText();
+					System.out.println("Pobrany Login: " +user);
+					pisarz.println("registerAttempt");
+					pisarz.println(user);
+					pisarz.println(Pass.getPassword());
+					pisarz.flush();
+					String wiadom;
+					try{
+						while ((wiadom = czytelnik.readLine()) !=null)
+							if( wiadom.equals("zarejestrowano"))
+							{
+								messageBox.append("\n Zarejestrowano pomyślnie, mozesz sie zalogowac");
+							}
+							else if (wiadom.equals("zajete"))
+							{
+								messageBox.append ("\n nazwa uzytkownika jest juz zajeta");
 							}
 					}
 					catch(Exception ex)
