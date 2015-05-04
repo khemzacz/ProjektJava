@@ -64,7 +64,7 @@ public class GraficznaPlansza extends JPanel implements MouseListener, MouseMoti
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub

@@ -70,7 +70,7 @@ public class MainMenu extends JFrame implements Runnable
 	MainMenu()
 	{
 		super("Menu Główne");
-	};
+	}
 	
 	@Override
 	public void run() {
@@ -171,6 +171,43 @@ public class MainMenu extends JFrame implements Runnable
 			}
 		});
 		
+		zalogujButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent ev)
+			{
+				try 
+				{
+					user = Login.getText();
+					System.out.println("Pobrany Login: " +user);
+					pisarz.println(user);
+					pisarz.println(Pass.getPassword());
+					pisarz.flush();
+					String wiadom;
+					try{
+						while ((wiadom = czytelnik.readLine()) !=null)
+							if( wiadom.equals("zalogowano"))
+							{
+								messageBox.append("\n Zalogowano, witaj: "+user+"\n");
+							}
+							else if (wiadom.equals("bledne_dane"))
+							{
+								messageBox.append ("\n Bledny login, lub haslo\n");
+							}
+					}
+					catch(Exception ex)
+					{
+					
+					}
+				}
+				catch (Exception ex)
+				{
+					//ex.printStackTrace();
+					System.out.println("Nie udalo sie poslac");
+				}
+
+				
+			}
+		});
 		
 		setResizable(false);
 		
