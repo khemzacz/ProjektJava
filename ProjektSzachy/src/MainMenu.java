@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -21,6 +23,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import komunikacja.*;
 
 
 public class MainMenu extends JFrame implements Runnable
@@ -52,13 +56,15 @@ public class MainMenu extends JFrame implements Runnable
 	private JTextField doWyslania = new JTextField();
 	
 	private boolean loginFlag=true;
+	private RamkaKlienta ramka;
+	
 	
 	String ip;
 	String nadawca;
 	int port=5000;
 	
-	BufferedReader czytelnik;
-	PrintWriter pisarz;
+	ObjectInputStream czytelnik;
+	ObjectOutputStream pisarz;
 	Socket gniazdo;
 	
 	MainMenu(String user)
@@ -141,8 +147,8 @@ public class MainMenu extends JFrame implements Runnable
 			public void actionPerformed(ActionEvent ev)
 			{
 				communicationConfig();
-				Thread watekOdbiorcy = new Thread(new OdbiorcaKomunikatow());
-				watekOdbiorcy.start();
+				//Thread watekOdbiorcy = new Thread(new OdbiorcaKomunikatow());
+				//watekOdbiorcy.start();
 			
 			}
 		});
@@ -156,7 +162,7 @@ public class MainMenu extends JFrame implements Runnable
 				try {
 				//importedLogin = loginTextField.getText();
 				//System.out.println("Pobrany Login: " +importedLogin);
-				pisarz.println((nadawca+": "+doWyslania.getText()));
+				//pisarz.println((nadawca+": "+doWyslania.getText()));
 				pisarz.flush();
 				//odebraneWiadomosci.append("\n PrzeslanoLogin");
 				}
@@ -179,31 +185,32 @@ public class MainMenu extends JFrame implements Runnable
 				{
 					user = Login.getText();
 					System.out.println("Pobrany Login: " +user);
-					pisarz.println("loginAttempt");
-					pisarz.println(user);
-					pisarz.println(Pass.getPassword());
+					
+					ramka = new RamkaKlienta(1,user,new String(Pass.getPassword()));
+					pisarz.writeObject(ramka);
 					pisarz.flush();
-					String wiadom;
+					RamkaSerwera pakiet;
 					try{
-						while ((wiadom = czytelnik.readLine()) !=null)
-							if( wiadom.equals("zalogowano"))
+						while ((pakiet = (RamkaSerwera) (czytelnik.readObject())) !=null)
+							
+							if( pakiet.getW1().equals("zalogowano"))
 							{
 								messageBox.append("\n Zalogowano, witaj: "+user+"\n");
 							}
-							else if (wiadom.equals("bledne_dane"))
+							else if (pakiet.getW1().equals("bledne_dane"))
 							{
 								messageBox.append ("\n Bledny login, lub haslo\n");
 							}
 					}
 					catch(Exception ex)
 					{
-					
+						ex.printStackTrace();
 					}
 				}
 				catch (Exception ex)
 				{
-					//ex.printStackTrace();
-					System.out.println("Nie udalo sie poslac");
+					ex.printStackTrace();
+					//System.out.println("Nie udalo sie poslac");
 				}
 
 				
@@ -218,18 +225,17 @@ public class MainMenu extends JFrame implements Runnable
 				{
 					user = Login.getText();
 					System.out.println("Pobrany Login: " +user);
-					pisarz.println("registerAttempt");
-					pisarz.println(user);
-					pisarz.println(Pass.getPassword());
+					ramka = new RamkaKlienta(2,user,new String(Pass.getPassword()));
+					pisarz.writeObject(ramka);
 					pisarz.flush();
-					String wiadom;
+					RamkaSerwera pakiet;
 					try{
-						while ((wiadom = czytelnik.readLine()) !=null)
-							if( wiadom.equals("zarejestrowano"))
+						while ((pakiet = (RamkaSerwera) (czytelnik.readObject())) !=null)
+							if( pakiet.getW1().equals("zarejestrowano"))
 							{
 								messageBox.append("\n Zarejestrowano pomyślnie, mozesz sie zalogowac");
 							}
-							else if (wiadom.equals("zajete"))
+							else if (pakiet.getW1().equals("zajete"))
 							{
 								messageBox.append ("\n nazwa uzytkownika jest juz zajeta");
 							}
@@ -281,15 +287,13 @@ public class MainMenu extends JFrame implements Runnable
 		try
 		{
 			gniazdo = new Socket(ip,port);
-			InputStreamReader czytelnikStrm = new InputStreamReader(gniazdo.getInputStream());
-			czytelnik = new BufferedReader(czytelnikStrm);
-			pisarz = new PrintWriter(gniazdo.getOutputStream());
+			czytelnik = new ObjectInputStream(gniazdo.getInputStream());
+			pisarz = new ObjectOutputStream(gniazdo.getOutputStream());
 			messageBox.append("Obsluga sieci przygotowana\n");
 			zalogujButton.setEnabled(true);
 			rejestrujButton.setEnabled(true);
 		} 
 		catch (IOException ex) {
-			// TODO Auto-generated catch block
 			//ex.printStackTrace();
 			loginFlag=false;
 			messageBox.append("Nie skonfigurowano sieci");
@@ -297,22 +301,9 @@ public class MainMenu extends JFrame implements Runnable
 	}
 	
 	public class OdbiorcaKomunikatow implements Runnable {
-		public void run() {
-			String wiadom;
-			try {
-				while ((wiadom = czytelnik.readLine()) !=null)
-				{
-					System.out.println("Odczyntano: "+ wiadom);
-					//odebraneWiadomosci.append(wiadom + "\n");
-					messageBox.append("\n"+ wiadom);
-				}
-				
-			}
-			catch (Exception ex)
-			{
-				//ex.printStackTrace();
-				System.out.println("Blad tutaj");
-			}
+		public void run() 
+		{
+			
 		}
 
 	}

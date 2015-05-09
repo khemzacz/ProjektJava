@@ -23,21 +23,11 @@ public class KlientCzatu implements Runnable
 			System.out.println("Laczenie z hostem " +ip + " na porcie: " + port );
 			Socket gniazdo = new Socket(ip,port);
 
-			
-
-			
 			InputStreamReader strCzytelnik = new InputStreamReader(gniazdo.getInputStream());
 			BufferedReader czytelnik = new BufferedReader(strCzytelnik);
 			
-
-			
-			
-			
-			
 			String message = czytelnik.readLine();
 			System.out.println("Message of the Day: " + message);
-			
-
 			
 			czytelnik.close();
 		}
