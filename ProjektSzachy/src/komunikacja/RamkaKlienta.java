@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public class RamkaKlienta implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4038219745714368545L;
 	private int rodzaj;
 	private String wiadomosc1;
 	private String wiadomosc2;

@@ -63,6 +63,7 @@ public class MainMenu extends JFrame implements Runnable
 	String nadawca;
 	int port=5000;
 	
+	
 	ObjectInputStream czytelnik;
 	ObjectOutputStream pisarz;
 	Socket gniazdo;
@@ -146,9 +147,8 @@ public class MainMenu extends JFrame implements Runnable
 		{
 			public void actionPerformed(ActionEvent ev)
 			{
-				communicationConfig();
-				//Thread watekOdbiorcy = new Thread(new OdbiorcaKomunikatow());
-				//watekOdbiorcy.start();
+				Thread watekOdbiorcy = new Thread(new KomunikacjaSieciowa());
+				watekOdbiorcy.start();
 			
 			}
 		});
@@ -191,7 +191,7 @@ public class MainMenu extends JFrame implements Runnable
 					pisarz.flush();
 					RamkaSerwera pakiet;
 					try{
-						while ((pakiet = (RamkaSerwera) (czytelnik.readObject())) !=null)
+							pakiet = (RamkaSerwera) (czytelnik.readObject());
 							
 							if( pakiet.getW1().equals("zalogowano"))
 							{
@@ -226,11 +226,12 @@ public class MainMenu extends JFrame implements Runnable
 					user = Login.getText();
 					System.out.println("Pobrany Login: " +user);
 					ramka = new RamkaKlienta(2,user,new String(Pass.getPassword()));
-					pisarz.writeObject(ramka);
+					pisarz.writeObject(ramka); // posyła
 					pisarz.flush();
-					RamkaSerwera pakiet;
-					try{
-						while ((pakiet = (RamkaSerwera) (czytelnik.readObject())) !=null)
+					RamkaSerwera pakiet = null;
+					try
+					{
+						pakiet = (RamkaSerwera) czytelnik.readObject(); // czeka w nieskonczonosc
 							if( pakiet.getW1().equals("zarejestrowano"))
 							{
 								messageBox.append("\n Zarejestrowano pomyślnie, mozesz sie zalogowac");
@@ -239,10 +240,11 @@ public class MainMenu extends JFrame implements Runnable
 							{
 								messageBox.append ("\n nazwa uzytkownika jest juz zajeta");
 							}
+							
 					}
 					catch(Exception ex)
 					{
-					
+						ex.printStackTrace();
 					}
 				}
 				catch (Exception ex)
@@ -280,31 +282,53 @@ public class MainMenu extends JFrame implements Runnable
 		return importedlogin;
 	}
 	
-	public void communicationConfig()
+	
+	public class KomunikacjaSieciowa implements Runnable
 	{
-		ip=adresTextField.getText();
-		nadawca=Login.getText();
-		try
+	
+		public void run() 
 		{
-			gniazdo = new Socket(ip,port);
-			czytelnik = new ObjectInputStream(gniazdo.getInputStream());
-			pisarz = new ObjectOutputStream(gniazdo.getOutputStream());
-			messageBox.append("Obsluga sieci przygotowana\n");
-			zalogujButton.setEnabled(true);
-			rejestrujButton.setEnabled(true);
-		} 
-		catch (IOException ex) {
-			//ex.printStackTrace();
-			loginFlag=false;
-			messageBox.append("Nie skonfigurowano sieci");
+			ip=adresTextField.getText();
+			nadawca=Login.getText();
+			try
+			{
+				gniazdo = new Socket(ip,port);
+				
+				pisarz = new ObjectOutputStream(gniazdo.getOutputStream()); 
+				pisarz.flush();
+				czytelnik = new ObjectInputStream(gniazdo.getInputStream());
+				messageBox.append("Obsluga sieci przygotowana\n");
+				zalogujButton.setEnabled(true);
+				rejestrujButton.setEnabled(true);
+			} 
+			catch (IOException ex) {
+				ex.printStackTrace();
+				loginFlag=false;
+				messageBox.append("Nie skonfigurowano sieci");
+			}
+		
 		}
 	}
 	
 	public class OdbiorcaKomunikatow implements Runnable {
 		public void run() 
 		{
-			
+			/*RamkaSerwera ramka;
+			try
+			{
+				while((ramka = (RamkaSerwera) czytelnik.readObject())!=null)
+				{
+							
+							
+				}
+				
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}*/
 		}
+		
 
 	}
 	

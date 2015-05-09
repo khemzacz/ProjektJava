@@ -1,7 +1,13 @@
 package komunikacja;
 
-public class RamkaSerwera 
+import java.io.Serializable;
+
+public class RamkaSerwera implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -443743683776580613L;
 	private int rodzaj;
 	private String wiadomosc1;
 	private String wiadomosc2;
