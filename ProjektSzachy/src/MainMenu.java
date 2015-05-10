@@ -15,13 +15,17 @@ import java.net.Socket;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
 import komunikacja.*;
@@ -30,7 +34,7 @@ import komunikacja.*;
 public class MainMenu extends JFrame implements Runnable
 {
 	private String user;
-	private int width=800, height=600;
+	private int width=1000, height=600;
 	
 	private JPanel panel_menu= new JPanel();
 	private JButton sp_button = new JButton("Local Game");
@@ -54,6 +58,8 @@ public class MainMenu extends JFrame implements Runnable
 	private JTextArea messageBox = new JTextArea();
 	private JButton wyslij = new JButton("Wyslij");
 	private JTextField doWyslania = new JTextField();
+	
+	private JScrollPane panelGraczy; 
 	
 	private boolean loginFlag=true;
 	private RamkaKlienta ramka;
@@ -120,6 +126,7 @@ public class MainMenu extends JFrame implements Runnable
 				messageBox.setBounds(width/2-250,height/2-90,500,300);
 				wyslij.setBounds(width/2-250,height/2+210,70,20);
 				doWyslania.setBounds(width/2-180,height/2+210,431,20);
+
 				
 				panel_menu.add(adresTextField);
 				panel_menu.add(adresLabel);
@@ -134,6 +141,9 @@ public class MainMenu extends JFrame implements Runnable
 				panel_menu.add(messageBox);
 				panel_menu.add(wyslij);
 				panel_menu.add(doWyslania);
+				//panel_menu.add(panelGraczy);
+				
+				
 				
 				panel_menu.setVisible(true);
 				zalogujButton.setEnabled(false);
@@ -191,11 +201,35 @@ public class MainMenu extends JFrame implements Runnable
 					pisarz.flush();
 					RamkaSerwera pakiet;
 					try{
-							pakiet = (RamkaSerwera) (czytelnik.readObject());
+							pakiet = (RamkaSerwera) czytelnik.readObject();
 							
 							if( pakiet.getW1().equals("zalogowano"))
 							{
 								messageBox.append("\n Zalogowano, witaj: "+user+"\n");
+								zalogujButton.setEnabled(false);
+								rejestrujButton.setEnabled(false);
+								pisarz.writeObject(new RamkaKlienta(3,"",""));
+								pisarz.flush();
+								RamkaSerwera listaGraczy;
+								listaGraczy = (RamkaSerwera) czytelnik.readObject();
+								
+								DefaultListModel<String>  listModel = new DefaultListModel<String>();
+								for (int i =0 ;i<listaGraczy.getClientList().size();i++)
+								{
+									listModel.addElement(listaGraczy.getClientList().get(i));
+								}
+								
+								
+								JList list = new JList(listModel);
+								list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+								list.setLayoutOrientation(JList.VERTICAL);
+								list.setVisibleRowCount(-1);
+								panelGraczy = new JScrollPane(list);
+								panelGraczy.setBounds(width-175, 25,155,505);
+								
+								
+								
+								panel_menu.add(panelGraczy);// dodac ta liste do scroll listy
 							}
 							else if (pakiet.getW1().equals("bledne_dane"))
 							{

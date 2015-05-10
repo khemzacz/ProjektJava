@@ -20,6 +20,7 @@ public class RamkaSerwera implements Serializable
 		this.rodzaj=r;
 		this.wiadomosc1=w1;
 		this.wiadomosc2=w2;
+		this.klienci=new ArrayList<String>();
 	}
 	
 	public RamkaSerwera(ArrayList<String> klienci)
@@ -31,6 +32,11 @@ public class RamkaSerwera implements Serializable
 	public ArrayList <String> getClientList()
 	{
 		return klienci;
+	}
+	
+	public void addClientToList(String klient)
+	{
+		klienci.add(klient);
 	}
 	
 	public String getW1()
