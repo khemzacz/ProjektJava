@@ -61,9 +61,11 @@ public class MainMenu extends JFrame implements Runnable
 	
 	private JScrollPane panelGraczy; 
 	
-	private boolean loginFlag=true;
+	private boolean loginFlag=false;
 	private RamkaKlienta ramka;
 	
+	private OdbiorcaKomunikatow reciever= new OdbiorcaKomunikatow();
+	private Thread t = new Thread(reciever);
 	
 	String ip;
 	String nadawca;
@@ -167,22 +169,13 @@ public class MainMenu extends JFrame implements Runnable
 		{
 			public void actionPerformed(ActionEvent ev)
 			{
-				if (!loginFlag)
-					return;
+				RamkaKlienta pakiet = new RamkaKlienta(4,user,doWyslania.getText());
 				try {
-				//importedLogin = loginTextField.getText();
-				//System.out.println("Pobrany Login: " +importedLogin);
-				//pisarz.println((nadawca+": "+doWyslania.getText()));
-				pisarz.flush();
-				//odebraneWiadomosci.append("\n PrzeslanoLogin");
+					pisarz.writeObject(pakiet);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				catch (Exception ex)
-				{
-					//ex.printStackTrace();
-					System.out.println("Nie udalo sie poslac");
-				}
-				doWyslania.setText("");// czyÅ›ci pole tekstowe na login
-				doWyslania.requestFocus();
 				
 			}
 		});
@@ -227,9 +220,12 @@ public class MainMenu extends JFrame implements Runnable
 								panelGraczy = new JScrollPane(list);
 								panelGraczy.setBounds(width-175, 25,155,505);
 								
-								
+								wyslij.setEnabled(true);
+
 								
 								panel_menu.add(panelGraczy);// dodac ta liste do scroll listy
+								loginFlag=true;
+								t.start();
 							}
 							else if (pakiet.getW1().equals("bledne_dane"))
 							{
@@ -337,7 +333,6 @@ public class MainMenu extends JFrame implements Runnable
 			} 
 			catch (IOException ex) {
 				ex.printStackTrace();
-				loginFlag=false;
 				messageBox.append("Nie skonfigurowano sieci");
 			}
 		
@@ -347,20 +342,34 @@ public class MainMenu extends JFrame implements Runnable
 	public class OdbiorcaKomunikatow implements Runnable {
 		public void run() 
 		{
-			/*RamkaSerwera ramka;
+			RamkaSerwera ramka;
 			try
 			{
-				while((ramka = (RamkaSerwera) czytelnik.readObject())!=null)
+				while(true)
 				{
+					if(loginFlag==true)
+					{
+						ramka = (RamkaSerwera) czytelnik.readObject();
+						int typ = ramka.getRodzaj();
+						switch(typ)
+						{
+							case 4:
+								messageBox.append("\n"+ramka.getW1()+": "+ramka.getW2());
+								break;
+							case 5:
 							
+								break;
 							
+						}
+					
+					}		
 				}
 				
 			}
 			catch(Exception e)
 			{
 				e.printStackTrace();
-			}*/
+			}
 		}
 		
 
