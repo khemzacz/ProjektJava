@@ -66,6 +66,10 @@ public class MainMenu extends JFrame implements Runnable
 	
 	private OdbiorcaKomunikatow reciever= new OdbiorcaKomunikatow();
 	private Thread t = new Thread(reciever);
+	private PlayerListUpdater updater = new PlayerListUpdater();
+	private Thread t1 = new Thread(updater);
+	
+	JList list;
 	
 	String ip;
 	String nadawca;
@@ -90,7 +94,7 @@ public class MainMenu extends JFrame implements Runnable
 	@Override
 	public void run() {
 	
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(width,height);
 		
 		sp_button.addActionListener(new ActionListener()
@@ -213,7 +217,7 @@ public class MainMenu extends JFrame implements Runnable
 								}
 								
 								
-								JList list = new JList(listModel);
+								list = new JList(listModel);
 								list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 								list.setLayoutOrientation(JList.VERTICAL);
 								list.setVisibleRowCount(-1);
@@ -223,9 +227,12 @@ public class MainMenu extends JFrame implements Runnable
 								wyslij.setEnabled(true);
 
 								
-								panel_menu.add(panelGraczy);// dodac ta liste do scroll listy
+								panel_menu.add(panelGraczy);// dodaje scroll pane do menu
+								
+								
 								loginFlag=true;
 								t.start();
+								t1.start();
 							}
 							else if (pakiet.getW1().equals("bledne_dane"))
 							{
@@ -312,6 +319,65 @@ public class MainMenu extends JFrame implements Runnable
 		return importedlogin;
 	}
 	
+	public void updatePlayerList(RamkaSerwera listaGraczy)
+	{
+		try
+		{
+			System.out.println("Aktualizuje liste graczy");
+			DefaultListModel<String>  listModel = new DefaultListModel<String>();
+			for (int i =0 ;i<listaGraczy.getClientList().size();i++)
+			{
+				listModel.addElement(listaGraczy.getClientList().get(i));
+			}
+			
+			
+			list = new JList(listModel);
+			list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+			list.setLayoutOrientation(JList.VERTICAL);
+			list.setVisibleRowCount(-1);
+			panelGraczy.setViewportView(list);
+			panelGraczy.repaint();
+
+			//panel_menu.remove(panelGraczy);
+			//panelGraczy = new JScrollPane(list);
+			//panelGraczy.setBounds(width-175, 25,155,505);
+			//panel_menu.add(panelGraczy);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public class PlayerListUpdater implements Runnable
+	{
+		public void run() 
+		{
+			while (true)
+			{
+				try 
+				{
+					pisarz.writeObject(new RamkaKlienta(3,"",""));
+					pisarz.flush();	
+					System.out.println("wyslalem");
+					try {
+						t1.sleep(5000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} 
+				catch (IOException e1) 
+				{
+					e1.printStackTrace();
+				}
+
+
+			}
+		}
+		
+		
+	}
 	
 	public class KomunikacjaSieciowa implements Runnable
 	{
@@ -353,6 +419,9 @@ public class MainMenu extends JFrame implements Runnable
 						int typ = ramka.getRodzaj();
 						switch(typ)
 						{
+							case 3:
+								updatePlayerList(ramka);
+								break;
 							case 4:
 								messageBox.append("\n"+ramka.getW1()+": "+ramka.getW2());
 								break;
