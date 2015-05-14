@@ -63,7 +63,7 @@ public class MainMenu extends JFrame implements Runnable
 	private JTextArea messageBox = new JTextArea();
 	private JButton wyslij = new JButton("Wyslij");
 	private JTextField doWyslania = new JTextField();
-	private ImageIcon zdjecieTla = new ImageIcon("pliki/tla/1.jpg");; 
+	private ImageIcon zdjecieTla = new ImageIcon("pliki/tla/1.jpg");
 	private JLabel tlo = new JLabel();
 	
 	private JScrollPane panelGraczy; 
@@ -375,9 +375,9 @@ public class MainMenu extends JFrame implements Runnable
 				{
 					pisarz.writeObject(new RamkaKlienta(3,"",""));
 					pisarz.flush();	
-					System.out.println("wyslalem");
+					//System.out.println("wyslalem");
 					try {
-						t1.sleep(1000);
+						t1.sleep(2000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

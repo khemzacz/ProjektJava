@@ -34,8 +34,10 @@ public class ListMouseListener extends MouseAdapter
 		list = (JList)evt.getSource();
 		if (evt.getClickCount() == 2)
 		{
-			new CzatGraczy("tester");
+			//new CzatGraczy("tester");
 			
+	        int index = list.locationToIndex(evt.getPoint());
+	        System.out.println("index: "+index); // wypisuje index bolka z tablicy bolków
 		}
 		
 	}
