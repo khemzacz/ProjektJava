@@ -1,38 +1,37 @@
+package mainPackage;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Ruch
+public class PojedynczyRuch
 {
 	MojCharacter czym;
 	Character czymc;
 	Pozycja pocz;
-	List <Pozycja> cele;
+	Pozycja cel;
 	
-	Ruch (Character c, Pozycja pocz, List <Pozycja> cele)
+	PojedynczyRuch (Character c, Pozycja pocz, Pozycja cel)
 	{
 		this.czym = new MojCharacter(c);
 		czymc = new Character(c);
 		this.pocz = new Pozycja(pocz);
-		this.cele = new ArrayList<Pozycja>(cele);
+		this.cel = new Pozycja(cel);
 	}
-	Ruch (Ruch kopia)
+	
+	
+	PojedynczyRuch (PojedynczyRuch kopia)
 	{
 		this.czym = new MojCharacter(kopia.getCzym());
 		czymc = new Character (kopia.getCzym());
 		this.pocz = new Pozycja(kopia.getPocz());
-		this.cele = new ArrayList<Pozycja>(kopia.cele);
+		this.cel = new Pozycja(kopia.cel);
 	}
 	
-	public Pozycja get(int index)
+	public Pozycja get()
 	{
-		return cele.get(index);
+		return cel;
 	}
-	
-	public int size()
-	{
-		return cele.size();
-	}
+
 	
 	public Character getCzym()
 	{

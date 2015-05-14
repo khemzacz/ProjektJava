@@ -1,3 +1,4 @@
+package mainPackage;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -10,12 +11,15 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,6 +33,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
 import komunikacja.*;
+import Listenery.*;
 
 
 public class MainMenu extends JFrame implements Runnable
@@ -58,6 +63,8 @@ public class MainMenu extends JFrame implements Runnable
 	private JTextArea messageBox = new JTextArea();
 	private JButton wyslij = new JButton("Wyslij");
 	private JTextField doWyslania = new JTextField();
+	private ImageIcon zdjecieTla = new ImageIcon("pliki/tla/1.jpg");; 
+	private JLabel tlo = new JLabel();
 	
 	private JScrollPane panelGraczy; 
 	
@@ -148,8 +155,9 @@ public class MainMenu extends JFrame implements Runnable
 				panel_menu.add(wyslij);
 				panel_menu.add(doWyslania);
 				//panel_menu.add(panelGraczy);
-				
-				
+				tlo.setIcon(zdjecieTla);
+				tlo.setBounds(0,0,width,height);
+				panel_menu.add(tlo);
 				
 				panel_menu.setVisible(true);
 				zalogujButton.setEnabled(false);
@@ -294,6 +302,7 @@ public class MainMenu extends JFrame implements Runnable
 			}
 		});
 		
+		
 		setResizable(false);
 		
 		panel_menu.setLayout(null);
@@ -309,6 +318,11 @@ public class MainMenu extends JFrame implements Runnable
 		panel_menu.add(op_button);
 		panel_menu.add(lo_button);
 		//panel_menu.add(dane_usera);
+		tlo.setIcon(zdjecieTla);
+		tlo.setBounds(0,0,width,height);
+		panel_menu.add(tlo);
+		
+		
 		add(panel_menu);
 		setVisible(true);
 		
@@ -335,6 +349,8 @@ public class MainMenu extends JFrame implements Runnable
 			list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 			list.setLayoutOrientation(JList.VERTICAL);
 			list.setVisibleRowCount(-1);
+			list.addMouseListener(new ListMouseListener(pisarz));
+			//list.getSelectedIndex();
 			panelGraczy.setViewportView(list);
 			panelGraczy.repaint();
 
@@ -361,7 +377,7 @@ public class MainMenu extends JFrame implements Runnable
 					pisarz.flush();	
 					System.out.println("wyslalem");
 					try {
-						t1.sleep(5000);
+						t1.sleep(1000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -386,10 +402,12 @@ public class MainMenu extends JFrame implements Runnable
 		{
 			ip=adresTextField.getText();
 			nadawca=Login.getText();
+			InetSocketAddress adres = new InetSocketAddress(ip,port);
 			try
 			{
-				gniazdo = new Socket(ip,port);
-				
+				gniazdo = new Socket();
+				gniazdo.connect(adres,2000);
+
 				pisarz = new ObjectOutputStream(gniazdo.getOutputStream()); 
 				pisarz.flush();
 				czytelnik = new ObjectInputStream(gniazdo.getInputStream());
@@ -399,7 +417,7 @@ public class MainMenu extends JFrame implements Runnable
 			} 
 			catch (IOException ex) {
 				ex.printStackTrace();
-				messageBox.append("Nie skonfigurowano sieci");
+				messageBox.append("Nie skonfigurowano sieci\n");
 			}
 		
 		}
