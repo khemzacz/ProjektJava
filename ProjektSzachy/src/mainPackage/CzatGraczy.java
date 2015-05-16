@@ -47,6 +47,7 @@ public class CzatGraczy extends JFrame implements Runnable
 		try {
 			pisarz.writeObject(new RamkaKlienta(5,nadawca,rozmowca,doWyslania.getText()));
 			pisarz.flush();
+			doWyslania.setText("");
 			messageBox.append("\n"+nadawca+": "+message);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -67,6 +68,7 @@ public class CzatGraczy extends JFrame implements Runnable
 		messageBox.setBounds(10,10,375,240);
 		wyslijButton.setBounds(300,250,85,20);
 		doWyslania.setBounds(10,250,290,20);
+		
 		
 		wyslijButton.addActionListener(new ActionListener()
 		{

@@ -56,7 +56,7 @@ public class MainMenu extends JFrame implements Runnable
 	private JLabel LoginLabel= new JLabel("Login: ");
 	private JPasswordField Pass=new JPasswordField("",12);
 	private JLabel PassLabel= new JLabel("Hasło: ");
-	
+	private JButton zaprosDoGry = new JButton("Zaproś do gry");
 	private String importedlogin = new String("");
 	private JButton connectButton = new JButton("Connect");
 	private JTextField adresTextField = new JTextField("127.0.0.1");	
@@ -64,6 +64,7 @@ public class MainMenu extends JFrame implements Runnable
 	private JTextArea messageBox = new JTextArea();
 	private JButton wyslij = new JButton("Wyslij");
 	private JTextField doWyslania = new JTextField();
+	private JButton logoutButton = new JButton("Wyloguj");
 	private ImageIcon zdjecieTla = new ImageIcon("pliki/tla/1.jpg");
 	private JLabel tlo = new JLabel();
 	
@@ -73,9 +74,10 @@ public class MainMenu extends JFrame implements Runnable
 	private RamkaKlienta ramka;
 	
 	private OdbiorcaKomunikatow reciever= new OdbiorcaKomunikatow();
-	private Thread t = new Thread(reciever);
+	private Thread t = new Thread(reciever); 
 	private PlayerListUpdater updater = new PlayerListUpdater();
 	private Thread t1 = new Thread(updater);
+	private Boolean helpFlag=false;
 	
 	ArrayList <CzatGraczy> watkiCzatow = new ArrayList<CzatGraczy>();
 	
@@ -142,12 +144,13 @@ public class MainMenu extends JFrame implements Runnable
 				messageBox.setBounds(width/2-250,height/2-90,500,300);
 				wyslij.setBounds(width/2-250,height/2+210,70,20);
 				doWyslania.setBounds(width/2-180,height/2+210,431,20);
-
+				logoutButton.setBounds(10,10,85,20);
+				zaprosDoGry.setBounds(width-175,535,155,20);
 				
 				panel_menu.add(adresTextField);
 				panel_menu.add(adresLabel);
 				panel_menu.add(connectButton);
-				
+				panel_menu.add(logoutButton);
 				panel_menu.add(LoginLabel);
 				panel_menu.add(Login);
 				panel_menu.add(PassLabel);
@@ -158,6 +161,7 @@ public class MainMenu extends JFrame implements Runnable
 				messageBox.setEditable(false);
 				messageBox.setLineWrap(true);
 				messageBox.setWrapStyleWord(true);
+				panel_menu.add(zaprosDoGry);
 				panel_menu.add(wyslij);
 				panel_menu.add(doWyslania);
 				//panel_menu.add(panelGraczy);
@@ -168,7 +172,9 @@ public class MainMenu extends JFrame implements Runnable
 				panel_menu.setVisible(true);
 				zalogujButton.setEnabled(false);
 				rejestrujButton.setEnabled(false);
+				logoutButton.setEnabled(false);
 				wyslij.setEnabled(false);
+				zaprosDoGry.setEnabled(false);
 				
 			}
 		});
@@ -190,6 +196,8 @@ public class MainMenu extends JFrame implements Runnable
 				RamkaKlienta pakiet = new RamkaKlienta(4,user,doWyslania.getText());
 				try {
 					pisarz.writeObject(pakiet);
+					pisarz.flush();
+					doWyslania.setText("");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -235,6 +243,7 @@ public class MainMenu extends JFrame implements Runnable
 								list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 								list.setLayoutOrientation(JList.VERTICAL);
 								list.setVisibleRowCount(-1);
+								//list.addMouseListener(new ListMouseListener(user,pisarz,watkiCzatow));
 								panelGraczy = new JScrollPane(list);
 								panelGraczy.setBounds(width-175, 25,155,505);
 								
@@ -242,11 +251,12 @@ public class MainMenu extends JFrame implements Runnable
 
 								
 								panel_menu.add(panelGraczy);// dodaje scroll pane do menu
-								
+								logoutButton.setEnabled(true);
+								zaprosDoGry.setEnabled(true);
 								
 								loginFlag=true;
-								t.start();
-								t1.start();
+								t.start(); // watek odbiorcy pakietow
+								t1.start(); // watek aktualizatora listy graczy
 							}
 							else if (pakiet.getW1().equals("bledne_dane"))
 							{
@@ -349,13 +359,16 @@ public class MainMenu extends JFrame implements Runnable
 			{
 				listModel.addElement(listaGraczy.getClientList().get(i));
 			}
-			
-			
+			String tmp = (String) list.getSelectedValue();
 			list = new JList(listModel);
 			list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 			list.setLayoutOrientation(JList.VERTICAL);
 			list.setVisibleRowCount(-1);
 			list.addMouseListener(new ListMouseListener(user,pisarz,watkiCzatow));
+			list.setSelectedValue(tmp, true);
+			if(!helpFlag)
+			zaprosDoGry.addActionListener(new ZaprosDoGryListener(list));
+			helpFlag=true;
 			//list.getSelectedIndex();
 			panelGraczy.setViewportView(list);
 			panelGraczy.repaint();
