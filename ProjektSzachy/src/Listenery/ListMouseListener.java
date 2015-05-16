@@ -3,6 +3,7 @@ package Listenery;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -20,12 +21,14 @@ public class ListMouseListener extends MouseAdapter
 {
 	JList list;
 	ObjectOutputStream pisarz;
+	ArrayList <CzatGraczy> watkiCzatow;
+	String nadawca;
 	
-	public ListMouseListener( ObjectOutputStream pisarz)
+	public ListMouseListener(String nadawca, ObjectOutputStream pisarz, ArrayList <CzatGraczy> watkiCzatow)
 	{
 		this.pisarz = pisarz;
-		
-		
+		this.nadawca = nadawca;
+		this.watkiCzatow = watkiCzatow;
 	}
 	
 	
@@ -34,10 +37,19 @@ public class ListMouseListener extends MouseAdapter
 		list = (JList)evt.getSource();
 		if (evt.getClickCount() == 2)
 		{
-			//new CzatGraczy("tester");
+
 			
 	        int index = list.locationToIndex(evt.getPoint());
 	        System.out.println("index: "+index); // wypisuje index bolka z tablicy bolków
+			
+	        String rozmowca = (String) list.getSelectedValue();
+	        
+	        CzatGraczy czat;
+			czat = new CzatGraczy(nadawca,rozmowca,pisarz);
+			watkiCzatow.add(czat);
+			czat.run(); // on sam to zakonczy po dispose
+			
+			
 		}
 		
 	}

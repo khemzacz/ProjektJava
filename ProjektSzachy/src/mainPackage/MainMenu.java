@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -75,6 +76,8 @@ public class MainMenu extends JFrame implements Runnable
 	private Thread t = new Thread(reciever);
 	private PlayerListUpdater updater = new PlayerListUpdater();
 	private Thread t1 = new Thread(updater);
+	
+	ArrayList <CzatGraczy> watkiCzatow = new ArrayList<CzatGraczy>();
 	
 	JList list;
 	
@@ -152,6 +155,9 @@ public class MainMenu extends JFrame implements Runnable
 				panel_menu.add(zalogujButton);
 				panel_menu.add(rejestrujButton);
 				panel_menu.add(messageBox);
+				messageBox.setEditable(false);
+				messageBox.setLineWrap(true);
+				messageBox.setWrapStyleWord(true);
 				panel_menu.add(wyslij);
 				panel_menu.add(doWyslania);
 				//panel_menu.add(panelGraczy);
@@ -349,7 +355,7 @@ public class MainMenu extends JFrame implements Runnable
 			list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 			list.setLayoutOrientation(JList.VERTICAL);
 			list.setVisibleRowCount(-1);
-			list.addMouseListener(new ListMouseListener(pisarz));
+			list.addMouseListener(new ListMouseListener(user,pisarz,watkiCzatow));
 			//list.getSelectedIndex();
 			panelGraczy.setViewportView(list);
 			panelGraczy.repaint();
@@ -362,6 +368,27 @@ public class MainMenu extends JFrame implements Runnable
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	public void wiadomoscPrywatna(String nadawca, String odbiorca, String wiadomosc)
+	{
+		Boolean chatActive = false;
+		for (int i = watkiCzatow.size()-1;i>=0;i--)
+		{
+			if (watkiCzatow.get(i).getRozmowca().equals(nadawca))
+			{
+				watkiCzatow.get(i).getMessageBox().append("\n"+nadawca+": "+wiadomosc);
+				chatActive = true;
+				break;
+			}
+		}
+		if (chatActive == false)
+		{
+			CzatGraczy czat = new CzatGraczy(user,nadawca,pisarz);
+			watkiCzatow.add(czat);
+			czat.run();
+			czat.getMessageBox().append("\n"+nadawca+": "+wiadomosc);
 		}
 	}
 
@@ -444,8 +471,24 @@ public class MainMenu extends JFrame implements Runnable
 								messageBox.append("\n"+ramka.getW1()+": "+ramka.getW2());
 								break;
 							case 5:
-							
+								wiadomoscPrywatna(ramka.getW1(),ramka.getW2(),ramka.getW3());
 								break;
+							case 6:
+								
+								break;
+							case 7:
+								
+								break;
+							case 8:
+								
+								break;
+							case 9:
+								
+								break;
+							case 10:
+								
+								break;
+						
 							
 						}
 					
