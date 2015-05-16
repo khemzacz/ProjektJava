@@ -367,7 +367,7 @@ public class MainMenu extends JFrame implements Runnable
 			list.addMouseListener(new ListMouseListener(user,pisarz,watkiCzatow));
 			list.setSelectedValue(tmp, true);
 			if(!helpFlag)
-			zaprosDoGry.addActionListener(new ZaprosDoGryListener(list));
+			zaprosDoGry.addActionListener(new ZaprosDoGryListener(list,pisarz));
 			helpFlag=true;
 			//list.getSelectedIndex();
 			panelGraczy.setViewportView(list);
