@@ -35,6 +35,7 @@ import javax.swing.border.EmptyBorder;
 
 import komunikacja.*;
 import Listenery.*;
+import maleOkienka.*;
 
 
 public class MainMenu extends JFrame implements Runnable
@@ -366,9 +367,11 @@ public class MainMenu extends JFrame implements Runnable
 			list.setVisibleRowCount(-1);
 			list.addMouseListener(new ListMouseListener(user,pisarz,watkiCzatow));
 			list.setSelectedValue(tmp, true);
-			if(!helpFlag)
-			zaprosDoGry.addActionListener(new ZaprosDoGryListener(list,pisarz));
-			helpFlag=true;
+			//if(!helpFlag)
+			for(ActionListener al : zaprosDoGry.getActionListeners())
+			zaprosDoGry.removeActionListener(al);
+			zaprosDoGry.addActionListener(new ZaprosDoGryListener(list,pisarz,user));
+			//helpFlag=true;
 			//list.getSelectedIndex();
 			panelGraczy.setViewportView(list);
 			panelGraczy.repaint();
@@ -403,6 +406,13 @@ public class MainMenu extends JFrame implements Runnable
 			czat.run();
 			czat.getMessageBox().append("\n"+nadawca+": "+wiadomosc);
 		}
+	}
+	
+	public void obslugaZaproszenia(String zapraszajacy)
+	{
+		new ZaproszenieBox(zapraszajacy).run();
+		
+		
 	}
 
 	public class PlayerListUpdater implements Runnable
@@ -487,7 +497,7 @@ public class MainMenu extends JFrame implements Runnable
 								wiadomoscPrywatna(ramka.getW1(),ramka.getW2(),ramka.getW3());
 								break;
 							case 6:
-								
+								obslugaZaproszenia(ramka.getW1());
 								break;
 							case 7:
 								

@@ -13,12 +13,14 @@ public class ZaprosDoGryListener implements ActionListener
 {
 	JList list;
 	String cel;
+	String zapraszajacy;
 	ObjectOutputStream pisarz;
 	
-	public ZaprosDoGryListener(JList list, ObjectOutputStream pisarz)
+	public ZaprosDoGryListener(JList list, ObjectOutputStream pisarz, String zapraszajacy)
 	{
 		this.list = list;
 		this.pisarz=pisarz;
+		this.zapraszajacy = zapraszajacy;
 	}
 	
 	public void actionPerformed(ActionEvent e) 
@@ -26,7 +28,7 @@ public class ZaprosDoGryListener implements ActionListener
 		cel = (String) list.getSelectedValue();
 		System.out.println("Próba zaproszenia: "+cel);
 		try {
-			pisarz.writeObject(new RamkaKlienta(6,cel,""));
+			pisarz.writeObject(new RamkaKlienta(6,zapraszajacy,cel));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
