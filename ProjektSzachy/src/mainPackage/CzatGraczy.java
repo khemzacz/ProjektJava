@@ -92,7 +92,7 @@ public class CzatGraczy extends JFrame implements Runnable
 		panel.add(doWyslania);
 		
 		add(panel);
-		
+		setLocationRelativeTo(null);
 		setVisible(true);
 		setResizable(false);
 		

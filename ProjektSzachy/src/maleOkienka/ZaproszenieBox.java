@@ -30,6 +30,7 @@ public class ZaproszenieBox extends JFrame implements Runnable
 		panel.add(odrzuc);
 		panel.add(ignoruj);
 		add(panel);
+		setLocationRelativeTo(null);
 		setVisible(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
