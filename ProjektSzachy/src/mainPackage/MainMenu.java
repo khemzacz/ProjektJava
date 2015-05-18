@@ -180,6 +180,8 @@ public class MainMenu extends JFrame implements Runnable
 			}
 		});
 		
+		
+		
 		connectButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent ev)
@@ -263,6 +265,10 @@ public class MainMenu extends JFrame implements Runnable
 							{
 								messageBox.append ("\n Bledny login, lub haslo\n");
 							}
+							else if (pakiet.getW1().equals("zajete"))
+							{
+								messageBox.append ("\n Podany user jest juz na serwerze \n");
+							}
 					}
 					catch(Exception ex)
 					{
@@ -302,6 +308,10 @@ public class MainMenu extends JFrame implements Runnable
 							{
 								messageBox.append ("\n nazwa uzytkownika jest juz zajeta");
 							}
+							else if(pakiet.getW1().equals("too_short"))
+							{
+								messageBox.append ("\n Login i hasło muszą składać się z więcej niż trzech liter");								
+							}
 							
 					}
 					catch(Exception ex)
@@ -319,6 +329,7 @@ public class MainMenu extends JFrame implements Runnable
 			}
 		});
 		
+		logoutButton.addActionListener(new WylogujButtonListener(pisarz));
 		
 		setResizable(false);
 		
