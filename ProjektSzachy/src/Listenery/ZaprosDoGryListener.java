@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 
 import javax.swing.JList;
 
+import maleOkienka.NieMozeszZaprosicSamegoSiebie;
 import komunikacja.*;
 
 public class ZaprosDoGryListener implements ActionListener
@@ -27,6 +28,11 @@ public class ZaprosDoGryListener implements ActionListener
 	{
 		cel = (String) list.getSelectedValue();
 		System.out.println("Próba zaproszenia: "+cel);
+		if (cel .equals (zapraszajacy))
+		{
+			new NieMozeszZaprosicSamegoSiebie().run();
+			return;
+		}
 		try {
 			pisarz.writeObject(new RamkaKlienta(6,zapraszajacy,cel));
 		} catch (IOException e1) {
