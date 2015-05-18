@@ -7,7 +7,10 @@ import javax.swing.JPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener; 
+import java.io.IOException;
 import java.io.ObjectOutputStream;
+
+import komunikacja.*;
 
 public class CzyNaPewnoChceszSieWylogowac extends JFrame implements Runnable
 {
@@ -39,8 +42,16 @@ public class CzyNaPewnoChceszSieWylogowac extends JFrame implements Runnable
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// TODO Auto-generated method stub
-				
+				try 
+				{
+					pisarz.writeObject(new RamkaKlienta(99,"",""));
+					pisarz.flush();
+					dispose();
+				} 
+				catch (IOException e) 
+				{
+					e.printStackTrace();
+				}
 			}
 			
 		});

@@ -74,11 +74,12 @@ public class MainMenu extends JFrame implements Runnable
 	private boolean loginFlag=false;
 	private RamkaKlienta ramka;
 	
-	private OdbiorcaKomunikatow reciever= new OdbiorcaKomunikatow();
-	private Thread t = new Thread(reciever); 
-	private PlayerListUpdater updater = new PlayerListUpdater();
-	private Thread t1 = new Thread(updater);
+	private OdbiorcaKomunikatow reciever;//= new OdbiorcaKomunikatow();
+	private Thread t;// = new Thread(reciever); 
+	private PlayerListUpdater updater;// = new PlayerListUpdater();
+	private Thread t1;// = new Thread(updater);
 	private Boolean helpFlag=false;
+	private Boolean JawnaProsbaPolaczenia=true;
 	
 	ArrayList <CzatGraczy> watkiCzatow = new ArrayList<CzatGraczy>();
 	
@@ -227,7 +228,7 @@ public class MainMenu extends JFrame implements Runnable
 							
 							if( pakiet.getW1().equals("zalogowano"))
 							{
-								messageBox.append("\n Zalogowano, witaj: "+user+"\n");
+								messageBox.append("\nZalogowano, witaj: "+user+"\n");
 								zalogujButton.setEnabled(false);
 								rejestrujButton.setEnabled(false);
 								pisarz.writeObject(new RamkaKlienta(3,"",""));
@@ -254,10 +255,17 @@ public class MainMenu extends JFrame implements Runnable
 
 								
 								panel_menu.add(panelGraczy);// dodaje scroll pane do menu
+								for(ActionListener al : logoutButton.getActionListeners())
+									logoutButton.removeActionListener(al);
+								logoutButton.addActionListener(new WylogujButtonListener(pisarz));
 								logoutButton.setEnabled(true);
 								zaprosDoGry.setEnabled(true);
 								
 								loginFlag=true;
+								reciever= new OdbiorcaKomunikatow();
+								t = new Thread(reciever); 
+								updater = new PlayerListUpdater();
+								t1 = new Thread(updater);
 								t.start(); // watek odbiorcy pakietow
 								t1.start(); // watek aktualizatora listy graczy
 							}
@@ -329,7 +337,7 @@ public class MainMenu extends JFrame implements Runnable
 			}
 		});
 		
-		logoutButton.addActionListener(new WylogujButtonListener(pisarz));
+
 		
 		setResizable(false);
 		
@@ -422,8 +430,29 @@ public class MainMenu extends JFrame implements Runnable
 	public void obslugaZaproszenia(String zapraszajacy)
 	{
 		new ZaproszenieBox(zapraszajacy).run();
+	}
+	
+	public void logOut()
+	{
+		list = new JList();
+		try 
+		{
+			gniazdo.close();
+		}
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		logoutButton.setEnabled(false);
+		zaprosDoGry.setEnabled(false);
+		wyslij.setEnabled(false);
 		
-		
+		zalogujButton.setEnabled(false);
+		rejestrujButton.setEnabled(false);
+		loginFlag=false;
+		//JawnaProsbaPolaczenia=false;
+		//t.stop();
+		messageBox.append("\nWylogowano - > Podłącz się ponownie do serwera\n");
 	}
 
 	public class PlayerListUpdater implements Runnable
@@ -446,6 +475,7 @@ public class MainMenu extends JFrame implements Runnable
 				} 
 				catch (IOException e1) 
 				{
+					t1.stop();
 					e1.printStackTrace();
 				}
 
@@ -472,7 +502,9 @@ public class MainMenu extends JFrame implements Runnable
 				pisarz = new ObjectOutputStream(gniazdo.getOutputStream()); 
 				pisarz.flush();
 				czytelnik = new ObjectInputStream(gniazdo.getInputStream());
-				messageBox.append("Obsluga sieci przygotowana\n");
+				if(JawnaProsbaPolaczenia)
+					messageBox.append("Obsluga sieci przygotowana\n");
+				JawnaProsbaPolaczenia=true;
 				zalogujButton.setEnabled(true);
 				rejestrujButton.setEnabled(true);
 			} 
@@ -522,8 +554,9 @@ public class MainMenu extends JFrame implements Runnable
 							case 10:
 								
 								break;
-						
-							
+							case 99:
+								logOut();
+								break;
 						}
 					
 					}		
@@ -532,6 +565,7 @@ public class MainMenu extends JFrame implements Runnable
 			}
 			catch(Exception e)
 			{
+				//t.stop();
 				e.printStackTrace();
 			}
 		}
