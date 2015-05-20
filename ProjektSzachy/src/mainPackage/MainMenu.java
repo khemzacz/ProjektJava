@@ -66,6 +66,7 @@ public class MainMenu extends JFrame implements Runnable
 	private JButton wyslij = new JButton("Wyslij");
 	private JTextField doWyslania = new JTextField();
 	private JButton logoutButton = new JButton("Wyloguj");
+	private JButton powrotDoMenuButton = new JButton("<html><center>Powrót do<br/>menu głównego<center/></html>");
 	private ImageIcon zdjecieTla = new ImageIcon("pliki/tla/1.jpg");
 	private JLabel tlo = new JLabel();
 	
@@ -103,6 +104,11 @@ public class MainMenu extends JFrame implements Runnable
 	MainMenu()
 	{
 		super("Menu Główne");
+	}
+	
+	public Boolean getLoginFlag()
+	{
+		return loginFlag;
 	}
 	
 	@Override
@@ -147,6 +153,8 @@ public class MainMenu extends JFrame implements Runnable
 				wyslij.setBounds(width/2-250,height/2+210,70,20);
 				doWyslania.setBounds(width/2-180,height/2+210,431,20);
 				logoutButton.setBounds(10,10,85,20);
+				powrotDoMenuButton.setBounds(10,height-90,140,40);
+				//powrotDoMenuButton.setMargin(new Insets(5,5,35,115));
 				zaprosDoGry.setBounds(width-175,535,155,20);
 				
 				panel_menu.add(adresTextField);
@@ -166,6 +174,7 @@ public class MainMenu extends JFrame implements Runnable
 				panel_menu.add(zaprosDoGry);
 				panel_menu.add(wyslij);
 				panel_menu.add(doWyslania);
+				panel_menu.add(powrotDoMenuButton);
 				//panel_menu.add(panelGraczy);
 				tlo.setIcon(zdjecieTla);
 				tlo.setBounds(0,0,width,height);
@@ -192,6 +201,8 @@ public class MainMenu extends JFrame implements Runnable
 			
 			}
 		});
+		
+		powrotDoMenuButton.addActionListener(new PowrotDoMenuListener(this));
 		
 		wyslij.addActionListener(new ActionListener()
 		{
@@ -450,10 +461,20 @@ public class MainMenu extends JFrame implements Runnable
 		zalogujButton.setEnabled(false);
 		rejestrujButton.setEnabled(false);
 		loginFlag=false;
+		panelGraczy.setViewportView(list);
+		Login.setText("");
+		Pass.setText("");
 		//JawnaProsbaPolaczenia=false;
 		//t.stop();
 		messageBox.append("\nWylogowano - > Podłącz się ponownie do serwera\n");
 	}
+	
+	public void powrotDoMenu()
+	{
+		
+		
+	}
+	
 
 	public class PlayerListUpdater implements Runnable
 	{
