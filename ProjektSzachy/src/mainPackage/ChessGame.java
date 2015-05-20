@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +20,12 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 
-public class ChessGame extends JFrame implements MouseListener, MouseMotionListener, Runnable // implementacja interfejsów odpowiedzialnych za guziki myszy i ruch myszy i odpalanie na wątku
+public class ChessGame extends JFrame implements MouseListener, MouseMotionListener, Runnable, Serializable // implementacja interfejsów odpowiedzialnych za guziki myszy i ruch myszy i odpalanie na wątku
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3100221960058878700L;
 	JLayeredPane layeredPane;
 	JPanel chessBoard;
 	JLabel chessPiece;

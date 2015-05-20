@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +20,12 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-public class InternetChessGame extends JFrame implements MouseListener, MouseMotionListener, Runnable
+public class InternetChessGame extends JFrame implements MouseListener, MouseMotionListener, Runnable, Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7625420960573006748L;
 	JLayeredPane layeredPane;
 	JPanel chessBoard;
 	JLabel chessPiece;
@@ -154,6 +159,15 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 	public InternetChessGame(String oponent)
 	{
 		super("partia przeciwko: "+oponent);
+
+	}
+	
+	
+
+
+	@Override
+	public void run() 
+	{  
 		Dimension boardSize = new Dimension(512,512); // rozmiar szachownicy - to się poskaluje
 		layeredPane= new JLayeredPane(); //
 		getContentPane().add(layeredPane); //
@@ -171,24 +185,13 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 
 		rysujPlansze();
 		rysujBierki();
-
-	}
-	
-	
-
-
-	@Override
-	public void run() 
-	{
 		
-		  JFrame frame = new ChessGame();
-		  frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
-		  frame.pack();
-		  frame.setResizable(true);
-		  frame.setLocationRelativeTo( null );
-		  frame.setVisible(true);
-
 		
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE );
+		pack();
+		setResizable(true);
+		setLocationRelativeTo( null );
+		setVisible(true);	
 	}
 
 	public void mousePressed(MouseEvent e)
