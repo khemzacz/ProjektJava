@@ -1,6 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/mainPackage/ChessGame.java=UTF-8
 encoding//src/mainPackage/CzatGraczy.java=UTF-8
+encoding//src/mainPackage/InternetChessGame.java=UTF-8
 encoding//src/mainPackage/MainMenu.java=UTF-8
 encoding//src/mainPackage/MojCharacter.java=UTF-8
 encoding//src/mainPackage/SzachyLogika.java=UTF-8
@@ -9,3 +10,4 @@ encoding//src/maleOkienka/CzyNaPewnoPowrotDoMenu.java=UTF-8
 encoding//src/maleOkienka/NajpierwSieWyloguj.java=UTF-8
 encoding//src/maleOkienka/NieMozeszCzatowacSamZeSoba.java=UTF-8
 encoding//src/maleOkienka/NieMozeszZaprosicSamegoSiebie.java=UTF-8
+encoding//src/maleOkienka/ZaproszenieBox.java=UTF-8

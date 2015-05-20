@@ -82,6 +82,11 @@ public class MainMenu extends JFrame implements Runnable
 	private Boolean helpFlag=false;
 	private Boolean JawnaProsbaPolaczenia=true;
 	
+	private ArrayList <String> ignorowani;
+	
+	private InternetChessGame rozgrywkaSieciowa;
+	private Boolean inGame=false;
+	
 	ArrayList <CzatGraczy> watkiCzatow = new ArrayList<CzatGraczy>();
 	
 	JList list;
@@ -270,6 +275,7 @@ public class MainMenu extends JFrame implements Runnable
 									logoutButton.removeActionListener(al);
 								logoutButton.addActionListener(new WylogujButtonListener(pisarz));
 								logoutButton.setEnabled(true);
+								ignorowani = new ArrayList <String>();
 								zaprosDoGry.setEnabled(true);
 								
 								loginFlag=true;
@@ -440,7 +446,7 @@ public class MainMenu extends JFrame implements Runnable
 	
 	public void obslugaZaproszenia(String zapraszajacy)
 	{
-		new ZaproszenieBox(zapraszajacy).run();
+		new ZaproszenieBox(zapraszajacy,user, ignorowani,pisarz, rozgrywkaSieciowa ).run();
 	}
 	
 	public void logOut()
@@ -473,6 +479,13 @@ public class MainMenu extends JFrame implements Runnable
 	{
 		
 		
+	}
+	
+	
+	public void rozpocznijRozgrywke(String oponent)
+	{
+		rozgrywkaSieciowa = new InternetChessGame(oponent);
+		rozgrywkaSieciowa.run();
 	}
 	
 
@@ -566,8 +579,8 @@ public class MainMenu extends JFrame implements Runnable
 							case 7:
 								
 								break;
-							case 8:
-								
+							case 8: // Odpowiedź o akceptacji zaproszenia
+								rozpocznijRozgrywke(ramka.getW1());
 								break;
 							case 9:
 								
