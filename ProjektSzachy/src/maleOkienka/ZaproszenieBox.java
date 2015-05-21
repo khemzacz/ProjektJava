@@ -55,7 +55,7 @@ public class ZaproszenieBox extends JFrame implements Runnable // to jes wywoły
 					pisarz.writeObject(new RamkaKlienta(7,user,zapraszajacy)); // akceptacja zapro
 					pisarz.flush();
 					
-					rozgrywkaSieciowa=new InternetChessGame(zapraszajacy);
+					rozgrywkaSieciowa=new InternetChessGame(zapraszajacy,"Bialy",true,pisarz);
 					rozgrywkaSieciowa.run();
 					
 					// DO ZROBIENA utworzenie kontrolki z grą

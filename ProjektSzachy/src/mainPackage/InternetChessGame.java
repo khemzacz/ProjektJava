@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +34,12 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 	int yAdjustment;
 	Pozycja pos, cel, poprzedniGraficzny;
 	List <Pozycja> listaRuchow;
+	
+	String kolor;
+	Boolean tura;
 
 	private SzachyLogika gra;
-
+	private ObjectOutputStream pisarz;
 	
 	public void rysujPlansze()
 	{
@@ -156,9 +160,12 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 		}
 	}
 	
-	public InternetChessGame(String oponent)
+	public InternetChessGame(String oponent, String kolor, Boolean tura, ObjectOutputStream pisarz)
 	{
 		super("partia przeciwko: "+oponent);
+		this.kolor = kolor;
+		this.tura=tura;
+		this.pisarz=pisarz;
 
 	}
 	
@@ -196,71 +203,82 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 
 	public void mousePressed(MouseEvent e)
 	{
-		chessPiece=null;
-		Component c = chessBoard.findComponentAt(e.getX(), e.getY()); //Pobiera komponent znajdujący się na danych współrzędnych
-		
-		if(c instanceof JPanel) // jeśli jest to JPanel;
-			return; // to wyjdź z funkcji
-		Point parentLocation =c.getParent().getLocation(); // zapisuhe położenie w parentLocation
-		List <PojedynczyRuch> tmpMoves = new ArrayList<PojedynczyRuch>();
+		if(tura)
+		{	
+			int pom =0;
+			pos = new Pozycja((e.getY()+pom)/64,(e.getX()+pom)/64);
+			if(kolor.equals("Czarny") && gra.plansza[pos.row][pos.column].isUpperCase())
+				return;
+			if(kolor.equals("Bialy") && gra.plansza[pos.row][pos.column].isLowerCase())
+				return;
+			chessPiece=null;
+			Component c = chessBoard.findComponentAt(e.getX(), e.getY()); //Pobiera komponent znajdujący się na danych współrzędnych
+			
+			if(c instanceof JPanel) // jeśli jest to JPanel;
+				return; // to wyjdź z funkcji
+			Point parentLocation =c.getParent().getLocation(); // zapisuhe położenie w parentLocation
+			List <PojedynczyRuch> tmpMoves = new ArrayList<PojedynczyRuch>();
+			xAdjustment = parentLocation.x -e.getX(); 
+			yAdjustment = parentLocation.y -e.getY(); 
+			//System.out.println(parentLocation.x); System.out.println(parentLocation.y);//
 
-	  	
-		
-		xAdjustment = parentLocation.x -e.getX(); 
-		yAdjustment = parentLocation.y -e.getY(); 
-		//System.out.println(parentLocation.x); System.out.println(parentLocation.y);//
-		int pom =0;
-		pos = new Pozycja((e.getY()+pom)/64,(e.getX()+pom)/64);
-		listaRuchow = gra.possibleMoves(pos,gra);
-	  	
-	  	if(gra.sprawdzSzachBialym(gra))
-	  	{
-	  		System.out.println("\nCzarny krol w szachu!!!");
-	  	}
-
-	  	if (gra.plansza[pos.row][pos.column].isUpperCase() && gra.tura ==1)
-	  	{
-	  		tmpMoves.addAll(this.gra.sprawdzSDWMRB(this.gra));
-	  		if (tmpMoves.size() == 0)
-	  		{
-	  			System.out.println("Czarny Zamatowany!");
-	  		}
-	  		System.out.println(listaRuchow.size());
-	  		System.out.println(tmpMoves.size());
-	  		listaRuchow = new ArrayList <Pozycja>(iloczynPozycji(pos,listaRuchow, tmpMoves)); 
-	  	}
-	  	
-		tmpMoves = new ArrayList <PojedynczyRuch>();
-	  	if(gra.sprawdzSzachCzarnym(gra))
-	  	{
-	  		System.out.println("\nCzarny krol w szachu!!!");
-	  	}
-	  	
-	  	if (gra.plansza[pos.row][pos.column].isLowerCase() && gra.tura == 2)
-	  	{
-	  		tmpMoves.addAll(this.gra.sprawdzSDWMRC(this.gra));
-	  		if (tmpMoves.size() == 0)
-	  		{
-	  			System.out.println("Czarny Zamatowany!");
-	  		}
-	  		System.out.println(listaRuchow.size());
-	  		System.out.println(tmpMoves.size());
-	  		listaRuchow = new ArrayList <Pozycja>(iloczynPozycji(pos,listaRuchow, tmpMoves)); 
-	  	}
-	  	
-		//System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column);
-		System.out.println(listaRuchow.size());
-		podswietlPole(listaRuchow);
-		chessPiece = (JLabel)c;
-		chessPiece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
-		poprzedniGraficzny = new Pozycja( e.getY()+ yAdjustment, e.getX() + xAdjustment);
-		chessPiece.setSize(chessPiece.getWidth(), chessPiece.getHeight());
-		layeredPane.add(chessPiece, JLayeredPane.DRAG_LAYER);
+			//pos = new Pozycja((e.getY()+pom)/64,(e.getX()+pom)/64);
+			listaRuchow = gra.possibleMoves(pos,gra);
+		  	
+		  	if(gra.sprawdzSzachBialym(gra))
+		  	{
+		  		System.out.println("\nCzarny krol w szachu!!!");
+		  	}
+	
+		  	if (gra.plansza[pos.row][pos.column].isUpperCase() && gra.tura ==1)
+		  	{
+		  		tmpMoves.addAll(this.gra.sprawdzSDWMRB(this.gra));
+		  		if (tmpMoves.size() == 0)
+		  		{
+		  			System.out.println("Czarny Zamatowany!");
+		  		}
+		  		System.out.println(listaRuchow.size());
+		  		System.out.println(tmpMoves.size());
+		  		listaRuchow = new ArrayList <Pozycja>(iloczynPozycji(pos,listaRuchow, tmpMoves)); 
+		  	}
+		  	
+			tmpMoves = new ArrayList <PojedynczyRuch>();
+		  	if(gra.sprawdzSzachCzarnym(gra))
+		  	{
+		  		System.out.println("\nCzarny krol w szachu!!!");
+		  	}
+		  	
+		  	if (gra.plansza[pos.row][pos.column].isLowerCase() && gra.tura == 2)
+		  	{
+		  		tmpMoves.addAll(this.gra.sprawdzSDWMRC(this.gra));
+		  		if (tmpMoves.size() == 0)
+		  		{
+		  			System.out.println("Czarny Zamatowany!");
+		  		}
+		  		System.out.println(listaRuchow.size());
+		  		System.out.println(tmpMoves.size());
+		  		listaRuchow = new ArrayList <Pozycja>(iloczynPozycji(pos,listaRuchow, tmpMoves)); 
+		  	}
+		  	
+			//System.out.println("wiersz" + pos.row); System.out.println("kolumna" +pos.column);
+			System.out.println(listaRuchow.size());
+			podswietlPole(listaRuchow);
+			chessPiece = (JLabel)c;
+			chessPiece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
+			poprzedniGraficzny = new Pozycja( e.getY()+ yAdjustment, e.getX() + xAdjustment);
+			chessPiece.setSize(chessPiece.getWidth(), chessPiece.getHeight());
+			layeredPane.add(chessPiece, JLayeredPane.DRAG_LAYER);
+				
+		}
 	}
 	
 	public void mouseDragged(MouseEvent me)
 	{
 		  if (chessPiece == null) return;
+			if(kolor.equals("Czarny") && gra.plansza[pos.row][pos.column].isUpperCase())
+				return;
+			if(kolor.equals("Bialy") && gra.plansza[pos.row][pos.column].isLowerCase())
+				return;
 		 chessPiece.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
 	}
 	
@@ -268,7 +286,10 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 	public void mouseReleased(MouseEvent e) 
 	{
 		  if(chessPiece == null) return;
-		 
+			if(kolor.equals("Czarny") && gra.plansza[pos.row][pos.column].isUpperCase())
+				return;
+			if(kolor.equals("Bialy") && gra.plansza[pos.row][pos.column].isLowerCase())
+				return;
 		  chessPiece.setVisible(false); //widocznosc JLabela
 		  Component c =  chessBoard.findComponentAt(e.getX(), e.getY());
 		  Component pom = chessBoard.findComponentAt(poprzedniGraficzny.column, poprzedniGraficzny.row);

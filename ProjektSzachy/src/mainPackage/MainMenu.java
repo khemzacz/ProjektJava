@@ -1,25 +1,14 @@
 package mainPackage;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
+
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,7 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.EmptyBorder;
+
 
 import komunikacja.*;
 import Listenery.*;
@@ -528,7 +517,7 @@ public class MainMenu extends JFrame implements Runnable
 	
 	public void rozpocznijRozgrywke(String oponent)
 	{
-		rozgrywkaSieciowa = new InternetChessGame(oponent);
+		rozgrywkaSieciowa = new InternetChessGame(oponent,"Czarny",false,pisarz);
 		rozgrywkaSieciowa.run();
 	}
 	
@@ -546,6 +535,7 @@ public class MainMenu extends JFrame implements Runnable
 					//System.out.println("wyslalem");
 					try {
 						t1.sleep(2000);
+						//Thread.sleep(2000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
