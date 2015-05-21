@@ -1,4 +1,5 @@
 package maleOkienka;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -9,25 +10,20 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-import komunikacja.*;
-import mainPackage.*;
+import komunikacja.RamkaKlienta;
 
-
-public class CzyNaPewnoPowrotDoMenu extends JFrame implements Runnable
+public class CzyNaPewnoChceszWyjsc extends JFrame implements Runnable
 {
 	private JButton tak = new JButton("TAK");
 	private JButton nie = new JButton("NIE");
 	private JPanel panel = new JPanel();
 	private JLabel label = new JLabel();
-	private int width = 360;
+	private int width = 320;
 	private int height = 100;
-	private MainMenu menu;
-	//private ObjectOutputStream pisarz;
 	
-	public CzyNaPewnoPowrotDoMenu(MainMenu menu)
+	public CzyNaPewnoChceszWyjsc()
 	{
 		super("notice");
-		this.menu=menu;
 	}
 	
 	public void run()
@@ -35,28 +31,14 @@ public class CzyNaPewnoPowrotDoMenu extends JFrame implements Runnable
 		setSize(width,height);
 		setLocationRelativeTo(null);
 		label.setBounds(10,10,300,20);
-		label.setText("Jesteś pewien, że chcesz powrócić do menu głównego?");
+		label.setText("Jesteś pewien, że chcesz się wyjść z gry?");
 		tak.setBounds(width/2-85,height/2+40,75,20);
 		tak.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-					menu.getPanel_Menu().removeAll();
-					menu.getPanel_Menu().add(menu.getSpButton());
-					menu.getPanel_Menu().add(menu.getMpButton());
-					menu.getPanel_Menu().add(menu.getOpButton());
-					menu.getPanel_Menu().add(menu.getLoButton());
-					menu.getPanel_Menu().add(menu.getTlo());
-					menu.getPanel_Menu().repaint();
-					menu.getSpButton().setVisible(true);
-					menu.getMpButton().setVisible(true);
-					menu.getOpButton().setVisible(true);
-					menu.getLoButton().setVisible(true);
-					
-					//TUTAJ TRZEBA PRZEMALOWAĆ OKNO KLASY MAIN MENU
-					dispose();
-				
+				System.exit(0);
 			}
 			
 		});

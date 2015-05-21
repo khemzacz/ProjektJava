@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -48,7 +49,7 @@ public class MainMenu extends JFrame implements Runnable
 	private JButton mp_button = new JButton("Internet Game");
 	//JButton st_button = new JButton("Statystyki");
 	private JButton op_button = new JButton("Opcje");
-	private JButton lo_button = new JButton("Log Out");
+	private JButton lo_button = new JButton("EXIT");
 	private JLabel dane_usera = new JLabel("Witaj " +user);
 	
 	private JButton zalogujButton=new JButton("Zaloguj");
@@ -115,6 +116,35 @@ public class MainMenu extends JFrame implements Runnable
 	{
 		return loginFlag;
 	}
+	
+	public JScrollPane getPanelGraczy() {return panelGraczy;}
+	
+	public JPanel getPanel_Menu(){return panel_menu;}
+	
+	public JButton getZalogujButton(){return zalogujButton;}
+	public JButton getRejestrujButton(){return rejestrujButton;}
+	public JButton getSpButton(){return sp_button;}
+	public JButton getMpButton(){return mp_button;}
+	public JButton getOpButton(){return op_button;}
+	public JButton getLoButton(){return lo_button;}
+	public JButton getZaprosDoGryButton(){return zaprosDoGry;}
+	public JButton getConnectButton(){return connectButton;}
+	public JButton getLogOutButton(){return logoutButton;}
+	public JButton getPowrotDoMenuButton(){return powrotDoMenuButton;}
+	
+	public JLabel getDane_Usera(){return dane_usera;}
+	public JLabel getLoginLabel(){return LoginLabel;}
+	public JLabel getPassLabel(){return PassLabel;}
+	public JLabel getAdresLabel(){return adresLabel;}
+	public JLabel getTlo(){return tlo;}
+	
+	public JTextField getLoginField(){return Login;}
+	public JTextField getDoWyslania(){return doWyslania;}
+	
+	public JTextArea getMessageBox(){return messageBox;}
+	
+	public JPasswordField getPasswordField(){return Pass;}
+	
 	
 	@Override
 	public void run() {
@@ -196,7 +226,9 @@ public class MainMenu extends JFrame implements Runnable
 		});
 		
 		
-		
+		lo_button.addActionListener(new ExitButtonListener());
+				
+				
 		connectButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent ev)
@@ -214,12 +246,14 @@ public class MainMenu extends JFrame implements Runnable
 			public void actionPerformed(ActionEvent ev)
 			{
 				RamkaKlienta pakiet = new RamkaKlienta(4,user,doWyslania.getText());
-				try {
+				try 
+				{
 					pisarz.writeObject(pakiet);
 					pisarz.flush();
 					doWyslania.setText("");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
+				} 
+				catch (IOException e) 
+				{
 					e.printStackTrace();
 				}
 				
@@ -272,14 +306,14 @@ public class MainMenu extends JFrame implements Runnable
 								
 								panel_menu.add(panelGraczy);// dodaje scroll pane do menu
 								for(ActionListener al : logoutButton.getActionListeners())
-									logoutButton.removeActionListener(al);
+								logoutButton.removeActionListener(al);
 								logoutButton.addActionListener(new WylogujButtonListener(pisarz));
 								logoutButton.setEnabled(true);
 								ignorowani = new ArrayList <String>();
 								zaprosDoGry.setEnabled(true);
 								
 								loginFlag=true;
-								reciever= new OdbiorcaKomunikatow();
+								reciever = new OdbiorcaKomunikatow();
 								t = new Thread(reciever); 
 								updater = new PlayerListUpdater();
 								t1 = new Thread(updater);
@@ -401,7 +435,7 @@ public class MainMenu extends JFrame implements Runnable
 			list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 			list.setLayoutOrientation(JList.VERTICAL);
 			list.setVisibleRowCount(-1);
-			list.addMouseListener(new ListMouseListener(user,pisarz,watkiCzatow));
+			list.addMouseListener(new ListMouseListener(user,pisarz,watkiCzatow)); // DO POPRAWY LISTENER
 			list.setSelectedValue(tmp, true);
 			//if(!helpFlag)
 			for(ActionListener al : zaprosDoGry.getActionListeners())
@@ -451,10 +485,13 @@ public class MainMenu extends JFrame implements Runnable
 	
 	public void logOut()
 	{
-		list = new JList();
+		
 		try 
 		{
 			gniazdo.close();
+			//pisarz = null;
+			//czytelnik=null;
+
 		}
 		catch (IOException e) 
 		{
@@ -467,12 +504,19 @@ public class MainMenu extends JFrame implements Runnable
 		zalogujButton.setEnabled(false);
 		rejestrujButton.setEnabled(false);
 		loginFlag=false;
+		list = new JList();
+		panel_menu.remove(panelGraczy);
+		panel_menu.repaint();
 		panelGraczy.setViewportView(list);
 		Login.setText("");
 		Pass.setText("");
 		//JawnaProsbaPolaczenia=false;
-		//t.stop();
+
 		messageBox.append("\nWylogowano - > Podłącz się ponownie do serwera\n");
+		t.stop();
+		t.destroy();
+		t1.stop();
+		t1.destroy();
 	}
 	
 	public void powrotDoMenu()
@@ -510,6 +554,9 @@ public class MainMenu extends JFrame implements Runnable
 				catch (IOException e1) 
 				{
 					t1.stop();
+					t1.destroy();
+					t.stop();
+					t.destroy();
 					e1.printStackTrace();
 				}
 
@@ -599,7 +646,10 @@ public class MainMenu extends JFrame implements Runnable
 			}
 			catch(Exception e)
 			{
-				//t.stop();
+				t.stop();
+				t.destroy();
+				t1.stop();
+				t1.destroy();
 				e.printStackTrace();
 			}
 		}
