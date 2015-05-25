@@ -517,7 +517,7 @@ public class MainMenu extends JFrame implements Runnable
 	
 	public void rozpocznijRozgrywke(String oponent)
 	{
-		rozgrywkaSieciowa = new InternetChessGame(oponent,"Czarny",false,pisarz);
+		rozgrywkaSieciowa = new InternetChessGame(user,oponent,"Czarny",false,pisarz);
 		rozgrywkaSieciowa.run();
 	}
 	
@@ -568,7 +568,7 @@ public class MainMenu extends JFrame implements Runnable
 			try
 			{
 				gniazdo = new Socket();
-				gniazdo.connect(adres,2000);
+				gniazdo.connect(adres,10000);
 
 				pisarz = new ObjectOutputStream(gniazdo.getOutputStream()); 
 				pisarz.flush();
@@ -619,8 +619,15 @@ public class MainMenu extends JFrame implements Runnable
 							case 8: // Odpowiedź o akceptacji zaproszenia
 								rozpocznijRozgrywke(ramka.getW1());
 								break;
-							case 9:
-								
+							case 9: // info o ruchu przeciwnika;
+								if (rozgrywkaSieciowa == null)
+								{
+									System.out.println("Odebrano błędny pakiet!!!");
+								}
+								else 
+								{
+									rozgrywkaSieciowa
+								}
 								break;
 							case 10:
 								

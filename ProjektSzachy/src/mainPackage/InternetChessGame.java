@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+
+import komunikacja.*;
 
 public class InternetChessGame extends JFrame implements MouseListener, MouseMotionListener, Runnable, Serializable
 {
@@ -37,6 +40,9 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 	
 	String kolor;
 	Boolean tura;
+	
+	private String gracz;
+	private String oponent;
 
 	private SzachyLogika gra;
 	private ObjectOutputStream pisarz;
@@ -160,12 +166,14 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 		}
 	}
 	
-	public InternetChessGame(String oponent, String kolor, Boolean tura, ObjectOutputStream pisarz)
+	public InternetChessGame(String gracz,String oponent, String kolor, Boolean tura, ObjectOutputStream pisarz)
 	{
 		super("partia przeciwko: "+oponent);
 		this.kolor = kolor;
 		this.tura=tura;
 		this.pisarz=pisarz;
+		this.gracz=gracz;
+		this.oponent=oponent;
 
 	}
 	
@@ -411,6 +419,16 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 			{
 				gra.plansza[cel.row][cel.column].set(gra.plansza[pos.row][pos.column].get());
 				gra.plansza[pos.row][pos.column].set(' ');
+				try 
+				{
+					pisarz.writeObject(new RamkaKlienta(8,gracz,oponent,pos.row,pos.column,cel.row,cel.column));
+					pisarz.flush();
+				} 
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				// pakie ruchu do serwera
 				return true;
 			}
 			
@@ -418,6 +436,13 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 		return false;
 		
 	}
+	
+	public void odbiorRuchu(Pozycja pocz, Pozycja cel)
+	{
+		
+		
+	}
+	
 	public void zmianaTury()
 	{
 		if (this.gra.tura ==1)
