@@ -238,7 +238,7 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 		  		System.out.println("\nCzarny krol w szachu!!!");
 		  	}
 	
-		  	if (gra.plansza[pos.row][pos.column].isUpperCase() && gra.tura ==1)
+		  	if (gra.plansza[pos.row][pos.column].isUpperCase())
 		  	{
 		  		tmpMoves.addAll(this.gra.sprawdzSDWMRB(this.gra));
 		  		if (tmpMoves.size() == 0)
@@ -256,7 +256,7 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 		  		System.out.println("\nCzarny krol w szachu!!!");
 		  	}
 		  	
-		  	if (gra.plansza[pos.row][pos.column].isLowerCase() && gra.tura == 2)
+		  	if (gra.plansza[pos.row][pos.column].isLowerCase())
 		  	{
 		  		tmpMoves.addAll(this.gra.sprawdzSDWMRC(this.gra));
 		  		if (tmpMoves.size() == 0)
@@ -304,7 +304,7 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 
 		  wylaczPodswietlenie();
 		  cel = new Pozycja((e.getY())/64,(e.getX())/64);
-		  Boolean flag = ruch(pos,cel);
+		  Boolean flag = ruch(pos,cel); // tu sie wykonal, albo nie ruch
 		  if (!flag)
 		  {
 			  chessPiece.setLocation(poprzedniGraficzny.column,poprzedniGraficzny.row);
@@ -417,11 +417,11 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 		{
 			if (cel.row == listaRuchow.get(i).row && cel.column == listaRuchow.get(i).column)
 			{
-				gra.plansza[cel.row][cel.column].set(gra.plansza[pos.row][pos.column].get());
-				gra.plansza[pos.row][pos.column].set(' ');
+				gra.plansza[cel.row][cel.column].set(gra.plansza[pocz.row][pocz.column].get());
+				gra.plansza[pocz.row][pocz.column].set(' ');
 				try 
 				{
-					pisarz.writeObject(new RamkaKlienta(8,gracz,oponent,pos.row,pos.column,cel.row,cel.column));
+					pisarz.writeObject(new RamkaKlienta(8,gracz,oponent,pocz.row,pocz.column,cel.row,cel.column));
 					pisarz.flush();
 				} 
 				catch (IOException e)
@@ -439,21 +439,26 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 	
 	public void odbiorRuchu(Pozycja pocz, Pozycja cel)
 	{
+		gra.plansza[cel.row][cel.column].set(gra.plansza[pocz.row][pocz.column].get());
+		gra.plansza[pocz.row][pocz.column].set(' '); // sam ruch na tablicy, trzeba grafike zupdatowac
+		//System.out.println("Wykonalem ruch na tablicy");
+		zmianaTury();//trzeba zmienic ture itd itp.
+		//czyscBierki();
+		//rysujBierki();
+
 		
-		
+		//zmianaTury();//trzeba zmienic ture itd itp.
 	}
 	
 	public void zmianaTury()
 	{
-		if (this.gra.tura ==1)
+		if (tura == false)
 			{
-				this.gra.tura =2;
-				return;
+				tura = true;
 			}
-		if (this.gra.tura == 2)
+		else
 		{
-			this.gra.tura =1;
-			return;
+			tura=false;
 		}
 	}
 	

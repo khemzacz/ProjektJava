@@ -26,16 +26,16 @@ public class ZaproszenieBox extends JFrame implements Runnable // to jes wywoły
 	private String zapraszajacy;
 	private String user;
 	private ObjectOutputStream pisarz;
-	private InternetChessGame rozgrywkaSieciowa;
+	private MainMenu menu;
 	
-	public ZaproszenieBox(String zapraszajacy, String user, ArrayList<String> ignorowani, ObjectOutputStream pisarz, InternetChessGame rozgrywkaSieciowa)
+	public ZaproszenieBox(String zapraszajacy, String user, ArrayList<String> ignorowani, ObjectOutputStream pisarz, MainMenu menu)
 	{
 		super("Zaproszenie do gry od: "+zapraszajacy);
 		this.zapraszajacy=zapraszajacy;
 		this.ignorowani=ignorowani;
 		this.pisarz=pisarz;
 		this.user=user;
-		this.rozgrywkaSieciowa=rozgrywkaSieciowa;
+		this.menu=menu;
 	}
 	
 	
@@ -55,10 +55,11 @@ public class ZaproszenieBox extends JFrame implements Runnable // to jes wywoły
 					pisarz.writeObject(new RamkaKlienta(7,user,zapraszajacy)); // akceptacja zapro
 					pisarz.flush();
 					
-					rozgrywkaSieciowa=new InternetChessGame(user,zapraszajacy,"Bialy",true,pisarz);
-					rozgrywkaSieciowa.run();
 					
-					// DO ZROBIENA utworzenie kontrolki z grą
+					menu.setRozgrywkaSieciowa(new InternetChessGame(user,zapraszajacy,"Bialy",true,pisarz));
+					menu.getRozgrywkaSieciowa().run(); // to działa teraz poprawić obsługę grafiki
+					
+					
 					dispose();
 				}
 				catch (IOException e1) 

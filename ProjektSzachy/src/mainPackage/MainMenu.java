@@ -106,6 +106,17 @@ public class MainMenu extends JFrame implements Runnable
 		return loginFlag;
 	}
 	
+	public void setRozgrywkaSieciowa(InternetChessGame rozgrywkaSieciowa)
+	{
+		this.rozgrywkaSieciowa=rozgrywkaSieciowa;
+	}
+	
+	public InternetChessGame getRozgrywkaSieciowa()
+	{
+		return rozgrywkaSieciowa;
+	}
+	
+	
 	public JScrollPane getPanelGraczy() {return panelGraczy;}
 	
 	public JPanel getPanel_Menu(){return panel_menu;}
@@ -469,7 +480,7 @@ public class MainMenu extends JFrame implements Runnable
 	
 	public void obslugaZaproszenia(String zapraszajacy)
 	{
-		new ZaproszenieBox(zapraszajacy,user, ignorowani,pisarz, rozgrywkaSieciowa ).run();
+		new ZaproszenieBox(zapraszajacy,user, ignorowani,pisarz, this).run();
 	}
 	
 	public void logOut()
@@ -534,7 +545,7 @@ public class MainMenu extends JFrame implements Runnable
 					pisarz.flush();	
 					//System.out.println("wyslalem");
 					try {
-						t1.sleep(2000);
+						t1.sleep(5000);
 						//Thread.sleep(2000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
@@ -620,13 +631,15 @@ public class MainMenu extends JFrame implements Runnable
 								rozpocznijRozgrywke(ramka.getW1());
 								break;
 							case 9: // info o ruchu przeciwnika;
+								System.out.println("Cos odebrał1");
 								if (rozgrywkaSieciowa == null)
 								{
 									System.out.println("Odebrano błędny pakiet!!!");
 								}
 								else 
 								{
-									rozgrywkaSieciowa
+									rozgrywkaSieciowa.odbiorRuchu(new Pozycja(ramka.getPW(),ramka.getPK()), new Pozycja(ramka.getKW(),ramka.getKK()));
+									System.out.println("Coś odebrał2");
 								}
 								break;
 							case 10:
