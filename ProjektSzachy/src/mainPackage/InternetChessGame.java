@@ -53,7 +53,7 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 		for (int i = 0;i<64 ;i++)
 		{
 			JPanel square = new JPanel(new BorderLayout());
-			chessBoard.add( square);
+			chessBoard.add( square); //dodaje pola w odpowiednim kolorze
 			int row =(i/8)%2;
 			if (row==0)
 				square.setBackground(i%2== 0? Color.getHSBColor((51F/360F),.46F,0.77F) : Color.getHSBColor((76F/360F),1F,0.5F)); //
@@ -68,8 +68,22 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 	{
 		for (int i = 0 ; i<64 ; i++)
 		{
+			if (gra.plansza[i/8][i%8].rowne(' '))
+			{
+				JPanel panel = (JPanel)chessBoard.getComponent(i);
+					panel.removeAll();
+					panel.repaint();
+			}
+		}
+	}
+	
+	
+	public void odswiezBierki()
+	{
+		for (int i = 0 ; i<64 ; i++)
+		{
 			JPanel panel = (JPanel)chessBoard.getComponent(i);
-			panel.remove(0);
+			panel.repaint();
 		}
 	}
 	
@@ -84,6 +98,8 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/pionczarny.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
+				piece.setVisible(true);
+				piece.repaint();
 				continue;
 			}
 			if (gra.plansza[i/8][i%8].rowne('P'))
@@ -91,6 +107,8 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/pionbialy.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
+				piece.setVisible(true);
+				piece.repaint();
 				continue;
 			}
 			if (gra.plansza[i/8][i%8].rowne('w'))
@@ -98,6 +116,8 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/wiezaczarna.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
+				piece.setVisible(true);
+				piece.repaint();
 				continue;
 			}
 			if (gra.plansza[i/8][i%8].rowne('W'))
@@ -105,6 +125,8 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/wiezabiala.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
+				piece.setVisible(true);
+				piece.repaint();
 				continue;
 			}
 			if (gra.plansza[i/8][i%8].rowne('s'))
@@ -112,6 +134,8 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/skoczekczarny.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
+				piece.setVisible(true);
+				piece.repaint();
 				continue;
 			}
 			if (gra.plansza[i/8][i%8].rowne('S'))
@@ -119,6 +143,8 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/skoczekbialy.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
+				piece.setVisible(true);
+				piece.repaint();
 				continue;
 			}
 			if (gra.plansza[i/8][i%8].rowne('g'))
@@ -126,6 +152,8 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/goniecczarny.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
+				piece.setVisible(true);
+				piece.repaint();
 				continue;
 			}
 			if (gra.plansza[i/8][i%8].rowne('G'))
@@ -133,6 +161,8 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/goniecbialy.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
+				piece.setVisible(true);
+				piece.repaint();
 				continue;
 			}
 			if (gra.plansza[i/8][i%8].rowne('k'))
@@ -140,6 +170,8 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/krolczarny.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
+				piece.setVisible(true);
+				piece.repaint();
 				continue;
 			}
 			if (gra.plansza[i/8][i%8].rowne('K'))
@@ -147,6 +179,8 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/krolbialy.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
+				piece.setVisible(true);
+				piece.repaint();
 				continue;
 			}
 			if (gra.plansza[i/8][i%8].rowne('h'))
@@ -154,6 +188,8 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanczarny.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
+				piece.setVisible(true);
+				piece.repaint();
 				continue;
 			}
 			if (gra.plansza[i/8][i%8].rowne('H'))
@@ -161,6 +197,8 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanbialy.png")); // Bierka jest JLabelem
 				JPanel panel = (JPanel)chessBoard.getComponent(i); // przypisuje pod odniesienie panel, odpowiedni komponent
 				panel.add(piece); // dodaje bierke do tego panelu
+				piece.setVisible(true);
+				piece.repaint();
 				continue;
 			}
 		}
@@ -282,79 +320,84 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 	
 	public void mouseDragged(MouseEvent me)
 	{
-		  if (chessPiece == null) return;
-			if(kolor.equals("Czarny") && gra.plansza[pos.row][pos.column].isUpperCase())
-				return;
-			if(kolor.equals("Bialy") && gra.plansza[pos.row][pos.column].isLowerCase())
-				return;
-		 chessPiece.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
+		if(tura)
+		{	
+			  if (chessPiece == null) return;
+				if(kolor.equals("Czarny") && gra.plansza[pos.row][pos.column].isUpperCase())
+					return;
+				if(kolor.equals("Bialy") && gra.plansza[pos.row][pos.column].isLowerCase())
+					return;
+			 chessPiece.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
+		}
 	}
 	
 	
 	public void mouseReleased(MouseEvent e) 
 	{
-		  if(chessPiece == null) return;
-			if(kolor.equals("Czarny") && gra.plansza[pos.row][pos.column].isUpperCase())
-				return;
-			if(kolor.equals("Bialy") && gra.plansza[pos.row][pos.column].isLowerCase())
-				return;
-		  chessPiece.setVisible(false); //widocznosc JLabela
-		  Component c =  chessBoard.findComponentAt(e.getX(), e.getY());
-		  Component pom = chessBoard.findComponentAt(poprzedniGraficzny.column, poprzedniGraficzny.row);
-
-		  wylaczPodswietlenie();
-		  cel = new Pozycja((e.getY())/64,(e.getX())/64);
-		  Boolean flag = ruch(pos,cel); // tu sie wykonal, albo nie ruch
-		  if (!flag)
-		  {
-			  chessPiece.setLocation(poprzedniGraficzny.column,poprzedniGraficzny.row);
-			  Container parent = (Container)pom;
-			  parent.add(chessPiece);
-			  chessPiece.setVisible(true);
-			  return;
-		  }
-		  
-		  if (c instanceof JLabel)
-		  {
-			  Container parent = c.getParent();
-			  parent.remove(0);
-			  parent.add( chessPiece );
-		  }
-		  else 
-		  {
-			  Container parent = (Container)c;
-			  parent.add( chessPiece );
-		  }
-		  
-		  
-		  	if (gra.tura==2)
-		  	{
-		  		int tmp=gra.sprawdzAwansCzarnym();
-		  		if(tmp!=8)
-		  		{
-		  			JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanczarny.png")); // Bierka jest JLabelem
-					JPanel panel = (JPanel)chessBoard.getComponent(tmp); // przypisuje pod odniesienie panel, odpowiedni komponent
-					panel.remove(0);
-					panel.add(piece); // dodaje bierke do tego panelu
-		  		}
-		  			
-		  	}
-		  	if (gra.tura==1)
-		  	{
-		  		int tmp=gra.sprawdzAwansBialym();
-		  		if (tmp!=8)
-		  		{
-		  			JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanbialy.png")); // Bierka jest JLabelem
-					JPanel panel = (JPanel)chessBoard.getComponent(tmp); // przypisuje pod odniesienie panel, odpowiedni komponent
-					panel.remove(0);
-					panel.add(piece); // dodaje bierke do tego panelu
-		  		}
-		  	}
-		  	
-		  	//this.rysujBierki();
-		  	zmianaTury();
-
-		  	chessPiece.setVisible(true);
+		if(tura)
+		{	
+			  if(chessPiece == null) return;
+				if(kolor.equals("Czarny") && gra.plansza[pos.row][pos.column].isUpperCase())
+					return;
+				if(kolor.equals("Bialy") && gra.plansza[pos.row][pos.column].isLowerCase())
+					return;
+			  chessPiece.setVisible(false); //widocznosc JLabela
+			  Component c =  chessBoard.findComponentAt(e.getX(), e.getY());
+			  Component pom = chessBoard.findComponentAt(poprzedniGraficzny.column, poprzedniGraficzny.row);
+	
+			  wylaczPodswietlenie();
+			  cel = new Pozycja((e.getY())/64,(e.getX())/64);
+			  Boolean flag = ruch(pos,cel); // tu sie wykonal, albo nie ruch
+			  if (!flag)
+			  {
+				  chessPiece.setLocation(poprzedniGraficzny.column,poprzedniGraficzny.row);
+				  Container parent = (Container)pom;
+				  parent.add(chessPiece);
+				  chessPiece.setVisible(true);
+				  return;
+			  }
+			  
+			  if (c instanceof JLabel)// jesli bierka
+			  {
+				  Container parent = c.getParent();
+				  parent.remove(0);
+				  parent.add( chessPiece );
+			  }
+			  else 
+			  {
+				  Container parent = (Container)c;
+				  parent.add( chessPiece );
+			  }
+			  
+			  
+			  	if (gra.tura==2)
+			  	{
+			  		int tmp=gra.sprawdzAwansCzarnym();
+			  		if(tmp!=8)
+			  		{
+			  			JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanczarny.png")); // Bierka jest JLabelem
+						JPanel panel = (JPanel)chessBoard.getComponent(tmp); // przypisuje pod odniesienie panel, odpowiedni komponent
+						panel.remove(0);
+						panel.add(piece); // dodaje bierke do tego panelu
+			  		}
+			  			
+			  	}
+			  	if (gra.tura==1)
+			  	{
+			  		int tmp=gra.sprawdzAwansBialym();
+			  		if (tmp!=8)
+			  		{
+			  			JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanbialy.png")); // Bierka jest JLabelem
+						JPanel panel = (JPanel)chessBoard.getComponent(tmp); // przypisuje pod odniesienie panel, odpowiedni komponent
+						panel.remove(0);
+						panel.add(piece); // dodaje bierke do tego panelu
+			  		}
+			  	}
+			  	
+			  	//this.rysujBierki();
+	
+			  	chessPiece.setVisible(true);
+		}
 
 	}
 	
@@ -423,6 +466,7 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				{
 					pisarz.writeObject(new RamkaKlienta(8,gracz,oponent,pocz.row,pocz.column,cel.row,cel.column));
 					pisarz.flush();
+					zmianaTury();
 				} 
 				catch (IOException e)
 				{
@@ -442,6 +486,7 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 		gra.plansza[cel.row][cel.column].set(gra.plansza[pocz.row][pocz.column].get());
 		gra.plansza[pocz.row][pocz.column].set(' '); // sam ruch na tablicy, trzeba grafike zupdatowac
 		//System.out.println("Wykonalem ruch na tablicy");
+		aktualizacjaGrafiki(pocz, cel);
 		zmianaTury();//trzeba zmienic ture itd itp.
 		//czyscBierki();
 		//rysujBierki();
@@ -461,6 +506,27 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 			tura=false;
 		}
 	}
+	
+	public void aktualizacjaGrafiki(Pozycja pocz, Pozycja cel)
+	{
+		//czyscBierki();
+		
+		JPanel c = (JPanel) chessBoard.getComponent(pocz.row*8+pocz.column);
+		JLabel chessPiece = (JLabel) c.getComponent(0);
+		c.remove(0);
+		c.repaint();
+		c = (JPanel) chessBoard.getComponent(cel.row*8+cel.column);
+		c.removeAll();
+		c.add(chessPiece);
+		c.repaint();
+		
+		//rysujBierki();
+		//chessBoard.repaint();*/ //psuje sie 
+		//rysujBierki();
+		//odswiezBierki();
+		
+	}
+	
 	
 	public List<Pozycja> iloczynPozycji(Pozycja pos,List<Pozycja> pierwsza, List <PojedynczyRuch> ruchy)
 	{
