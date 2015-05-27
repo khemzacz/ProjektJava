@@ -282,7 +282,7 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 		  	
 		  	if(gra.sprawdzSzachBialym(gra))
 		  	{
-		  		System.out.println("\nCzarny krol w szachu!!!");
+		  		System.out.println("\nBialy krol w szachu!!!");
 		  	}
 	
 		  	if (gra.plansza[pos.row][pos.column].isUpperCase())
@@ -290,7 +290,7 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 		  		tmpMoves.addAll(this.gra.sprawdzSDWMRB(this.gra));
 		  		if (tmpMoves.size() == 0)
 		  		{
-		  			System.out.println("Czarny Zamatowany!");
+		  			System.out.println("Bialy Zamatowany!");
 		  		}
 		  		System.out.println(listaRuchow.size());
 		  		System.out.println(tmpMoves.size());
@@ -379,7 +379,7 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 			  }
 			  
 			  
-			  	if (gra.tura==2)
+			  	if (kolor.equals("Czarny"))
 			  	{
 			  		int tmp=gra.sprawdzAwansCzarnym();
 			  		if(tmp!=8)
@@ -391,7 +391,7 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 			  		}
 			  			
 			  	}
-			  	if (gra.tura==1)
+			  	if (kolor.equalsIgnoreCase("Biały"))
 			  	{
 			  		int tmp=gra.sprawdzAwansBialym();
 			  		if (tmp!=8)

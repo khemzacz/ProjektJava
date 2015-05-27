@@ -217,7 +217,7 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	  	
 	  	if(gra.sprawdzSzachBialym(gra))
 	  	{
-	  		System.out.println("\nCzarny krol w szachu!!!");
+	  		System.out.println("\nBialy krol w szachu!!!");
 	  	}
 
 	  	if (gra.plansza[pos.row][pos.column].isUpperCase() && gra.tura ==1)
@@ -225,7 +225,7 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	  		tmpMoves.addAll(this.gra.sprawdzSDWMRB(this.gra));
 	  		if (tmpMoves.size() == 0)
 	  		{
-	  			System.out.println("Czarny Zamatowany!");
+	  			System.out.println("Bialy Zamatowany!");
 	  		}
 	  		System.out.println(listaRuchow.size());
 	  		System.out.println(tmpMoves.size());
