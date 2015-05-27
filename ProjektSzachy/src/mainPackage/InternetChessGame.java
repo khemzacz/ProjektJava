@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
+import maleOkienka.Porazka;
 import maleOkienka.RageQuitNotice;
 import komunikacja.*;
 import adapteryOkien.graSieciowaCloseAdapter;
@@ -54,6 +55,9 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 	public ObjectOutputStream getPisarz()
 	{return pisarz;}
 	
+	public String getOponent()
+	{return oponent;}
+	
 	public void rysujPlansze()
 	{
 		gra = new SzachyLogika();		 // nowy obiekt Typu SzachyLogika
@@ -83,6 +87,7 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 			}
 		}
 	}
+	
 	
 	
 	public void odswiezBierki()
@@ -294,7 +299,7 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 		  		}
 		  		System.out.println(listaRuchow.size());
 		  		System.out.println(tmpMoves.size());
-		  		listaRuchow = new ArrayList <Pozycja>(iloczynPozycji(pos,listaRuchow, tmpMoves)); 
+		  		listaRuchow = new ArrayList <Pozycja>(iloczynPozycji(pos,listaRuchow, tmpMoves));	  		
 		  	}
 		  	
 			tmpMoves = new ArrayList <PojedynczyRuch>();
@@ -353,7 +358,7 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 			  chessPiece.setVisible(false); //widocznosc JLabela
 			  Component c =  chessBoard.findComponentAt(e.getX(), e.getY());
 			  Component pom = chessBoard.findComponentAt(poprzedniGraficzny.column, poprzedniGraficzny.row);
-	
+		
 			  wylaczPodswietlenie();
 			  cel = new Pozycja((e.getY())/64,(e.getX())/64);
 			  Boolean flag = ruch(pos,cel); // tu sie wykonal, albo nie ruch
@@ -378,30 +383,32 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				  parent.add( chessPiece );
 			  }
 			  
+			if(this.kolor.equals("Czarny"))
+			{
+				int tmp=gra.sprawdzAwansCzarnym();
+				if(tmp!=8)
+				{
+					JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanczarny.png")); // Bierka jest JLabelem
+					JPanel panel = (JPanel)chessBoard.getComponent(tmp); // przypisuje pod odniesienie panel, odpowiedni komponent
+					panel.remove(0);
+					panel.add(piece); // dodaje bierke do tego panelu
+				}
+			}
+			else if(this.kolor.equals("Biały"))
+			{
+				int tmp=gra.sprawdzAwansBialym();
+				if (tmp!=8)
+				{
+					JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanbialy.png")); // Bierka jest JLabelem
+					JPanel panel = (JPanel)chessBoard.getComponent(tmp); // przypisuje pod odniesienie panel, odpowiedni komponent
+					panel.remove(0);
+					panel.add(piece); // dodaje bierke do tego panelu
+				}
+			}
 			  
-			  	if (kolor.equals("Czarny"))
-			  	{
-			  		int tmp=gra.sprawdzAwansCzarnym();
-			  		if(tmp!=8)
-			  		{
-			  			JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanczarny.png")); // Bierka jest JLabelem
-						JPanel panel = (JPanel)chessBoard.getComponent(tmp); // przypisuje pod odniesienie panel, odpowiedni komponent
-						panel.remove(0);
-						panel.add(piece); // dodaje bierke do tego panelu
-			  		}
-			  			
-			  	}
-			  	if (kolor.equalsIgnoreCase("Biały"))
-			  	{
-			  		int tmp=gra.sprawdzAwansBialym();
-			  		if (tmp!=8)
-			  		{
-			  			JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanbialy.png")); // Bierka jest JLabelem
-						JPanel panel = (JPanel)chessBoard.getComponent(tmp); // przypisuje pod odniesienie panel, odpowiedni komponent
-						panel.remove(0);
-						panel.add(piece); // dodaje bierke do tego panelu
-			  		}
-			  	}
+
+
+			  	
 			  	
 			  	//this.rysujBierki();
 	
@@ -475,13 +482,13 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 				{
 					pisarz.writeObject(new RamkaKlienta(8,gracz,oponent,pocz.row,pocz.column,cel.row,cel.column));
 					pisarz.flush();
-					zmianaTury();
+					zmianaTury();					
 				} 
 				catch (IOException e)
 				{
 					e.printStackTrace();
 				}
-				// pakie ruchu do serwera
+				// pakiet ruchu do serwera
 				return true;
 			}
 			
@@ -492,16 +499,91 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 	
 	public void odbiorRuchu(Pozycja pocz, Pozycja cel)
 	{
+		List <PojedynczyRuch> tmpMoves = new ArrayList<PojedynczyRuch>();
 		gra.plansza[cel.row][cel.column].set(gra.plansza[pocz.row][pocz.column].get());
 		gra.plansza[pocz.row][pocz.column].set(' '); // sam ruch na tablicy, trzeba grafike zupdatowac
 		//System.out.println("Wykonalem ruch na tablicy");
-		aktualizacjaGrafiki(pocz, cel);
+		int tmp=0;
+		if (this.kolor.equals("Czarny"))
+		{
+	  		tmp=gra.sprawdzAwansBialym();
+		}
+		else if(this.kolor.equals("Biały"))
+		{
+			tmp=gra.sprawdzAwansCzarnym();
+		}
+		if(tmp!=8)
+		{
+			if (cel.row*8+cel.column<=7)
+			{	
+				JPanel c = (JPanel) chessBoard.getComponent(pocz.row*8+pocz.column);
+				JLabel chessPiece = (JLabel) c.getComponent(0);
+				c.remove(0);
+				c.repaint();
+				//JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanbialy.png")); // Bierka jest JLabelem
+				//piece.setVisible(true);
+				c = (JPanel)chessBoard.getComponent(cel.row*8+cel.column); // przypisuje pod odniesienie panel, odpowiedni komponent
+				c.removeAll();
+				chessPiece.setIcon(new ImageIcon("pliki/zdjecia/hetmanbialy.png"));
+				c.add(chessPiece);// dodaje bierke do tego panelu
+				c.repaint();
+			}
+			else if(cel.row*8+cel.column>=56)
+			{
+				JPanel c = (JPanel) chessBoard.getComponent(pocz.row*8+pocz.column);
+				JLabel chessPiece = (JLabel) c.getComponent(0);
+				c.remove(0);
+				c.repaint();
+	  			//JLabel piece = new JLabel (new ImageIcon("pliki/zdjecia/hetmanczarny.png"));
+	  			//piece.setVisible(true);// Bierka jest JLabelem
+				c = (JPanel)chessBoard.getComponent(cel.row*8+cel.column); // przypisuje pod odniesienie panel, odpowiedni komponent
+				c.removeAll();
+				chessPiece.setIcon(new ImageIcon("pliki/zdjecia/hetmanczarny.png"));
+				c.add(chessPiece);
+				// dodaje bierke do tego panelu
+				c.repaint();
+			}
+		}
+		else if (tmp==8)
+		{aktualizacjaGrafiki(pocz, cel);}
 		zmianaTury();//trzeba zmienic ture itd itp.
-		//czyscBierki();
-		//rysujBierki();
-
+		if (kolor.equals("Czarny"))
+		{
+	  		tmpMoves.addAll(this.gra.sprawdzSDWMRC(this.gra));
+	  		if (tmpMoves.size() == 0)
+	  		{
+	  			try
+	  			{
+					pisarz.writeObject(new RamkaKlienta(11,gracz,oponent)); // info o porażce
+					pisarz.flush();
+					new Porazka(this).run();
+				}
+	  			catch (IOException e) 
+	  			{
+	  				e.printStackTrace();
+				}
+	  		}
+		}
+		else if(kolor.equals("Biały"))
+		{
+	  		tmpMoves.addAll(this.gra.sprawdzSDWMRB(this.gra));
+	  		if (tmpMoves.size() == 0)
+	  		{
+	  			try
+	  			{
+					pisarz.writeObject(new RamkaKlienta(11,gracz,oponent));
+					pisarz.flush();
+					new Porazka(this).run();
+				}
+	  			catch (IOException e) 
+	  			{
+	  				e.printStackTrace();
+				}
+	  		}
+		}
 		
-		//zmianaTury();//trzeba zmienic ture itd itp.
+		
+		
 	}
 	
 	public void zmianaTury()

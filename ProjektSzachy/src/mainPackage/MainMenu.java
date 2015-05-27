@@ -307,14 +307,14 @@ public class MainMenu extends JFrame implements Runnable
 								panel_menu.add(panelGraczy);// dodaje scroll pane do menu
 								for(ActionListener al : logoutButton.getActionListeners())
 								logoutButton.removeActionListener(al);
-								logoutButton.addActionListener(new WylogujButtonListener(pisarz));
+								logoutButton.addActionListener(new WylogujButtonListener(pisarz,connectButton));
 								logoutButton.setEnabled(true);
 								ignorowani = new ArrayList <String>();
 								zaprosDoGry.setEnabled(true);
 								
 								loginFlag=true;
 								reciever = new OdbiorcaKomunikatow();
-								t = new Thread(reciever); 
+								t = new Thread(reciever);
 								updater = new PlayerListUpdater();
 								t1 = new Thread(updater);
 								t.start(); // watek odbiorcy pakietow
@@ -589,6 +589,7 @@ public class MainMenu extends JFrame implements Runnable
 				JawnaProsbaPolaczenia=true;
 				zalogujButton.setEnabled(true);
 				rejestrujButton.setEnabled(true);
+				connectButton.setEnabled(false);
 			} 
 			catch (IOException ex) {
 				ex.printStackTrace();
@@ -652,7 +653,7 @@ public class MainMenu extends JFrame implements Runnable
 								obslugaRozlaczenia();
 								break;
 							case 11:
-								
+								new Zwyciestwo(rozgrywkaSieciowa).run();
 								break;
 							case 12:
 								

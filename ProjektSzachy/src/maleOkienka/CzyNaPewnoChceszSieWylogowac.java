@@ -21,11 +21,13 @@ public class CzyNaPewnoChceszSieWylogowac extends JFrame implements Runnable
 	private int width = 320;
 	private int height = 100;
 	private ObjectOutputStream pisarz;
+	private JButton connectButton;
 	
-	public CzyNaPewnoChceszSieWylogowac(ObjectOutputStream pisarz)
+	public CzyNaPewnoChceszSieWylogowac(ObjectOutputStream pisarz, JButton connectButton)
 	{
 		super("notice");
 		this.pisarz=pisarz;
+		this.connectButton=connectButton;
 		
 	}
 	
@@ -42,10 +44,11 @@ public class CzyNaPewnoChceszSieWylogowac extends JFrame implements Runnable
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				try 
+				try
 				{
 					pisarz.writeObject(new RamkaKlienta(99,"",""));
 					pisarz.flush();
+					connectButton.setEnabled(true);
 					dispose();
 				} 
 				catch (IOException e) 

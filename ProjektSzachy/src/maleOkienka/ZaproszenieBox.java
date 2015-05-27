@@ -56,7 +56,7 @@ public class ZaproszenieBox extends JFrame implements Runnable // to jes wywoły
 					pisarz.flush();
 					
 					
-					menu.setRozgrywkaSieciowa(new InternetChessGame(user,zapraszajacy,"Bialy",true,pisarz));
+					menu.setRozgrywkaSieciowa(new InternetChessGame(user,zapraszajacy,"Biały",true,pisarz));
 					menu.getRozgrywkaSieciowa().run(); // to działa teraz poprawić obsługę grafiki
 					
 					
