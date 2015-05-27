@@ -10,6 +10,8 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -22,7 +24,9 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
+import maleOkienka.RageQuitNotice;
 import komunikacja.*;
+import adapteryOkien.graSieciowaCloseAdapter;
 
 public class InternetChessGame extends JFrame implements MouseListener, MouseMotionListener, Runnable, Serializable
 {
@@ -46,6 +50,9 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 
 	private SzachyLogika gra;
 	private ObjectOutputStream pisarz;
+	
+	public ObjectOutputStream getPisarz()
+	{return pisarz;}
 	
 	public void rysujPlansze()
 	{
@@ -240,7 +247,9 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 		rysujBierki();
 		
 		
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE );
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		addWindowListener( new graSieciowaCloseAdapter(this));
+		
 		pack();
 		setResizable(true);
 		setLocationRelativeTo( null );

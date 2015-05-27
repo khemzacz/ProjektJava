@@ -598,6 +598,12 @@ public class MainMenu extends JFrame implements Runnable
 		}
 	}
 	
+	public void obslugaRozlaczenia()
+	{
+		new RageQuitted().run();
+		rozgrywkaSieciowa.dispose();
+	}
+	
 	public class OdbiorcaKomunikatow implements Runnable {
 		public void run() 
 		{
@@ -639,12 +645,18 @@ public class MainMenu extends JFrame implements Runnable
 								else 
 								{
 									rozgrywkaSieciowa.odbiorRuchu(new Pozycja(ramka.getPW(),ramka.getPK()), new Pozycja(ramka.getKW(),ramka.getKK()));
-									System.out.println("Coś odebrał2");
+									//System.out.println("Coś odebrał");
 								}
 								break;
-							case 10:
+							case 10: // rozłączyło przeciwnika
+								obslugaRozlaczenia();
+								break;
+							case 11:
 								
 								break;
+							case 12:
+								
+								break;							
 							case 99:
 								logOut();
 								break;
