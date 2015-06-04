@@ -33,35 +33,41 @@ public class MainMenu extends JFrame implements Runnable
 	private String user;
 	private int width=1000, height=600;
 	
-	private JPanel panel_menu= new JPanel();
+
 	private JButton sp_button = new JButton("Local Game");
 	private JButton mp_button = new JButton("Internet Game");
-	//JButton st_button = new JButton("Statystyki");
+	private JButton st_button = new JButton("Statystyki"); // do zrobienia
 	private JButton op_button = new JButton("Opcje");
 	private JButton lo_button = new JButton("EXIT");
-	private JLabel dane_usera = new JLabel("Witaj " +user);
-	
 	private JButton zalogujButton=new JButton("Zaloguj");
 	private JButton rejestrujButton=new JButton("Rejestracja");
-	private JTextField Login=new JTextField("",12);
-	private JLabel LoginLabel= new JLabel("Login: ");
-	private JPasswordField Pass=new JPasswordField("",12);
-	private JLabel PassLabel= new JLabel("Hasło: ");
 	private JButton zaprosDoGry = new JButton("Zaproś do gry");
-	private String importedlogin = new String("");
-	private JButton connectButton = new JButton("Connect");
-	private JTextField adresTextField = new JTextField("127.0.0.1");	
-	private JLabel adresLabel = new JLabel("Adres: ");
-	private JTextArea messageBox = new JTextArea();
-	private JButton wyslij = new JButton("Wyslij");
-	private JTextField doWyslania = new JTextField();
 	private JButton logoutButton = new JButton("Wyloguj");
 	private JButton powrotDoMenuButton = new JButton("<html><center>Powrót do<br/>menu głównego<center/></html>");
-	private ImageIcon zdjecieTla = new ImageIcon("pliki/tla/1.jpg");
+	private JButton wyslij = new JButton("Wyslij");
+	private JButton connectButton = new JButton("Connect");
+	
+	private JLabel dane_usera = new JLabel("Witaj " +user);
+	private JLabel LoginLabel= new JLabel("Login: ");
+	private JLabel PassLabel= new JLabel("Hasło: ");
 	private JLabel tlo = new JLabel();
+	private JLabel adresLabel = new JLabel("Adres: ");
+	
+	private JPanel panel_menu= new JPanel();
+	
+	private JTextField Login=new JTextField("",12);
+	private JTextField adresTextField = new JTextField("127.0.0.1");
+	private JTextField doWyslania = new JTextField();
+
+	private JPasswordField Pass=new JPasswordField("",12);
+
+	private JTextArea messageBox = new JTextArea();
 	
 	private JScrollPane panelGraczy; 
 	
+	private String importedlogin = new String("");
+	private ImageIcon zdjecieTla = new ImageIcon("pliki/tla/1.jpg");
+
 	private boolean loginFlag=false;
 	private RamkaKlienta ramka;
 	
@@ -191,11 +197,13 @@ public class MainMenu extends JFrame implements Runnable
 				powrotDoMenuButton.setBounds(10,height-90,140,40);
 				//powrotDoMenuButton.setMargin(new Insets(5,5,35,115));
 				zaprosDoGry.setBounds(width-175,535,155,20);
+				st_button.setBounds(10,height-150,140,40);
 				
 				panel_menu.add(adresTextField);
 				panel_menu.add(adresLabel);
 				panel_menu.add(connectButton);
 				panel_menu.add(logoutButton);
+				panel_menu.add(st_button);
 				panel_menu.add(LoginLabel);
 				panel_menu.add(Login);
 				panel_menu.add(PassLabel);
@@ -221,6 +229,7 @@ public class MainMenu extends JFrame implements Runnable
 				logoutButton.setEnabled(false);
 				wyslij.setEnabled(false);
 				zaprosDoGry.setEnabled(false);
+				st_button.setEnabled(false);
 				
 			}
 		});
@@ -311,6 +320,7 @@ public class MainMenu extends JFrame implements Runnable
 								logoutButton.setEnabled(true);
 								ignorowani = new ArrayList <String>();
 								zaprosDoGry.setEnabled(true);
+								st_button.setEnabled(true);								
 								
 								loginFlag=true;
 								reciever = new OdbiorcaKomunikatow();
@@ -388,7 +398,19 @@ public class MainMenu extends JFrame implements Runnable
 			}
 		});
 		
+		st_button.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					RamkaKlienta ramka = new RamkaKlienta(15,"","");
+					pisarz.writeObject(ramka);
+					pisarz.flush(); // posłanie ramki proszącej o statystyki
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 
+				
+			}});
+		
 		
 		setResizable(false);
 		
@@ -503,6 +525,7 @@ public class MainMenu extends JFrame implements Runnable
 		
 		zalogujButton.setEnabled(false);
 		rejestrujButton.setEnabled(false);
+		st_button.setEnabled(false);
 		loginFlag=false;
 		list = new JList();
 		panel_menu.remove(panelGraczy);
@@ -513,6 +536,7 @@ public class MainMenu extends JFrame implements Runnable
 		//JawnaProsbaPolaczenia=false;
 
 		messageBox.append("\nWylogowano - > Podłącz się ponownie do serwera\n");
+		
 		t.stop();
 		t.destroy();
 		t1.stop();
@@ -605,6 +629,40 @@ public class MainMenu extends JFrame implements Runnable
 		rozgrywkaSieciowa.dispose();
 	}
 	
+	public void disconnected()
+	{
+		try 
+		{
+			gniazdo.close();
+		}
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		logoutButton.setEnabled(false);
+		zaprosDoGry.setEnabled(false);
+		wyslij.setEnabled(false);
+		
+		zalogujButton.setEnabled(false);
+		rejestrujButton.setEnabled(false);
+		st_button.setEnabled(false);
+		loginFlag=false;
+		list = new JList();
+		panel_menu.remove(panelGraczy);
+		panel_menu.repaint();
+		panelGraczy.setViewportView(list);
+		Login.setText("");
+		Pass.setText("");
+		//JawnaProsbaPolaczenia=false;
+		connectButton.setEnabled(true);
+		messageBox.append("\nUtracono połączenie z serwerem - > Podłącz się ponownie do serwera\n");
+		
+		t.stop();
+		t.destroy();
+		t1.stop();
+		t1.destroy();
+	}
+	
 	public class OdbiorcaKomunikatow implements Runnable {
 		public void run() 
 		{
@@ -652,11 +710,11 @@ public class MainMenu extends JFrame implements Runnable
 							case 10: // rozłączyło przeciwnika
 								obslugaRozlaczenia();
 								break;
-							case 11:
+							case 11: // win
 								new Zwyciestwo(rozgrywkaSieciowa).run();
 								break;
-							case 12:
-								
+							case 12: // statystyki
+								new Stats(ramka.getW1(),ramka.getW2()).run();
 								break;							
 							case 99:
 								logOut();
@@ -669,11 +727,14 @@ public class MainMenu extends JFrame implements Runnable
 			}
 			catch(Exception e)
 			{
+				//disconnected();
+				e.printStackTrace();
 				t.stop();
 				t.destroy();
 				t1.stop();
-				t1.destroy();
-				e.printStackTrace();
+				t1.destroy();				
+				
+				
 			}
 		}
 		
