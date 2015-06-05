@@ -54,6 +54,12 @@ public class MojCharacter
 	{
 		this.c=c;		
 	}
+	
+	public void set(char c)
+	{
+		this.c=c;		
+	}
+	
 	public Character get()
 	{
 		return this.c;

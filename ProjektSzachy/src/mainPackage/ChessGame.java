@@ -4,20 +4,44 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
 
 
 public class ChessGame extends JFrame implements MouseListener, MouseMotionListener, Runnable, Serializable // implementacja interfejsów odpowiedzialnych za guziki myszy i ruch myszy i odpalanie na wątku
@@ -33,13 +57,14 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	int yAdjustment;
 	Pozycja pos, cel, poprzedniGraficzny;
 	List <Pozycja> listaRuchow;
+	JList list;
 
 	private SzachyLogika gra;
 
 	
 	public void rysujPlansze()
 	{
-		gra = new SzachyLogika();		 // nowy obiekt Typu SzachyLogika
+				 // nowy obiekt Typu SzachyLogika
 		for (int i = 0;i<64 ;i++)
 		{
 			JPanel square = new JPanel(new BorderLayout());
@@ -159,7 +184,8 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	public ChessGame()
 	{
 		super("Plansza");
-		Dimension boardSize = new Dimension(512,512); // rozmiar szachownicy - to się poskaluje
+		gra = new SzachyLogika();
+		/*Dimension boardSize = new Dimension(512,512); // rozmiar szachownicy - to się poskaluje
 		layeredPane= new JLayeredPane(); //
 		getContentPane().add(layeredPane); //
 		layeredPane.setPreferredSize(boardSize); // rozmiar layered pane
@@ -171,13 +197,10 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 		layeredPane.add(chessBoard,JLayeredPane.DEFAULT_LAYER);
 		chessBoard.setLayout(new GridLayout(8,8));
 		chessBoard.setPreferredSize(boardSize);
-		chessBoard.setBounds(0,0,boardSize.width, boardSize.height);
-		
-
-		rysujPlansze();
-		rysujBierki();
-
+		chessBoard.setBounds(0,0,boardSize.width, boardSize.height);*/
 	}
+	
+	
 	
 	
 
@@ -185,15 +208,227 @@ public class ChessGame extends JFrame implements MouseListener, MouseMotionListe
 	@Override
 	public void run() 
 	{
+		JButton zapiszButton = new JButton("zapisz");
+		JButton wczytajButton = new JButton("wczytaj");
+		JButton wycofajOdczytButton = new JButton("wycofaj odczyt");
+		wycofajOdczytButton.setMargin(new Insets(0, 0, 0, 0));
+		wycofajOdczytButton.setEnabled(false);
+		wycofajOdczytButton.setVisible(false);
+		JButton okButton = new JButton("OK");
+		okButton.setMargin(new Insets(0, 0, 0, 0));
+		JButton ok1Button = new JButton("OK");
+		ok1Button.setMargin(new Insets(0, 0, 0, 0));
+		JTextField nazwaZapisuField= new JTextField();
+		JLabel infoLabel = new JLabel();
+		JPanel panel = new JPanel();
+		JScrollPane wczytajScrollPane = new JScrollPane();
 		
-		  JFrame frame = new ChessGame();
-		  frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
-		  frame.pack();
-		  frame.setResizable(true);
-		  frame.setLocationRelativeTo( null );
-		  frame.setVisible(true);
-
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE );
 		
+		panel.add(zapiszButton);
+		panel.add(wczytajButton);
+		panel.add(okButton);
+		okButton.setVisible(false);
+		okButton.setEnabled(false);
+		panel.add(ok1Button);
+		ok1Button.setVisible(false);
+		ok1Button.setEnabled(false);
+		panel.add(infoLabel);
+		panel.add(wycofajOdczytButton);
+		wycofajOdczytButton.setBounds(532,85,85,20);
+		panel.add(nazwaZapisuField);
+		panel.add(wczytajScrollPane);
+		wczytajScrollPane.setBounds(532,115,285,300);
+		wczytajScrollPane.setVisible(false);
+		nazwaZapisuField.setBounds(637,25,130,20);
+		nazwaZapisuField.setVisible(false);
+		okButton.setBounds(777,25,50,20);
+		ok1Button.setBounds(777,25,50,20);
+		zapiszButton.setBounds(532,25,85,20);
+		wczytajButton.setBounds(532,55,85,20);
+		infoLabel.setBounds(532,0,350,20);
+		
+		panel.setLayout(null);
+		
+		
+		zapiszButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				infoLabel.setText("Podaj nazwę zapisu, a następnie wciśnij OK");
+				zapiszButton.setEnabled(false);
+				okButton.setVisible(true);
+				okButton.setEnabled(true);
+				nazwaZapisuField.setVisible(true);
+			}
+			
+		});
+		wczytajButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				infoLabel.setText("Wybierz zapis z listy, a następnie kliknij OK");
+				File currDir = new File("."); // tworzy plik w katalogu projektu
+			    String path = currDir.getAbsolutePath(); // pobiera jego sciezke
+			    path = path.substring(0, path.length()-1);// skraca sciezke o 1
+				Filter poszukiwacz = new Filter();
+				DefaultListModel<String> pliki;// = new ArrayList<File>();
+				pliki = poszukiwacz.finder(path+"/saves/");
+				wycofajOdczytButton.setEnabled(true);
+				wycofajOdczytButton.setVisible(true);
+				list = new JList(pliki);
+				wczytajScrollPane.setViewportView(list);
+				wczytajScrollPane.setVisible(true);
+				ok1Button.setEnabled(true);
+				ok1Button.setVisible(true);
+				zapiszButton.setEnabled(false);
+				wczytajButton.setEnabled(false);
+				
+			}
+		});
+		
+		okButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				DateFormat df = new SimpleDateFormat("dd_MM_yy HH;mm;ss");
+				Date dateobj = new Date();		
+				String tmp = df.format(dateobj);
+			    File currDir = new File("."); // tworzy plik w katalogu projektu
+			    String path = currDir.getAbsolutePath(); // pobiera jego sciezke
+			    path = path.substring(0, path.length()-1);// skraca sciezke o 1
+				File plik = new File(path+"/saves/"+tmp +" " +nazwaZapisuField.getText()+".txt");
+				try
+				{
+					PrintWriter zapis = new PrintWriter(plik);
+					for(int i = 0;i<8;i++)
+					{
+						for(int j =0;j<8;j++)
+						{
+							zapis.print(gra.plansza[i][j].get());
+						}
+						zapis.print("\n");
+					}
+					zapis.println(gra.tura);
+					zapis.close();
+				} 
+				catch (FileNotFoundException e1)
+				{
+					e1.printStackTrace();
+				}
+				zapiszButton.setEnabled(true);
+				infoLabel.setText("Zapisano pomyślnie!");
+				okButton.setEnabled(false);
+				okButton.setVisible(false);
+				nazwaZapisuField.setVisible(false);
+			}
+			
+		});
+		
+		ChessGame reference = this;
+		
+		ok1Button.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+			    File currDir = new File("."); // tworzy plik w katalogu projektu
+			    String path = currDir.getAbsolutePath(); // pobiera jego sciezke
+			    path = path.substring(0, path.length()-1);// skraca sciezke o 1
+				File plik = new File (path+"/saves/"+list.getSelectedValue());
+				try 
+				{
+					Path sciezka = Paths.get(path+"/saves/"+list.getSelectedValue());
+					Reader in = Files.newBufferedReader(sciezka);
+					for (int i =0;i<8;i++)
+					{
+						for(int j=0;j<8;j++)
+						{
+							Character c = (char)in.read();
+							//System.out.print(c); // dobrze czytał
+							gra.plansza[i][j].set(c);
+						}
+						//System.out.println();
+						in.skip(1);
+					}
+					gra.tura=Integer.parseInt(String.valueOf((char)in.read()));
+				} 
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				
+				panel.remove(layeredPane); 
+				
+				Dimension boardSize = new Dimension(512,512);
+				layeredPane= new JLayeredPane(); //
+				panel.add(layeredPane); //
+				panel.repaint();
+				panel.revalidate();
+				layeredPane.setPreferredSize(boardSize); // rozmiar layered pane
+				layeredPane.addMouseListener(reference);
+				layeredPane.addMouseMotionListener(reference);
+				
+				
+				chessBoard = new JPanel();
+				layeredPane.add(chessBoard,JLayeredPane.DEFAULT_LAYER);
+				chessBoard.setLayout(new GridLayout(8,8));
+				chessBoard.setPreferredSize(boardSize);
+				layeredPane.setBounds(0,0,boardSize.width, boardSize.height);
+				chessBoard.setBounds(0,0,boardSize.width, boardSize.height);
+				
+				rysujPlansze();
+				rysujBierki();
+				
+				ok1Button.setEnabled(false);
+				ok1Button.setVisible(false);
+				wczytajButton.setEnabled(true);
+				zapiszButton.setEnabled(true);		
+				wczytajScrollPane.setVisible(false);
+				wycofajOdczytButton.setEnabled(false);
+				wycofajOdczytButton.setVisible(false);
+			}
+		});
+		
+		
+		wycofajOdczytButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				ok1Button.setEnabled(false);
+				ok1Button.setVisible(false);
+				wczytajButton.setEnabled(true);
+				zapiszButton.setEnabled(true);		
+				wczytajScrollPane.setVisible(false);
+				wycofajOdczytButton.setEnabled(false);
+				wycofajOdczytButton.setVisible(false);
+			}
+		});
+		
+		Dimension boardSize = new Dimension(512,512); // rozmiar szachownicy - to się poskaluje
+		layeredPane= new JLayeredPane(); //
+		panel.add(layeredPane); //
+		layeredPane.setPreferredSize(boardSize); // rozmiar layered pane
+		layeredPane.addMouseListener(this);
+		layeredPane.addMouseMotionListener(this);
+		
+		
+		chessBoard = new JPanel();
+		layeredPane.add(chessBoard,JLayeredPane.DEFAULT_LAYER);
+		chessBoard.setLayout(new GridLayout(8,8));
+		chessBoard.setPreferredSize(boardSize);
+		layeredPane.setBounds(0,0,boardSize.width, boardSize.height);
+		chessBoard.setBounds(0,0,boardSize.width, boardSize.height);
+		
+		
+		//pack();
+		setResizable(true);
+		add(panel);
+		setSize(850,550);
+		setVisible(true);
+		setLocationRelativeTo(null);
+		
+		rysujPlansze();
+		rysujBierki();
 	}
 
 	public void mousePressed(MouseEvent e)
