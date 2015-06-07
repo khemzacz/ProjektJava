@@ -18,14 +18,14 @@ import maleOkienka.NieMozeszCzatowacSamZeSoba;
 
 
 
-public class ListMouseListener extends MouseAdapter
+public class KontaktyListListener extends MouseAdapter
 {
 	JList list;
 	ObjectOutputStream pisarz;
 	ArrayList <CzatGraczy> watkiCzatow;
 	String nadawca;
 	
-	public ListMouseListener(String nadawca, ObjectOutputStream pisarz, ArrayList <CzatGraczy> watkiCzatow)
+	public KontaktyListListener(String nadawca, ObjectOutputStream pisarz, ArrayList <CzatGraczy> watkiCzatow)
 	{
 		this.pisarz = pisarz;
 		this.nadawca = nadawca;
@@ -48,7 +48,7 @@ public class ListMouseListener extends MouseAdapter
 	        System.out.println("index: "+index); // wypisuje index bolka z tablicy bolków
 			
 	        String rozmowca = (String) list.getSelectedValue();
-	        
+	        rozmowca = rozmowca.substring(0, rozmowca.lastIndexOf("-")-1);
 	        CzatGraczy czat;
 			czat = new CzatGraczy(nadawca,rozmowca,pisarz,watkiCzatow);
 			for (CzatGraczy tmp : watkiCzatow)

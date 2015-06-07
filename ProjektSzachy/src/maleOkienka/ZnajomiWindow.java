@@ -21,6 +21,7 @@ public class ZnajomiWindow extends JFrame implements Runnable
 	JList list;
 	JTextField poleNicka;
 	JButton dodajZnajomego;
+	JButton kasujZnajomego;
 	ObjectOutputStream pisarz;
 	
 	public ZnajomiWindow(ObjectOutputStream pisarz)
@@ -32,19 +33,20 @@ public class ZnajomiWindow extends JFrame implements Runnable
 	
 	public void run() 
 	{
-		setSize(300,700);
+		setSize(310,100);
 		panel = new JPanel();
 		listaZnajomych = new JScrollPane();
 		poleNicka = new JTextField();
-		dodajZnajomego = new JButton();
+		dodajZnajomego = new JButton("Dodaj Kontakt");
+		kasujZnajomego = new JButton("Kasuj Kontakt");
 		
 		panel.setLayout(null);
-		panel.add(listaZnajomych);
-		listaZnajomych.setBounds(10,10,280,600);
 		panel.add(poleNicka);
-		poleNicka.setBounds(10,620,180,20);
+		poleNicka.setBounds(10,10,275,20);
+		dodajZnajomego.setBounds(10,30,135,20);
+		kasujZnajomego.setBounds (150,30,135,20);
+		panel.add(kasujZnajomego);
 		panel.add(dodajZnajomego);
-		dodajZnajomego.setBounds(200,620,90,20);
 		dodajZnajomego.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -61,6 +63,19 @@ public class ZnajomiWindow extends JFrame implements Runnable
 			}
 		});
 		
+		kasujZnajomego.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					pisarz.writeObject(new RamkaKlienta(18,poleNicka.getText(),""));
+					pisarz.flush();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}});
 		
 		add(panel);
 		setVisible(true);

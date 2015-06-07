@@ -1,12 +1,16 @@
 package mainPackage;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+
+
 
 
 import javax.swing.DefaultListModel;
@@ -21,6 +25,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+
+
 
 
 import komunikacja.*;
@@ -64,6 +70,7 @@ public class MainMenu extends JFrame implements Runnable
 	private JTextArea messageBox = new JTextArea();
 	
 	private JScrollPane panelGraczy; 
+	private JScrollPane panelKontaktow;
 	
 	private String importedlogin = new String("");
 	private ImageIcon zdjecieTla = new ImageIcon("pliki/tla/1.jpg");
@@ -86,6 +93,7 @@ public class MainMenu extends JFrame implements Runnable
 	ArrayList <CzatGraczy> watkiCzatow = new ArrayList<CzatGraczy>();
 	
 	JList list;
+	JList listaKontaktow;
 	
 	String ip;
 	String nadawca;
@@ -133,11 +141,13 @@ public class MainMenu extends JFrame implements Runnable
 	}
 	
 	public JScrollPane getPanelGraczy() {return panelGraczy;}
+	public JScrollPane getPanelKontaktow() {return panelKontaktow;}
 	
 	public JPanel getPanel_Menu(){return panel_menu;}
 	
 	public JButton getZalogujButton(){return zalogujButton;}
-	public JButton znajomiButton = new JButton("Znajomi");
+	public JButton znajomiButton = new JButton("<html><center>Pobierz kontakty<br/>z bazy<center/></html>");
+	public JButton dodajZnajomegoButton = new JButton("<html><center>Zarządzaj kontaktami<br/>w bazie<center/></html>");
 	public JButton getRejestrujButton(){return rejestrujButton;}
 	public JButton getSpButton(){return sp_button;}
 	public JButton getMpButton(){return mp_button;}
@@ -154,6 +164,7 @@ public class MainMenu extends JFrame implements Runnable
 	public JLabel getAdresLabel(){return adresLabel;}
 	public JLabel getTlo(){return tlo;}
 	
+	public JList getListaKontaktow(){return listaKontaktow;}  
 	public JTextField getLoginField(){return Login;}
 	public JTextField getDoWyslania(){return doWyslania;}
 	
@@ -197,7 +208,8 @@ public class MainMenu extends JFrame implements Runnable
 				
 				PassLabel.setBounds(width/2-100,height/2 -130,44,20);
 				Pass.setBounds(width/2-50,height/2 -130,151,20);
-				znajomiButton.setBounds(10,height -210,140,40);
+				dodajZnajomegoButton.setBounds(10,height-200,140,35);
+				znajomiButton.setBounds(10,height -160,140,35);
 				znajomiButton.setEnabled(false);
 				zalogujButton.setBounds(width/2-100,height/2 -110,90,20);
 				rejestrujButton.setBounds(width/2-10,height/2 -110,110,20);
@@ -205,10 +217,10 @@ public class MainMenu extends JFrame implements Runnable
 				wyslij.setBounds(width/2-250,height/2+210,70,20);
 				doWyslania.setBounds(width/2-180,height/2+210,431,20);
 				logoutButton.setBounds(10,10,85,20);
-				powrotDoMenuButton.setBounds(10,height-90,140,40);
+				powrotDoMenuButton.setBounds(10,height-80,140,35);
 				//powrotDoMenuButton.setMargin(new Insets(5,5,35,115));
 				zaprosDoGry.setBounds(width-175,535,155,20);
-				st_button.setBounds(10,height-150,140,40);
+				st_button.setBounds(10,height-120,140,35);
 				
 				panel_menu.add(adresTextField);
 				panel_menu.add(adresLabel);
@@ -230,6 +242,11 @@ public class MainMenu extends JFrame implements Runnable
 				panel_menu.add(doWyslania);
 				panel_menu.add(powrotDoMenuButton);
 				panel_menu.add(znajomiButton);
+				panel_menu.add(dodajZnajomegoButton);
+				znajomiButton.setMargin(new Insets(0,0,0,0));
+				powrotDoMenuButton.setMargin(new Insets(0,0,0,0));
+				st_button.setMargin(new Insets(0,0,0,0));
+				dodajZnajomegoButton.setMargin(new Insets(0,0,0,0));
 				//panel_menu.add(panelGraczy);
 				tlo.setIcon(zdjecieTla);
 				tlo.setBounds(0,0,width,height);
@@ -242,6 +259,7 @@ public class MainMenu extends JFrame implements Runnable
 				wyslij.setEnabled(false);
 				zaprosDoGry.setEnabled(false);
 				st_button.setEnabled(false);
+				dodajZnajomegoButton.setEnabled(false);
 				
 			}
 		});
@@ -286,6 +304,7 @@ public class MainMenu extends JFrame implements Runnable
 		{
 			public void actionPerformed(ActionEvent ev)
 			{
+				zalogujButton.setEnabled(false);
 				try 
 				{
 					user = Login.getText();
@@ -323,6 +342,7 @@ public class MainMenu extends JFrame implements Runnable
 								panelGraczy = new JScrollPane(list);
 								panelGraczy.setBounds(width-175, 25,155,505);
 								
+								
 								wyslij.setEnabled(true);
 
 								
@@ -335,6 +355,7 @@ public class MainMenu extends JFrame implements Runnable
 								zaprosDoGry.setEnabled(true);
 								st_button.setEnabled(true);		
 								znajomiButton.setEnabled(true);
+								dodajZnajomegoButton.setEnabled(true);
 								
 								loginFlag=true;
 								reciever = new OdbiorcaKomunikatow();
@@ -347,20 +368,24 @@ public class MainMenu extends JFrame implements Runnable
 							else if (pakiet.getW1().equals("bledne_dane"))
 							{
 								messageBox.append ("\n Bledny login, lub haslo\n");
+								zalogujButton.setEnabled(true);
 							}
 							else if (pakiet.getW1().equals("zajete"))
 							{
 								messageBox.append ("\n Podany user jest juz na serwerze \n");
+								zalogujButton.setEnabled(true);
 							}
 					}
 					catch(Exception ex)
 					{
 						ex.printStackTrace();
+						zalogujButton.setEnabled(true);
 					}
 				}
 				catch (Exception ex)
 				{
 					ex.printStackTrace();
+					zalogujButton.setEnabled(true);
 					//System.out.println("Nie udalo sie poslac");
 				}
 
@@ -372,6 +397,7 @@ public class MainMenu extends JFrame implements Runnable
 		{
 			public void actionPerformed(ActionEvent ev)
 			{
+				rejestrujButton.setEnabled(false);
 				try 
 				{
 					user = Login.getText();
@@ -390,22 +416,26 @@ public class MainMenu extends JFrame implements Runnable
 							else if (pakiet.getW1().equals("zajete"))
 							{
 								messageBox.append ("\n nazwa uzytkownika jest juz zajeta");
+								rejestrujButton.setEnabled(true);
 							}
 							else if(pakiet.getW1().equals("too_short"))
 							{
-								messageBox.append ("\n Login i hasło muszą składać się z więcej niż trzech liter");								
+								messageBox.append ("\n Login i hasło muszą składać się z więcej niż trzech liter, oraz login nie może zawierać / i -, ani być dłuższy niż 16 znaków ");								
+								rejestrujButton.setEnabled(true);
 							}
 							
 					}
 					catch(Exception ex)
 					{
 						ex.printStackTrace();
+						rejestrujButton.setEnabled(true);	
 					}
 				}
 				catch (Exception ex)
 				{
 					//ex.printStackTrace();
 					System.out.println("Nie udalo sie poslac");
+					rejestrujButton.setEnabled(true);
 				}
 
 				
@@ -496,7 +526,7 @@ public class MainMenu extends JFrame implements Runnable
 		}
 		if (chatActive == false)
 		{
-			CzatGraczy czat = new CzatGraczy(user,nadawca,pisarz);
+			CzatGraczy czat = new CzatGraczy(user,nadawca,pisarz,watkiCzatow);
 			watkiCzatow.add(czat);
 			czat.run();
 			czat.getMessageBox().append("\n"+nadawca+": "+wiadomosc);
@@ -507,6 +537,20 @@ public class MainMenu extends JFrame implements Runnable
 	{
 		new ZaproszenieBox(zapraszajacy,user, ignorowani,pisarz, this).run();
 	}
+	
+	public void pobierzListeKontaktow()
+	{
+		try
+		{
+			pisarz.writeObject(new RamkaKlienta(17,user,""));
+			pisarz.flush();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public void logOut()
 	{
@@ -529,8 +573,11 @@ public class MainMenu extends JFrame implements Runnable
 		zalogujButton.setEnabled(false);
 		rejestrujButton.setEnabled(false);
 		st_button.setEnabled(false);
+		connectButton.setEnabled(true);
 		loginFlag=false;
 		list = new JList();
+		listaKontaktow = new JList();
+		panelKontaktow.setViewportView(listaKontaktow);
 		panel_menu.remove(panelGraczy);
 		panel_menu.repaint();
 		panelGraczy.setViewportView(list);
@@ -624,17 +671,16 @@ public class MainMenu extends JFrame implements Runnable
 							RamkaKlienta ramka = new RamkaKlienta(15,"","");
 							pisarz.writeObject(ramka);
 							pisarz.flush(); // posłanie ramki proszącej o statystyki
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-
-						
+						} catch (IOException e) {e.printStackTrace();}						
 					}});
 
 				znajomiButton.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e) {
+						pobierzListeKontaktow();//new ZnajomiWindow(pisarz).run();
+					}});
+				dodajZnajomegoButton.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent arg0) {
 						new ZnajomiWindow(pisarz).run();
-						
 					}});
 				
 				
@@ -645,6 +691,23 @@ public class MainMenu extends JFrame implements Runnable
 			}
 		
 		}
+	}
+	
+	public void disableDodajZnajomegoButton()
+	{dodajZnajomegoButton.setEnabled(false);}
+	
+	public void kontakty(RamkaSerwera ramka)
+	{
+		listaKontaktow = new JList(ramka.getZnajomi());
+		listaKontaktow.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		listaKontaktow.setLayoutOrientation(JList.VERTICAL);
+		listaKontaktow.setVisibleRowCount(-1);
+		listaKontaktow.addMouseListener(new KontaktyListListener(user,pisarz,watkiCzatow){});
+		panelKontaktow = new JScrollPane(listaKontaktow);
+		panelKontaktow.setBounds(10,80,140,280);
+		panel_menu.add(panelKontaktow);
+		panel_menu.revalidate();
+		
 	}
 	
 	public void obslugaRozlaczenia()
@@ -739,7 +802,10 @@ public class MainMenu extends JFrame implements Runnable
 								break;
 							case 12: // statystyki
 								new Stats(ramka.getW1(),ramka.getW2()).run();
-								break;							
+								break;	
+							case 17:
+								kontakty(ramka);
+								break;
 							case 99:
 								logOut();
 								break;
@@ -751,7 +817,7 @@ public class MainMenu extends JFrame implements Runnable
 			}
 			catch(Exception e)
 			{
-				//disconnected();
+				disconnected(); // to ma byc nie zmieniac!
 				e.printStackTrace();
 				t.stop();
 				t.destroy();

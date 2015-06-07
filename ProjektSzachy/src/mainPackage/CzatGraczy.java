@@ -1,13 +1,19 @@
 package mainPackage;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import maleOkienka.RageQuitNotice;
+
 import java.awt.event.ActionListener;
 
 import komunikacja.*;
@@ -23,6 +29,7 @@ public class CzatGraczy extends JFrame implements Runnable
 	JButton wyslijButton = new JButton("wyslij");
 	JTextField doWyslania = new JTextField();
 	ObjectOutputStream pisarz;
+	ArrayList <CzatGraczy> watkiCzatow;
 	
 	public String getRozmowca()
 	{
@@ -34,12 +41,13 @@ public class CzatGraczy extends JFrame implements Runnable
 		return messageBox;
 	}
 	
-	public CzatGraczy(String nadawca,String rozmowca, ObjectOutputStream pisarz)
+	public CzatGraczy(String nadawca,String rozmowca, ObjectOutputStream pisarz, ArrayList<CzatGraczy> watkiCzatow)
 	{
 		super(rozmowca);
 		this.nadawca = nadawca;
 		this.rozmowca = rozmowca;
 		this.pisarz = pisarz;
+		this.watkiCzatow=watkiCzatow;
 	}
 	
 	public void dodajWiadomosc(String message)
@@ -61,8 +69,19 @@ public class CzatGraczy extends JFrame implements Runnable
 	@Override
 	public void run() 
 	{
+		//Thread JPK = new Thread (this);
 		setSize(width,height);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		CzatGraczy reference = this;
+		addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent evt)
+			{
+				dispose();
+				watkiCzatow.remove(reference);
+				//JPK.stop();
+				//JPK.destroy();
+			}
+		});
 		panel.setLayout(null);
 		
 		messageBox.setBounds(10,10,375,240);

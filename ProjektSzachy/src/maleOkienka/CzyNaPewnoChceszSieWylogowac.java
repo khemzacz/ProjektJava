@@ -52,9 +52,9 @@ public class CzyNaPewnoChceszSieWylogowac extends JFrame implements Runnable
 				{
 					pisarz.writeObject(new RamkaKlienta(99,"",""));
 					pisarz.flush();
-					connectButton.setEnabled(true);
 					menu.disableStButton();
 					menu.diableZnajomiButton();
+					menu.disableDodajZnajomegoButton();
 					dispose();
 				} 
 				catch (IOException e) 
