@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import mainPackage.MainMenu;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener; 
 import java.io.IOException;
@@ -22,12 +24,14 @@ public class CzyNaPewnoChceszSieWylogowac extends JFrame implements Runnable
 	private int height = 100;
 	private ObjectOutputStream pisarz;
 	private JButton connectButton;
+	private MainMenu menu;
 	
-	public CzyNaPewnoChceszSieWylogowac(ObjectOutputStream pisarz, JButton connectButton)
+	public CzyNaPewnoChceszSieWylogowac(ObjectOutputStream pisarz, JButton connectButton, MainMenu menu)
 	{
 		super("notice");
 		this.pisarz=pisarz;
 		this.connectButton=connectButton;
+		this.menu = menu;
 		
 	}
 	
@@ -49,6 +53,8 @@ public class CzyNaPewnoChceszSieWylogowac extends JFrame implements Runnable
 					pisarz.writeObject(new RamkaKlienta(99,"",""));
 					pisarz.flush();
 					connectButton.setEnabled(true);
+					menu.disableStButton();
+					menu.diableZnajomiButton();
 					dispose();
 				} 
 				catch (IOException e) 

@@ -122,12 +122,22 @@ public class MainMenu extends JFrame implements Runnable
 		return rozgrywkaSieciowa;
 	}
 	
+	public void disableStButton()
+	{
+		st_button.setEnabled(false);
+	}
+	
+	public void diableZnajomiButton()
+	{
+		znajomiButton.setEnabled(false);
+	}
 	
 	public JScrollPane getPanelGraczy() {return panelGraczy;}
 	
 	public JPanel getPanel_Menu(){return panel_menu;}
 	
 	public JButton getZalogujButton(){return zalogujButton;}
+	public JButton znajomiButton = new JButton("Znajomi");
 	public JButton getRejestrujButton(){return rejestrujButton;}
 	public JButton getSpButton(){return sp_button;}
 	public JButton getMpButton(){return mp_button;}
@@ -187,7 +197,8 @@ public class MainMenu extends JFrame implements Runnable
 				
 				PassLabel.setBounds(width/2-100,height/2 -130,44,20);
 				Pass.setBounds(width/2-50,height/2 -130,151,20);
-				
+				znajomiButton.setBounds(10,height -210,140,40);
+				znajomiButton.setEnabled(false);
 				zalogujButton.setBounds(width/2-100,height/2 -110,90,20);
 				rejestrujButton.setBounds(width/2-10,height/2 -110,110,20);
 				messageBox.setBounds(width/2-250,height/2-90,500,300);
@@ -218,6 +229,7 @@ public class MainMenu extends JFrame implements Runnable
 				panel_menu.add(wyslij);
 				panel_menu.add(doWyslania);
 				panel_menu.add(powrotDoMenuButton);
+				panel_menu.add(znajomiButton);
 				//panel_menu.add(panelGraczy);
 				tlo.setIcon(zdjecieTla);
 				tlo.setBounds(0,0,width,height);
@@ -268,6 +280,7 @@ public class MainMenu extends JFrame implements Runnable
 				
 			}
 		});
+		MainMenu reference = this;
 		
 		zalogujButton.addActionListener(new ActionListener()
 		{
@@ -316,11 +329,12 @@ public class MainMenu extends JFrame implements Runnable
 								panel_menu.add(panelGraczy);// dodaje scroll pane do menu
 								for(ActionListener al : logoutButton.getActionListeners())
 								logoutButton.removeActionListener(al);
-								logoutButton.addActionListener(new WylogujButtonListener(pisarz,connectButton));
+								logoutButton.addActionListener(new WylogujButtonListener(pisarz,connectButton,reference));
 								logoutButton.setEnabled(true);
 								ignorowani = new ArrayList <String>();
 								zaprosDoGry.setEnabled(true);
-								st_button.setEnabled(true);								
+								st_button.setEnabled(true);		
+								znajomiButton.setEnabled(true);
 								
 								loginFlag=true;
 								reciever = new OdbiorcaKomunikatow();
@@ -398,18 +412,7 @@ public class MainMenu extends JFrame implements Runnable
 			}
 		});
 		
-		st_button.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					RamkaKlienta ramka = new RamkaKlienta(15,"","");
-					pisarz.writeObject(ramka);
-					pisarz.flush(); // posłanie ramki proszącej o statystyki
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 
-				
-			}});
 		
 		
 		setResizable(false);
@@ -614,6 +617,27 @@ public class MainMenu extends JFrame implements Runnable
 				zalogujButton.setEnabled(true);
 				rejestrujButton.setEnabled(true);
 				connectButton.setEnabled(false);
+				
+				st_button.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent arg0) {
+						try {
+							RamkaKlienta ramka = new RamkaKlienta(15,"","");
+							pisarz.writeObject(ramka);
+							pisarz.flush(); // posłanie ramki proszącej o statystyki
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+
+						
+					}});
+
+				znajomiButton.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e) {
+						new ZnajomiWindow(pisarz).run();
+						
+					}});
+				
+				
 			} 
 			catch (IOException ex) {
 				ex.printStackTrace();
