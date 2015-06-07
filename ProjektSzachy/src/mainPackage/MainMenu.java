@@ -9,10 +9,6 @@ import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-
-
-
-
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,10 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-
-
-
-
 import komunikacja.*;
 import Listenery.*;
 import maleOkienka.*;
@@ -38,8 +30,6 @@ public class MainMenu extends JFrame implements Runnable
 {
 	private String user;
 	private int width=1000, height=600;
-	
-
 	private JButton sp_button = new JButton("Local Game");
 	private JButton mp_button = new JButton("Internet Game");
 	private JButton st_button = new JButton("Statystyki"); // do zrobienia
@@ -81,7 +71,9 @@ public class MainMenu extends JFrame implements Runnable
 	private OdbiorcaKomunikatow reciever;//= new OdbiorcaKomunikatow();
 	private Thread t;// = new Thread(reciever); 
 	private PlayerListUpdater updater;// = new PlayerListUpdater();
+	private KontaktyUpdater updater1;
 	private Thread t1;// = new Thread(updater);
+	private Thread t2;
 	private Boolean helpFlag=false;
 	private Boolean JawnaProsbaPolaczenia=true;
 	
@@ -92,17 +84,14 @@ public class MainMenu extends JFrame implements Runnable
 	
 	ArrayList <CzatGraczy> watkiCzatow = new ArrayList<CzatGraczy>();
 	
-	JList list;
-	JList listaKontaktow;
+	JList list; JList listaKontaktow;
+	String ip;	String nadawca;	int port=5000;
+	ObjectInputStream czytelnik;	ObjectOutputStream pisarz;	Socket gniazdo;
 	
-	String ip;
-	String nadawca;
-	int port=5000;
-	
-	
-	ObjectInputStream czytelnik;
-	ObjectOutputStream pisarz;
-	Socket gniazdo;
+	synchronized void writeObject(RamkaKlienta ramka)
+	{try {pisarz.writeObject(ramka);	pisarz.flush();	} catch (IOException e) {
+		disconnected(); e.printStackTrace();
+		t.stop();	t.destroy();	t1.stop();	t1.destroy();  t2.stop();	t2.destroy();}}
 	
 	MainMenu(String user)
 	{
@@ -111,34 +100,22 @@ public class MainMenu extends JFrame implements Runnable
 	}
 	
 	MainMenu()
-	{
-		super("Menu Główne");
-	}
+	{super("Menu Główne");}
 	
 	public Boolean getLoginFlag()
-	{
-		return loginFlag;
-	}
+	{return loginFlag;}
 	
 	public void setRozgrywkaSieciowa(InternetChessGame rozgrywkaSieciowa)
-	{
-		this.rozgrywkaSieciowa=rozgrywkaSieciowa;
-	}
+	{this.rozgrywkaSieciowa=rozgrywkaSieciowa;}
 	
 	public InternetChessGame getRozgrywkaSieciowa()
-	{
-		return rozgrywkaSieciowa;
-	}
+	{return rozgrywkaSieciowa;}
 	
 	public void disableStButton()
-	{
-		st_button.setEnabled(false);
-	}
+	{st_button.setEnabled(false);}
 	
 	public void diableZnajomiButton()
-	{
-		znajomiButton.setEnabled(false);
-	}
+	{znajomiButton.setEnabled(false);}
 	
 	public JScrollPane getPanelGraczy() {return panelGraczy;}
 	public JScrollPane getPanelKontaktow() {return panelKontaktow;}
@@ -182,19 +159,12 @@ public class MainMenu extends JFrame implements Runnable
 		sp_button.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent ae)
-			{
-				new ChessGame().run();
-			}
+			{new ChessGame().run();}
 		});
 		
 		mp_button.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent ae)
-			/*{
-				new GUI("Klient").guiStart();
-				// TU bede odpalał
-			}*/
-			
+			public void actionPerformed(ActionEvent ae)			
 			{
 				panel_menu.setVisible(false);
 				panel_menu.removeAll();
@@ -264,17 +234,14 @@ public class MainMenu extends JFrame implements Runnable
 			}
 		});
 		
-		
 		lo_button.addActionListener(new ExitButtonListener());
-				
-				
+						
 		connectButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent ev)
 			{
 				Thread watekOdbiorcy = new Thread(new KomunikacjaSieciowa());
 				watekOdbiorcy.start();
-			
 			}
 		});
 		
@@ -295,7 +262,6 @@ public class MainMenu extends JFrame implements Runnable
 				{
 					e.printStackTrace();
 				}
-				
 			}
 		});
 		MainMenu reference = this;
@@ -329,10 +295,7 @@ public class MainMenu extends JFrame implements Runnable
 								
 								DefaultListModel<String>  listModel = new DefaultListModel<String>();
 								for (int i =0 ;i<listaGraczy.getClientList().size();i++)
-								{
-									listModel.addElement(listaGraczy.getClientList().get(i));
-								}
-								
+								{listModel.addElement(listaGraczy.getClientList().get(i));}
 								
 								list = new JList(listModel);
 								list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -342,10 +305,16 @@ public class MainMenu extends JFrame implements Runnable
 								panelGraczy = new JScrollPane(list);
 								panelGraczy.setBounds(width-175, 25,155,505);
 								
+								//listaKontaktow = new JList(listModel);
+								//listaKontaktow.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+								//listaKontaktow.setLayoutOrientation(JList.VERTICAL);
+								//listaKontaktow.setVisibleRowCount(-1);
+								panelKontaktow = new JScrollPane();
+								panelKontaktow.setBounds(10,80,140,280);
+								panel_menu.add(panelKontaktow);
 								
 								wyslij.setEnabled(true);
 
-								
 								panel_menu.add(panelGraczy);// dodaje scroll pane do menu
 								for(ActionListener al : logoutButton.getActionListeners())
 								logoutButton.removeActionListener(al);
@@ -362,8 +331,11 @@ public class MainMenu extends JFrame implements Runnable
 								t = new Thread(reciever);
 								updater = new PlayerListUpdater();
 								t1 = new Thread(updater);
+								updater1 = new KontaktyUpdater();
+								t2 = new Thread (updater1);
 								t.start(); // watek odbiorcy pakietow
 								t1.start(); // watek aktualizatora listy graczy
+								t2.start();
 							}
 							else if (pakiet.getW1().equals("bledne_dane"))
 							{
@@ -386,10 +358,7 @@ public class MainMenu extends JFrame implements Runnable
 				{
 					ex.printStackTrace();
 					zalogujButton.setEnabled(true);
-					//System.out.println("Nie udalo sie poslac");
 				}
-
-				
 			}
 		});
 		
@@ -400,11 +369,9 @@ public class MainMenu extends JFrame implements Runnable
 				rejestrujButton.setEnabled(false);
 				try 
 				{
-					user = Login.getText();
-					System.out.println("Pobrany Login: " +user);
+					user = Login.getText();	System.out.println("Pobrany Login: " +user);
 					ramka = new RamkaKlienta(2,user,new String(Pass.getPassword()));
-					pisarz.writeObject(ramka); // posyła
-					pisarz.flush();
+					pisarz.writeObject(ramka); 	pisarz.flush();
 					RamkaSerwera pakiet = null;
 					try
 					{
@@ -433,53 +400,27 @@ public class MainMenu extends JFrame implements Runnable
 				}
 				catch (Exception ex)
 				{
-					//ex.printStackTrace();
 					System.out.println("Nie udalo sie poslac");
 					rejestrujButton.setEnabled(true);
 				}
-
-				
 			}
 		});
-		
-
-		
-		
-		setResizable(false);
-		
-		panel_menu.setLayout(null);
-		
-		//dane_usera.setBounds(width-40-8*user.length(),0,40+8*user.length(),20);
-		sp_button.setBounds(width/2-80,height/2-120,160,40);
-		mp_button.setBounds(width/2-80,height/2-80,160,40);
-		op_button.setBounds(width/2-80,height/2-40,160,40);
-		lo_button.setBounds(width/2-80,height/2-0,160,40);
-		
-		panel_menu.add(sp_button);
-		panel_menu.add(mp_button);
-		panel_menu.add(op_button);
-		panel_menu.add(lo_button);
-		//panel_menu.add(dane_usera);
-		tlo.setIcon(zdjecieTla);
-		tlo.setBounds(0,0,width,height);
-		panel_menu.add(tlo);
-		
-		
-		add(panel_menu);
-		setVisible(true);
-		
+		setResizable(false); panel_menu.setLayout(null);
+		sp_button.setBounds(width/2-80,height/2-120,160,40); mp_button.setBounds(width/2-80,height/2-80,160,40);
+		op_button.setBounds(width/2-80,height/2-40,160,40);	lo_button.setBounds(width/2-80,height/2-0,160,40);
+		panel_menu.add(sp_button); panel_menu.add(mp_button); panel_menu.add(op_button); panel_menu.add(lo_button);
+		tlo.setIcon(zdjecieTla); tlo.setBounds(0,0,width,height);
+		panel_menu.add(tlo); add(panel_menu); setVisible(true);
 	}
 	
 	public String getLogin()
-	{
-		return importedlogin;
-	}
+	{return importedlogin;}
 	
 	public void updatePlayerList(RamkaSerwera listaGraczy)
 	{
 		try
 		{
-			System.out.println("Aktualizuje liste graczy");
+			//System.out.println("Aktualizuje liste graczy");
 			DefaultListModel<String>  listModel = new DefaultListModel<String>();
 			for (int i =0 ;i<listaGraczy.getClientList().size();i++)
 			{
@@ -492,24 +433,38 @@ public class MainMenu extends JFrame implements Runnable
 			list.setVisibleRowCount(-1);
 			list.addMouseListener(new ListMouseListener(user,pisarz,watkiCzatow)); // DO POPRAWY LISTENER
 			list.setSelectedValue(tmp, true);
-			//if(!helpFlag)
 			for(ActionListener al : zaprosDoGry.getActionListeners())
 			zaprosDoGry.removeActionListener(al);
 			zaprosDoGry.addActionListener(new ZaprosDoGryListener(list,pisarz,user));
-			//helpFlag=true;
-			//list.getSelectedIndex();
 			panelGraczy.setViewportView(list);
-			panelGraczy.repaint();
+			panelGraczy.revalidate();
 
-			//panel_menu.remove(panelGraczy);
-			//panelGraczy = new JScrollPane(list);
-			//panelGraczy.setBounds(width-175, 25,155,505);
-			//panel_menu.add(panelGraczy);
-		}
-		catch(Exception e)
+		}catch(Exception e){e.printStackTrace();}
+	}
+	
+	public void kontakty(DefaultListModel<String> listModel)
+	{
+		/*DefaultListModel<String>  listModel = new DefaultListModel<String>();
+		for (int i =0 ;i<ramka.getZnajomi().size();i++)
 		{
-			e.printStackTrace();
-		}
+			listModel.addElement(ramka.getZnajomi().get(i));
+		}*/
+		
+		//String tmp = (String) listaKontaktow.getSelectedValue();// -> wywala program
+		listaKontaktow = new JList(listModel);
+		listaKontaktow.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		listaKontaktow.setLayoutOrientation(JList.VERTICAL);
+		listaKontaktow.setVisibleRowCount(-1);
+	//	listaKontaktow.addMouseListener(new KontaktyListListener(user,pisarz,watkiCzatow));
+		//listaKontaktow.setSelectedValue(tmp,true); //-> wywala program razem z tym wyzej
+		
+		//panelKontaktow = new JScrollPane(listaKontaktow);
+		//panelKontaktow.setBounds(10,80,140,280);
+		panelKontaktow.setViewportView(listaKontaktow);
+		panelKontaktow.revalidate();
+		//panel_menu.add(panelKontaktow);
+		//panel_menu.revalidate();
+		
 	}
 	
 	public void wiadomoscPrywatna(String nadawca, String odbiorca, String wiadomosc)
@@ -534,71 +489,26 @@ public class MainMenu extends JFrame implements Runnable
 	}
 	
 	public void obslugaZaproszenia(String zapraszajacy)
-	{
-		new ZaproszenieBox(zapraszajacy,user, ignorowani,pisarz, this).run();
-	}
+	{new ZaproszenieBox(zapraszajacy,user, ignorowani,pisarz, this).run();}
 	
 	public void pobierzListeKontaktow()
-	{
-		try
-		{
+	{	try	{
 			pisarz.writeObject(new RamkaKlienta(17,user,""));
 			pisarz.flush();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-	
+		}catch(Exception e){e.printStackTrace();}}
 	
 	public void logOut()
 	{
-		
-		try 
-		{
-			gniazdo.close();
-			//pisarz = null;
-			//czytelnik=null;
-
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-		logoutButton.setEnabled(false);
-		zaprosDoGry.setEnabled(false);
-		wyslij.setEnabled(false);
-		
-		zalogujButton.setEnabled(false);
-		rejestrujButton.setEnabled(false);
-		st_button.setEnabled(false);
-		connectButton.setEnabled(true);
-		loginFlag=false;
-		list = new JList();
-		listaKontaktow = new JList();
-		panelKontaktow.setViewportView(listaKontaktow);
-		panel_menu.remove(panelGraczy);
-		panel_menu.repaint();
-		panelGraczy.setViewportView(list);
-		Login.setText("");
-		Pass.setText("");
-		//JawnaProsbaPolaczenia=false;
-
+		try {gniazdo.close();}	catch (IOException e) {e.printStackTrace();}
+		logoutButton.setEnabled(false);	zaprosDoGry.setEnabled(false); wyslij.setEnabled(false);
+		zalogujButton.setEnabled(false); rejestrujButton.setEnabled(false);	st_button.setEnabled(false);
+		connectButton.setEnabled(true);	loginFlag=false;
+		list = new JList();	listaKontaktow = new JList(); panelKontaktow.setViewportView(listaKontaktow);
+		panel_menu.remove(panelGraczy);	panel_menu.repaint(); panelGraczy.setViewportView(list);
+		Login.setText(""); Pass.setText("");
 		messageBox.append("\nWylogowano - > Podłącz się ponownie do serwera\n");
-		
-		t.stop();
-		t.destroy();
-		t1.stop();
-		t1.destroy();
-	}
-	
-	public void powrotDoMenu()
-	{
-		
-		
-	}
-	
+		t.stop();t.destroy();t1.stop();	t1.destroy();	t2.stop();	t2.destroy();
+	}	
 	
 	public void rozpocznijRozgrywke(String oponent)
 	{
@@ -606,45 +516,32 @@ public class MainMenu extends JFrame implements Runnable
 		rozgrywkaSieciowa.run();
 	}
 	
-
 	public class PlayerListUpdater implements Runnable
 	{
 		public void run() 
 		{
 			while (true)
 			{
-				try 
-				{
-					pisarz.writeObject(new RamkaKlienta(3,"",""));
-					pisarz.flush();	
-					//System.out.println("wyslalem");
-					try {
-						t1.sleep(5000);
-						//Thread.sleep(2000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				} 
-				catch (IOException e1) 
-				{
-					t1.stop();
-					t1.destroy();
-					t.stop();
-					t.destroy();
-					e1.printStackTrace();
-				}
-
-
+				writeObject(new RamkaKlienta(3,"",""));
+				try {t1.sleep(3000);} catch (InterruptedException e) {e.printStackTrace();}
 			}
 		}
-		
-		
+	}
+	
+	public class KontaktyUpdater implements Runnable
+	{
+		public void run()
+		{
+			while (true)
+			{
+				writeObject(new RamkaKlienta(17,user,""));
+				try {t2.sleep(2400);} catch (InterruptedException e) {e.printStackTrace();}
+			}
+		}
 	}
 	
 	public class KomunikacjaSieciowa implements Runnable
 	{
-	
 		public void run() 
 		{
 			ip=adresTextField.getText();
@@ -676,78 +573,30 @@ public class MainMenu extends JFrame implements Runnable
 
 				znajomiButton.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e) {
-						pobierzListeKontaktow();//new ZnajomiWindow(pisarz).run();
+						//pobierzListeKontaktow();//new ZnajomiWindow(pisarz).run();
 					}});
 				dodajZnajomegoButton.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent arg0) {
 						new ZnajomiWindow(pisarz).run();
-					}});
-				
-				
-			} 
-			catch (IOException ex) {
-				ex.printStackTrace();
-				messageBox.append("Nie skonfigurowano sieci\n");
-			}
-		
+					}});	
+			}catch (IOException ex) {ex.printStackTrace(); messageBox.append("Nie skonfigurowano sieci\n");}
 		}
 	}
 	
-	public void disableDodajZnajomegoButton()
-	{dodajZnajomegoButton.setEnabled(false);}
-	
-	public void kontakty(RamkaSerwera ramka)
-	{
-		listaKontaktow = new JList(ramka.getZnajomi());
-		listaKontaktow.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		listaKontaktow.setLayoutOrientation(JList.VERTICAL);
-		listaKontaktow.setVisibleRowCount(-1);
-		listaKontaktow.addMouseListener(new KontaktyListListener(user,pisarz,watkiCzatow){});
-		panelKontaktow = new JScrollPane(listaKontaktow);
-		panelKontaktow.setBounds(10,80,140,280);
-		panel_menu.add(panelKontaktow);
-		panel_menu.revalidate();
-		
-	}
-	
-	public void obslugaRozlaczenia()
-	{
-		new RageQuitted().run();
-		rozgrywkaSieciowa.dispose();
-	}
+	public void disableDodajZnajomegoButton(){dodajZnajomegoButton.setEnabled(false);}	
+	public void obslugaRozlaczenia(){new RageQuitted().run();rozgrywkaSieciowa.dispose();}
 	
 	public void disconnected()
 	{
 		try 
-		{
-			gniazdo.close();
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-		logoutButton.setEnabled(false);
-		zaprosDoGry.setEnabled(false);
-		wyslij.setEnabled(false);
-		
-		zalogujButton.setEnabled(false);
-		rejestrujButton.setEnabled(false);
-		st_button.setEnabled(false);
-		loginFlag=false;
-		list = new JList();
-		panel_menu.remove(panelGraczy);
-		panel_menu.repaint();
-		panelGraczy.setViewportView(list);
-		Login.setText("");
-		Pass.setText("");
-		//JawnaProsbaPolaczenia=false;
+		{gniazdo.close();} catch (IOException e) {e.printStackTrace();}
+		logoutButton.setEnabled(false);	zaprosDoGry.setEnabled(false);	wyslij.setEnabled(false);
+		zalogujButton.setEnabled(false); rejestrujButton.setEnabled(false);	st_button.setEnabled(false);
+		loginFlag=false; list = new JList(); panel_menu.remove(panelGraczy); panel_menu.repaint();
+		panelGraczy.setViewportView(list);	Login.setText("");	Pass.setText("");
 		connectButton.setEnabled(true);
 		messageBox.append("\nUtracono połączenie z serwerem - > Podłącz się ponownie do serwera\n");
-		
-		t.stop();
-		t.destroy();
-		t1.stop();
-		t1.destroy();
+		t.stop();		t.destroy();		t1.stop();		t1.destroy();		t2.stop();		t2.destroy();
 	}
 	
 	public class OdbiorcaKomunikatow implements Runnable {
@@ -785,14 +634,9 @@ public class MainMenu extends JFrame implements Runnable
 							case 9: // info o ruchu przeciwnika;
 								System.out.println("Cos odebrał1");
 								if (rozgrywkaSieciowa == null)
-								{
-									System.out.println("Odebrano błędny pakiet!!!");
-								}
+								{System.out.println("Odebrano błędny pakiet!!!");}
 								else 
-								{
-									rozgrywkaSieciowa.odbiorRuchu(new Pozycja(ramka.getPW(),ramka.getPK()), new Pozycja(ramka.getKW(),ramka.getKK()));
-									//System.out.println("Coś odebrał");
-								}
+								{rozgrywkaSieciowa.odbiorRuchu(new Pozycja(ramka.getPW(),ramka.getPK()), new Pozycja(ramka.getKW(),ramka.getKK()));}
 								break;
 							case 10: // rozłączyło przeciwnika
 								obslugaRozlaczenia();
@@ -804,31 +648,21 @@ public class MainMenu extends JFrame implements Runnable
 								new Stats(ramka.getW1(),ramka.getW2()).run();
 								break;	
 							case 17:
-								kontakty(ramka);
+								kontakty(ramka.getZnajomi()); // to generuje blad
 								break;
 							case 99:
 								logOut();
 								break;
 						}
-					
 					}		
 				}
-				
 			}
 			catch(Exception e)
 			{
 				disconnected(); // to ma byc nie zmieniac!
 				e.printStackTrace();
-				t.stop();
-				t.destroy();
-				t1.stop();
-				t1.destroy();				
-				
-				
+				t.stop();	t.destroy();	t1.stop();	t1.destroy();  t2.stop();	t2.destroy();				
 			}
 		}
-		
-
 	}
-	
 }
