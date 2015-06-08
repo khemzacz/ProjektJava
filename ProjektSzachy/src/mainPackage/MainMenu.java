@@ -114,8 +114,8 @@ public class MainMenu extends JFrame implements Runnable
 	public void disableStButton()
 	{st_button.setEnabled(false);}
 	
-	public void diableZnajomiButton()
-	{znajomiButton.setEnabled(false);}
+	/*public void diableZnajomiButton()
+	{znajomiButton.setEnabled(false);}*/
 	
 	public JScrollPane getPanelGraczy() {return panelGraczy;}
 	public JScrollPane getPanelKontaktow() {return panelKontaktow;}
@@ -123,7 +123,7 @@ public class MainMenu extends JFrame implements Runnable
 	public JPanel getPanel_Menu(){return panel_menu;}
 	
 	public JButton getZalogujButton(){return zalogujButton;}
-	public JButton znajomiButton = new JButton("<html><center>Pobierz kontakty<br/>z bazy<center/></html>");
+	//public JButton znajomiButton = new JButton("<html><center>Pobierz kontakty<br/>z bazy<center/></html>");
 	public JButton dodajZnajomegoButton = new JButton("<html><center>Zarządzaj kontaktami<br/>w bazie<center/></html>");
 	public JButton getRejestrujButton(){return rejestrujButton;}
 	public JButton getSpButton(){return sp_button;}
@@ -178,9 +178,9 @@ public class MainMenu extends JFrame implements Runnable
 				
 				PassLabel.setBounds(width/2-100,height/2 -130,44,20);
 				Pass.setBounds(width/2-50,height/2 -130,151,20);
-				dodajZnajomegoButton.setBounds(10,height-200,140,35);
-				znajomiButton.setBounds(10,height -160,140,35);
-				znajomiButton.setEnabled(false);
+				dodajZnajomegoButton.setBounds(10,height-160,140,35);
+				//znajomiButton.setBounds(10,height -160,140,35);
+				//znajomiButton.setEnabled(false);
 				zalogujButton.setBounds(width/2-100,height/2 -110,90,20);
 				rejestrujButton.setBounds(width/2-10,height/2 -110,110,20);
 				messageBox.setBounds(width/2-250,height/2-90,500,300);
@@ -211,9 +211,9 @@ public class MainMenu extends JFrame implements Runnable
 				panel_menu.add(wyslij);
 				panel_menu.add(doWyslania);
 				panel_menu.add(powrotDoMenuButton);
-				panel_menu.add(znajomiButton);
+				//panel_menu.add(znajomiButton);
 				panel_menu.add(dodajZnajomegoButton);
-				znajomiButton.setMargin(new Insets(0,0,0,0));
+				//znajomiButton.setMargin(new Insets(0,0,0,0));
 				powrotDoMenuButton.setMargin(new Insets(0,0,0,0));
 				st_button.setMargin(new Insets(0,0,0,0));
 				dodajZnajomegoButton.setMargin(new Insets(0,0,0,0));
@@ -323,7 +323,7 @@ public class MainMenu extends JFrame implements Runnable
 								ignorowani = new ArrayList <String>();
 								zaprosDoGry.setEnabled(true);
 								st_button.setEnabled(true);		
-								znajomiButton.setEnabled(true);
+								//znajomiButton.setEnabled(true);
 								dodajZnajomegoButton.setEnabled(true);
 								
 								loginFlag=true;
@@ -455,6 +455,7 @@ public class MainMenu extends JFrame implements Runnable
 		listaKontaktow.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		listaKontaktow.setLayoutOrientation(JList.VERTICAL);
 		listaKontaktow.setVisibleRowCount(-1);
+		listaKontaktow.addMouseListener(new KontaktyListListener(user,pisarz,watkiCzatow));
 	//	listaKontaktow.addMouseListener(new KontaktyListListener(user,pisarz,watkiCzatow));
 		//listaKontaktow.setSelectedValue(tmp,true); //-> wywala program razem z tym wyzej
 		
@@ -571,10 +572,10 @@ public class MainMenu extends JFrame implements Runnable
 						} catch (IOException e) {e.printStackTrace();}						
 					}});
 
-				znajomiButton.addActionListener(new ActionListener(){
+				/*znajomiButton.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e) {
 						//pobierzListeKontaktow();//new ZnajomiWindow(pisarz).run();
-					}});
+					}});*/
 				dodajZnajomegoButton.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent arg0) {
 						new ZnajomiWindow(pisarz).run();
@@ -649,6 +650,12 @@ public class MainMenu extends JFrame implements Runnable
 								break;	
 							case 17:
 								kontakty(ramka.getZnajomi()); // to generuje blad
+								break;
+							case 23:
+								new NiePosiadaszTakiegoKontaktu().run();
+								break;
+							case 24:
+								new PodanyUserNieIstnieje().run();
 								break;
 							case 99:
 								logOut();

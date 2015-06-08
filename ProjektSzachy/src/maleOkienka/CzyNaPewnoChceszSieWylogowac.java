@@ -53,7 +53,7 @@ public class CzyNaPewnoChceszSieWylogowac extends JFrame implements Runnable
 					pisarz.writeObject(new RamkaKlienta(99,"",""));
 					pisarz.flush();
 					menu.disableStButton();
-					menu.diableZnajomiButton();
+					//menu.diableZnajomiButton();
 					menu.disableDodajZnajomegoButton();
 					dispose();
 				} 
