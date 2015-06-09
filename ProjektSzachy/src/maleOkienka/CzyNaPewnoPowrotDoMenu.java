@@ -45,13 +45,13 @@ public class CzyNaPewnoPowrotDoMenu extends JFrame implements Runnable
 					menu.getPanel_Menu().removeAll();
 					menu.getPanel_Menu().add(menu.getSpButton());
 					menu.getPanel_Menu().add(menu.getMpButton());
-					menu.getPanel_Menu().add(menu.getOpButton());
+					//menu.getPanel_Menu().add(menu.getOpButton());
 					menu.getPanel_Menu().add(menu.getLoButton());
 					menu.getPanel_Menu().add(menu.getTlo());
 					menu.getPanel_Menu().repaint();
 					menu.getSpButton().setVisible(true);
 					menu.getMpButton().setVisible(true);
-					menu.getOpButton().setVisible(true);
+					//menu.getOpButton().setVisible(true);
 					menu.getLoButton().setVisible(true);
 					
 					//TUTAJ TRZEBA PRZEMALOWAĆ OKNO KLASY MAIN MENU

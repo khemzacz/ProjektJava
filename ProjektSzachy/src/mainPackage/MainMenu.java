@@ -33,7 +33,7 @@ public class MainMenu extends JFrame implements Runnable
 	private JButton sp_button = new JButton("Local Game");
 	private JButton mp_button = new JButton("Internet Game");
 	private JButton st_button = new JButton("Statystyki"); // do zrobienia
-	private JButton op_button = new JButton("Opcje");
+	//private JButton op_button = new JButton("Opcje");
 	private JButton lo_button = new JButton("EXIT");
 	private JButton zalogujButton=new JButton("Zaloguj");
 	private JButton rejestrujButton=new JButton("Rejestracja");
@@ -128,7 +128,7 @@ public class MainMenu extends JFrame implements Runnable
 	public JButton getRejestrujButton(){return rejestrujButton;}
 	public JButton getSpButton(){return sp_button;}
 	public JButton getMpButton(){return mp_button;}
-	public JButton getOpButton(){return op_button;}
+	//public JButton getOpButton(){return op_button;}
 	public JButton getLoButton(){return lo_button;}
 	public JButton getZaprosDoGryButton(){return zaprosDoGry;}
 	public JButton getConnectButton(){return connectButton;}
@@ -407,8 +407,11 @@ public class MainMenu extends JFrame implements Runnable
 		});
 		setResizable(false); panel_menu.setLayout(null);
 		sp_button.setBounds(width/2-80,height/2-120,160,40); mp_button.setBounds(width/2-80,height/2-80,160,40);
-		op_button.setBounds(width/2-80,height/2-40,160,40);	lo_button.setBounds(width/2-80,height/2-0,160,40);
-		panel_menu.add(sp_button); panel_menu.add(mp_button); panel_menu.add(op_button); panel_menu.add(lo_button);
+		//op_button.setBounds(width/2-80,height/2-40,160,40);
+		lo_button.setBounds(width/2-80,height/2-40,160,40);
+		panel_menu.add(sp_button); panel_menu.add(mp_button); 
+		//panel_menu.add(op_button);
+		panel_menu.add(lo_button);
 		tlo.setIcon(zdjecieTla); tlo.setBounds(0,0,width,height);
 		panel_menu.add(tlo); add(panel_menu); setVisible(true);
 	}
@@ -596,7 +599,7 @@ public class MainMenu extends JFrame implements Runnable
 		loginFlag=false; list = new JList(); panel_menu.remove(panelGraczy); panel_menu.repaint();
 		panelGraczy.setViewportView(list);	Login.setText("");	Pass.setText("");
 		connectButton.setEnabled(true);
-		messageBox.append("\nUtracono połączenie z serwerem - > Podłącz się ponownie do serwera\n");
+		//messageBox.append("\nUtracono połączenie z serwerem - > Podłącz się ponownie do serwera\n");
 		t.stop();		t.destroy();		t1.stop();		t1.destroy();		t2.stop();		t2.destroy();
 	}
 	
@@ -667,6 +670,7 @@ public class MainMenu extends JFrame implements Runnable
 			catch(Exception e)
 			{
 				disconnected(); // to ma byc nie zmieniac!
+				messageBox.append("\nUtracono połączenie z serwerem - > Podłącz się ponownie do serwera\n");
 				e.printStackTrace();
 				t.stop();	t.destroy();	t1.stop();	t1.destroy();  t2.stop();	t2.destroy();				
 			}
