@@ -55,6 +55,9 @@ public class InternetChessGame extends JFrame implements MouseListener, MouseMot
 	public ObjectOutputStream getPisarz()
 	{return pisarz;}
 	
+	public String getGracz()
+	{return gracz;}
+	
 	public String getOponent()
 	{return oponent;}
 	

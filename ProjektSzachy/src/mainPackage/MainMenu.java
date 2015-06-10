@@ -509,7 +509,7 @@ public class MainMenu extends JFrame implements Runnable
 		connectButton.setEnabled(true);	loginFlag=false;
 		list = new JList();	listaKontaktow = new JList(); panelKontaktow.setViewportView(listaKontaktow);
 		panel_menu.remove(panelGraczy);	panel_menu.repaint(); panelGraczy.setViewportView(list);
-		Login.setText(""); Pass.setText("");
+		Login.setText(""); Pass.setText(""); for (ActionListener al : st_button.getActionListeners())st_button.removeActionListener(al);
 		messageBox.append("\nWylogowano - > Podłącz się ponownie do serwera\n");
 		t.stop();t.destroy();t1.stop();	t1.destroy();	t2.stop();	t2.destroy();
 	}	

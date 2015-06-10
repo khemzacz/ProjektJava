@@ -1,6 +1,8 @@
 package maleOkienka;
 
 import java.awt.Font;
+import java.text.NumberFormat;
+import java.util.Formatter;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,8 +26,13 @@ public class Stats extends JFrame implements Runnable
 		this.liczbaWygranych.setText(liczbaWygranych);
 		double tmp;
 		tmp = ((double)Integer.parseInt(liczbaWygranych) / ((double)Integer.parseInt(liczbaPrzegranych) + (double)Integer.parseInt(liczbaWygranych)))*100;
-		ratio.setText(String.valueOf(tmp + " %"));
-
+		//ratio.setText(String.valueOf(tmp) + " %");
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setMinimumFractionDigits(2);
+		nf.setMaximumFractionDigits(2);
+		ratio.setText("" + nf.format(tmp) + " %");
+		//String pom = new String(String.valueOf(tmp));
+		//ratio.setText(pom + " %");
 		wygrane.setText("Zwycięstwa: ");
 		Font font=new Font("Arial", 1,20);
 		wygrane.setFont(font);
@@ -59,9 +66,6 @@ public class Stats extends JFrame implements Runnable
 		panel.setVisible(true);
 		add(panel);
 		setVisible(true);
-		
-		
-		
 	}
 
 }

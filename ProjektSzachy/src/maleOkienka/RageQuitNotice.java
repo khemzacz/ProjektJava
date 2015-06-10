@@ -44,7 +44,7 @@ public class RageQuitNotice extends JFrame implements Runnable
 			{
 				try 
 				{
-					graSieciowa.getPisarz().writeObject(new RamkaKlienta(9,"",""));
+					graSieciowa.getPisarz().writeObject(new RamkaKlienta(9,graSieciowa.getGracz(),graSieciowa.getOponent()));
 					graSieciowa.getPisarz().flush();
 				} 
 				catch (IOException e) 
